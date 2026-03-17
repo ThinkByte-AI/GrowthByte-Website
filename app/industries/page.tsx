@@ -13,14 +13,50 @@ export default function IndustriesPage() {
       {/* Hero */}
       <section className="relative bg-ink overflow-hidden">
         <div className="absolute inset-0 bg-grid-dark pointer-events-none" aria-hidden="true" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.05] pointer-events-none" aria-hidden="true"
+          style={{ background: 'radial-gradient(circle at center, #009389, transparent 70%)', transform: 'translate(20%, -20%)' }} />
         <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
-          <p className="section-eyebrow-dark">Industries</p>
-          <h1 className="text-white max-w-[38rem] text-balance mb-5">
-            We specialise. Not generalise.
-          </h1>
-          <p className="text-white/55 text-body-lg max-w-[36rem] text-balance">
-            Generic growth playbooks fail because buyer journeys, CAC benchmarks, and channel mix differ completely across industries. We operate in five — and have proven playbooks for each.
-          </p>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left */}
+            <div>
+              <p className="section-eyebrow-dark">Industries</p>
+              <h1 className="text-white text-balance mb-5">
+                We specialise. Not generalise.
+              </h1>
+              <p className="text-white/55 text-body-lg max-w-[36rem] text-balance leading-relaxed">
+                Generic growth playbooks fail because buyer journeys, CAC benchmarks, and channel mix differ completely across industries. We operate in five — and have proven playbooks for each.
+              </p>
+            </div>
+            {/* Right: industry vertical stack */}
+            <div className="hidden lg:flex justify-end">
+              <div className="w-[300px] space-y-2.5">
+                {[
+                  { name: 'SaaS', note: 'Trial-to-paid · CAC reduction' },
+                  { name: 'D2C / E-Commerce', note: 'ROAS · Retention · LTV' },
+                  { name: 'Healthcare', note: 'Compliant acquisition · Trust' },
+                  { name: 'FinTech', note: 'Regulated channels · Pipeline' },
+                  { name: 'Professional Services', note: 'Authority · Inbound · BD' },
+                ].map((ind, i) => (
+                  <div
+                    key={ind.name}
+                    className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.07] rounded-xl px-4 py-3"
+                    style={{ opacity: 1 - i * 0.06 }}
+                  >
+                    <div className="w-6 h-6 rounded-full bg-teal/15 border border-teal/25 flex items-center justify-center flex-shrink-0">
+                      <span className="text-teal text-[0.625rem] font-bold tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white/80 leading-none">{ind.name}</p>
+                      <p className="text-[0.6875rem] text-white/35 mt-0.5">{ind.note}</p>
+                    </div>
+                    <div className="ml-auto">
+                      <div className="text-[0.6875rem] text-teal font-semibold">Proven ✓</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

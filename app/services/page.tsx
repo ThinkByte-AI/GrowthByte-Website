@@ -13,14 +13,67 @@ export default function ServicesPage() {
       {/* Page hero */}
       <section className="relative bg-ink overflow-hidden">
         <div className="absolute inset-0 bg-grid-dark pointer-events-none" aria-hidden="true" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.05] pointer-events-none" aria-hidden="true"
+          style={{ background: 'radial-gradient(circle at center, #009389, transparent 70%)', transform: 'translate(20%, -20%)' }} />
         <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
-          <p className="section-eyebrow-dark">Services</p>
-          <h1 className="text-white max-w-[40rem] text-balance mb-5">
-            Six capabilities. One growth system.
-          </h1>
-          <p className="text-white/55 text-body-lg max-w-[36rem] text-balance">
-            Each service is designed to compound with the others. You can start with one — but the real gains come from integration.
-          </p>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left */}
+            <div>
+              <p className="section-eyebrow-dark">Services</p>
+              <h1 className="text-white text-balance mb-5">
+                Six capabilities. One growth system.
+              </h1>
+              <p className="text-white/55 text-body-lg max-w-[36rem] text-balance leading-relaxed">
+                Each service is designed to compound with the others. You can start with one — but the real gains come from integration.
+              </p>
+            </div>
+            {/* Right: service system visual */}
+            <div className="hidden lg:flex justify-end">
+              <div className="relative w-[340px]">
+                {/* Central hub */}
+                <div className="flex flex-col gap-3">
+                  {/* Row 1 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {['Growth Strategy', 'Performance Marketing'].map((name) => (
+                      <div key={name} className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-teal mb-2" />
+                        <p className="text-[0.75rem] font-semibold text-white/70 leading-snug">{name}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Row 2 — center hub */}
+                  <div className="flex items-center gap-3">
+                    <div className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3 flex-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal mb-2" />
+                      <p className="text-[0.75rem] font-semibold text-white/70 leading-snug">SEO & Content</p>
+                    </div>
+                    <div className="bg-teal/10 border border-teal/30 rounded-xl px-4 py-3 flex-1 flex flex-col items-center justify-center">
+                      <div className="text-[0.625rem] text-teal/70 uppercase tracking-wider font-semibold mb-1">Integrated</div>
+                      <div className="text-xs text-white font-bold">AI System</div>
+                    </div>
+                    <div className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3 flex-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal mb-2" />
+                      <p className="text-[0.75rem] font-semibold text-white/70 leading-snug">Automation</p>
+                    </div>
+                  </div>
+                  {/* Row 3 */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {['Analytics & BI', 'Creative & CRO'].map((name) => (
+                      <div key={name} className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-teal mb-2" />
+                        <p className="text-[0.75rem] font-semibold text-white/70 leading-snug">{name}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Outcome bar */}
+                  <div className="mt-1 bg-teal/10 border border-teal/20 rounded-xl px-4 py-2.5 flex items-center justify-between">
+                    <span className="text-xs text-teal/80 font-medium">Combined outcome</span>
+                    <span className="text-xs font-bold text-teal">↑ Revenue growth</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

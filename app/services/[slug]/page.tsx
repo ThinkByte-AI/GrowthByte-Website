@@ -31,17 +31,53 @@ export default function ServicePage({ params }: Props) {
       {/* Hero */}
       <section className="relative bg-ink overflow-hidden">
         <div className="absolute inset-0 bg-grid-dark pointer-events-none" aria-hidden="true" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.05] pointer-events-none" aria-hidden="true"
+          style={{ background: 'radial-gradient(circle at center, #009389, transparent 70%)', transform: 'translate(20%, -20%)' }} />
         <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
-          <Link href="/services" className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors mb-6">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            All services
-          </Link>
-          <p className="section-eyebrow-dark">Service</p>
-          <h1 className="text-white max-w-[36rem] text-balance mb-4">{service.title}</h1>
-          <p className="text-teal-light text-body-lg font-medium mb-6">{service.outcome}</p>
-          <p className="text-white/55 text-body-lg max-w-[38rem] leading-relaxed">{service.description}</p>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left */}
+            <div>
+              <Link href="/services" className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors mb-6">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                All services
+              </Link>
+              <p className="section-eyebrow-dark">Service</p>
+              <h1 className="text-white text-balance mb-4">{service.title}</h1>
+              <p className="text-teal-light text-body-lg font-medium mb-5">{service.outcome}</p>
+              <p className="text-white/55 text-body-lg max-w-[38rem] leading-relaxed">{service.description}</p>
+            </div>
+            {/* Right: capabilities preview card */}
+            <div className="hidden lg:flex justify-end">
+              <div className="w-[300px]">
+                <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5">
+                  <p className="text-[0.6875rem] text-white/30 uppercase tracking-wider font-semibold mb-4">Key capabilities</p>
+                  <ul className="space-y-3">
+                    {service.capabilities.slice(0, 5).map((cap, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <span className="w-4 h-4 rounded-full bg-teal/15 border border-teal/25 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </span>
+                        <span className="text-[0.8125rem] text-white/60 leading-snug">{cap}</span>
+                      </li>
+                    ))}
+                    {service.capabilities.length > 5 && (
+                      <li className="text-[0.75rem] text-teal/60 pl-6.5">
+                        +{service.capabilities.length - 5} more capabilities
+                      </li>
+                    )}
+                  </ul>
+                  <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse flex-shrink-0" />
+                    <span className="text-[0.6875rem] text-teal font-medium">AI-managed · Strategist-directed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

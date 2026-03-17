@@ -66,14 +66,54 @@ export default function InsightsPage() {
       {/* Hero */}
       <section className="relative bg-ink overflow-hidden">
         <div className="absolute inset-0 bg-grid-dark pointer-events-none" aria-hidden="true" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.05] pointer-events-none" aria-hidden="true"
+          style={{ background: 'radial-gradient(circle at center, #009389, transparent 70%)', transform: 'translate(20%, -20%)' }} />
         <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
-          <p className="section-eyebrow-dark">Insights</p>
-          <h1 className="text-white max-w-[36rem] text-balance mb-5">
-            Practical growth content. No fluff.
-          </h1>
-          <p className="text-white/55 text-body-lg max-w-[34rem] text-balance">
-            Strategy, frameworks, and real campaign breakdowns. Written for marketing heads and founders who want to understand the mechanics — not just the headlines.
-          </p>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left */}
+            <div>
+              <p className="section-eyebrow-dark">Insights</p>
+              <h1 className="text-white text-balance mb-5">
+                Practical growth content. No fluff.
+              </h1>
+              <p className="text-white/55 text-body-lg max-w-[34rem] text-balance leading-relaxed">
+                Strategy, frameworks, and real campaign breakdowns — written for marketing heads and founders who want to understand the mechanics, not just the headlines.
+              </p>
+            </div>
+            {/* Right: content categories visual */}
+            <div className="hidden lg:flex justify-end">
+              <div className="w-[300px]">
+                <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5">
+                  <p className="text-[0.6875rem] text-white/30 uppercase tracking-wider font-semibold mb-4">Topics covered</p>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {[
+                      { name: 'Growth Strategy', count: '4 pieces' },
+                      { name: 'Performance Marketing', count: '2 pieces' },
+                      { name: 'SEO', count: '2 pieces' },
+                      { name: 'Automation', count: '1 piece' },
+                      { name: 'Analytics', count: '1 piece' },
+                      { name: 'More soon', count: '' },
+                    ].map((cat, i) => (
+                      <div key={i} className={`rounded-lg px-3 py-2 ${i === 5 ? 'border border-dashed border-white/[0.08] flex items-center justify-center' : 'bg-white/[0.04] border border-white/[0.06]'}`}>
+                        {i === 5 ? (
+                          <span className="text-[0.625rem] text-white/20 font-medium">More soon</span>
+                        ) : (
+                          <>
+                            <p className="text-[0.6875rem] font-semibold text-white/70 leading-snug">{cat.name}</p>
+                            {cat.count && <p className="text-[0.625rem] text-teal mt-0.5">{cat.count}</p>}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2 pt-3 border-t border-white/[0.06]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal flex-shrink-0" />
+                    <span className="text-[0.6875rem] text-white/40">Written by senior practitioners</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
