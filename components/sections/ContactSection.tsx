@@ -1,72 +1,66 @@
 import Link from 'next/link'
-import { CONTACT_INFO } from '@/lib/constants'
 
 export default function ContactSection() {
+  const WHAT_HAPPENS = [
+    '30-minute call with a senior strategist',
+    'We audit your current growth setup live',
+    'Identify your 2–3 highest-leverage opportunities',
+    'You leave with a clear picture — no obligation',
+  ]
+
   return (
-    <section id="contact" className="section-padding bg-gradient-to-br from-secondary-dark via-secondary to-secondary-dark text-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-primary rounded-full blur-[100px]"></div>
-      </div>
+    <section id="contact" className="section-padding bg-teal relative overflow-hidden scroll-mt-header">
+      {/* Subtle texture */}
+      <div className="absolute inset-0 bg-grid-dark opacity-40 pointer-events-none" aria-hidden="true" />
 
       <div className="container-custom relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Headline */}
-          <h2 className="text-white mb-4">Let&apos;s Grow Together</h2>
+        <div className="max-w-[52rem] mx-auto text-center">
 
-          {/* Single line value prop */}
-          <p className="text-xl text-gray-300 mb-10">
-            Book a free strategy call. No pressure, just possibilities.
+          {/* Eyebrow */}
+          <p className="inline-flex items-center gap-2 text-label-sm text-white/60 uppercase tracking-[0.1em] mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/60 inline-block" />
+            Get started
           </p>
 
-          {/* Primary CTA */}
-          <Link href="/contact" className="btn-primary inline-block mb-8">
-            Schedule Free Call
-          </Link>
+          {/* Headline */}
+          <h2 className="text-white mb-5 text-balance">
+            Ready to build a growth system that actually works?
+          </h2>
 
-          {/* Divider */}
-          <div className="flex items-center gap-4 max-w-md mx-auto mb-8">
-            <div className="flex-1 h-px bg-white/10"></div>
-            <span className="text-gray-500 text-sm">or stay in the loop</span>
-            <div className="flex-1 h-px bg-white/10"></div>
+          {/* Subhead */}
+          <p className="text-white/70 text-body-lg mb-10 max-w-[34rem] mx-auto">
+            Book a 30-minute strategy call. We will audit your current setup and show you exactly what we would do in the first 90 days.
+          </p>
+
+          {/* What happens */}
+          <ul className="grid sm:grid-cols-2 gap-3 max-w-[38rem] mx-auto mb-10 text-left">
+            {WHAT_HAPPENS.map((item, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm text-white/80">
+                <svg className="w-4 h-4 text-white mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 font-semibold rounded-lg bg-ink text-white px-8 py-4 text-[0.9375rem] hover:bg-ink-90 transition-colors duration-250"
+              style={{ minHeight: '56px' }}
+            >
+              Book a Strategy Call
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+            <Link href="/case-studies" className="btn-ghost-dark">
+              See our results first
+            </Link>
           </div>
 
-          {/* Newsletter - Secondary option */}
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-10">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm"
-            />
-            <button type="submit" className="btn-secondary whitespace-nowrap">
-              Subscribe
-            </button>
-          </form>
-
-          {/* Contact Info */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-sm text-gray-400">
-            <a
-              href={CONTACT_INFO.emailHref}
-              className="flex items-center gap-2 hover:text-primary transition-colors"
-              aria-label={`Email us at ${CONTACT_INFO.email}`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span>{CONTACT_INFO.email}</span>
-            </a>
-            <span className="hidden sm:block text-gray-600" aria-hidden="true">|</span>
-            <a
-              href={CONTACT_INFO.phoneHref}
-              className="flex items-center gap-2 hover:text-primary transition-colors"
-              aria-label={`Call us at ${CONTACT_INFO.phone}`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span>{CONTACT_INFO.phone}</span>
-            </a>
-          </div>
         </div>
       </div>
     </section>

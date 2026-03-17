@@ -2,162 +2,156 @@ import type { Metadata } from 'next'
 import { CONTACT_INFO } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'Contact GrowthByte | Schedule a Meeting | Growth Strategy Session',
-  description: 'Ready to accelerate growth? Schedule a free strategy session with our team. No obligation.',
+  title: 'Book a Strategy Call — GrowthByte',
+  description: 'Book a 30-minute strategy call with GrowthByte. We will audit your growth setup, identify the highest-leverage opportunities, and tell you exactly what we would do.',
 }
 
 export default function ContactPage() {
+  const BENEFITS = [
+    'A senior strategist — not a salesperson',
+    'Live audit of your current growth setup',
+    'Your top 3 highest-leverage opportunities',
+    'A clear 90-day action plan — no obligation',
+  ]
+
   return (
-    <div className="section-padding bg-gradient-to-b from-white to-gray-50">
-      <div className="container-custom">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="mb-6">
-              <span className="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-semibold">
-                Let&apos;s Connect
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance">
-              Get In Touch
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
-              Schedule Your Free Strategy Session
-            </p>
-          </div>
+    <>
+      {/* Hero */}
+      <section className="section-padding bg-surface border-b border-surface-border">
+        <div className="container-custom">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
-          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-16 border border-gray-100">
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-semibold mb-3 text-gray-700">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all bg-white text-gray-900 placeholder-gray-400"
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-semibold mb-3 text-gray-700">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all bg-white text-gray-900 placeholder-gray-400"
-                    placeholder="john@company.com"
-                  />
-                </div>
-              </div>
+            {/* Left — framing */}
+            <div className="lg:sticky lg:top-28">
+              <p className="section-eyebrow">Strategy call</p>
+              <h1 className="mb-5 text-balance">
+                Book a 30-minute strategy call.
+              </h1>
+              <p className="text-body-lg text-ink-60 leading-relaxed mb-8">
+                This is a working session. We will look at your current marketing setup, identify what is underperforming, and map out a clear starting point — at no cost, no obligation.
+              </p>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="company" className="block text-sm font-semibold mb-3 text-gray-700">
-                    Company Name
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all bg-white text-gray-900 placeholder-gray-400"
-                    placeholder="Your Company"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-semibold mb-3 text-gray-700">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all bg-white text-gray-900 placeholder-gray-400"
-                    placeholder="+1 (555) 000-0000"
-                  />
-                </div>
-              </div>
+              <ul className="space-y-3 mb-8">
+                {BENEFITS.map((b, i) => (
+                  <li key={i} className="flex items-center gap-3 text-[0.9375rem] text-ink">
+                    <span className="w-5 h-5 rounded-full bg-teal-muted text-teal flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
 
-              <div>
-                <label htmlFor="service" className="block text-sm font-semibold mb-3 text-gray-700">
-                  Service Interest
-                </label>
-                <select
-                  id="service"
-                  name="service"
-                  className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all bg-white text-gray-900"
+              <div className="flex flex-col gap-2">
+                <a
+                  href={CONTACT_INFO.emailHref}
+                  className="inline-flex items-center gap-2 text-sm text-ink-60 hover:text-ink transition-colors"
                 >
-                  <option value="">Select a service...</option>
-                  <option value="strategy">Marketing Strategy</option>
-                  <option value="seo">SEO</option>
-                  <option value="ppc">PPC</option>
-                  <option value="social">Social Media</option>
-                  <option value="email">Email Marketing</option>
-                  <option value="design">Content & Design</option>
-                  <option value="full">Full-Funnel Marketing</option>
-                </select>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                  {CONTACT_INFO.email}
+                </a>
+                <a
+                  href={CONTACT_INFO.phoneHref}
+                  className="inline-flex items-center gap-2 text-sm text-ink-60 hover:text-ink transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                  </svg>
+                  {CONTACT_INFO.phone}
+                </a>
               </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-semibold mb-3 text-gray-700">
-                  Tell Us About Your Goals *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={6}
-                  required
-                  className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all bg-white text-gray-900 placeholder-gray-400 resize-none"
-                  placeholder="What are you looking to achieve? What challenges are you facing?"
-                />
-              </div>
-
-              <button type="submit" className="btn-primary w-full text-lg py-5">
-                Send Message
-              </button>
-            </form>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold mb-2 text-primary text-lg">Email</h3>
-              <a href={CONTACT_INFO.emailHref} className="text-gray-600 hover:text-primary transition-colors break-all">
-                {CONTACT_INFO.email}
-              </a>
             </div>
-            <div className="text-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold mb-2 text-primary text-lg">Phone</h3>
-              <a href={CONTACT_INFO.phoneHref} className="text-gray-600 hover:text-primary transition-colors">
-                {CONTACT_INFO.phone}
-              </a>
+
+            {/* Right — form */}
+            <div className="bg-surface rounded-2xl border border-surface-border p-7 lg:p-8">
+              <h2 className="text-[1.25rem] font-bold text-ink mb-6">Tell us about your situation</h2>
+              <form className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-semibold text-ink mb-2">Full name *</label>
+                    <input
+                      type="text" id="name" name="name" required
+                      className="w-full px-4 py-3 border border-surface-border rounded-lg text-ink bg-surface placeholder-ink-20 focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-all text-sm"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-semibold text-ink mb-2">Work email *</label>
+                    <input
+                      type="email" id="email" name="email" required
+                      className="w-full px-4 py-3 border border-surface-border rounded-lg text-ink bg-surface placeholder-ink-20 focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-all text-sm"
+                      placeholder="you@company.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="company" className="block text-sm font-semibold text-ink mb-2">Company</label>
+                    <input
+                      type="text" id="company" name="company"
+                      className="w-full px-4 py-3 border border-surface-border rounded-lg text-ink bg-surface placeholder-ink-20 focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-all text-sm"
+                      placeholder="Company name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="revenue" className="block text-sm font-semibold text-ink mb-2">Annual revenue</label>
+                    <select
+                      id="revenue" name="revenue"
+                      className="w-full px-4 py-3 border border-surface-border rounded-lg text-ink bg-surface focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-all text-sm"
+                    >
+                      <option value="">Select range</option>
+                      <option value="under-5cr">Under ₹5Cr</option>
+                      <option value="5-20cr">₹5Cr – ₹20Cr</option>
+                      <option value="20-50cr">₹20Cr – ₹50Cr</option>
+                      <option value="50-100cr">₹50Cr – ₹100Cr</option>
+                      <option value="over-100cr">Over ₹100Cr</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="industry" className="block text-sm font-semibold text-ink mb-2">Industry</label>
+                  <select
+                    id="industry" name="industry"
+                    className="w-full px-4 py-3 border border-surface-border rounded-lg text-ink bg-surface focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-all text-sm"
+                  >
+                    <option value="">Select industry</option>
+                    <option value="saas">SaaS</option>
+                    <option value="d2c">D2C / E-Commerce</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="fintech">FinTech</option>
+                    <option value="professional-services">Professional Services</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-semibold text-ink mb-2">What is your biggest growth challenge right now? *</label>
+                  <textarea
+                    id="message" name="message" rows={4} required
+                    className="w-full px-4 py-3 border border-surface-border rounded-lg text-ink bg-surface placeholder-ink-20 focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-all text-sm resize-none"
+                    placeholder="Where are you stuck? What have you tried? What does success look like in 12 months?"
+                  />
+                </div>
+
+                <button type="submit" className="btn-primary w-full btn-lg">
+                  Request Strategy Call
+                </button>
+
+                <p className="text-xs text-ink-40 text-center leading-relaxed">
+                  We respond within 24 hours. No spam. No pitch decks. Just a real conversation.
+                </p>
+              </form>
             </div>
-            <div className="text-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold mb-2 text-primary text-lg">Response Time</h3>
-              <p className="text-gray-600">Within 24 hours</p>
-            </div>
+
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   )
 }

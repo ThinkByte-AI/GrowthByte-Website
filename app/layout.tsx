@@ -15,25 +15,25 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI-Powered Marketing Agency | End-to-End Growth Solutions | GrowthByte',
-    template: '%s | GrowthByte'
+    default: 'GrowthByte — AI-Powered Growth Partner',
+    template: '%s — GrowthByte'
   },
-  description: 'Transform your marketing with AI + human expertise. Multi-channel strategies that deliver exponential growth. Integrated SEO, PPC, Social, Email & Design.',
-  keywords: ['AI marketing agency', 'marketing strategy', 'SEO services', 'PPC management', 'social media marketing', 'email marketing', 'growth marketing'],
+  description: 'GrowthByte deploys integrated AI systems across paid media, SEO, content, and lifecycle marketing — guided by senior strategists. Measurable CAC reduction, ROAS improvement, and revenue growth.',
+  keywords: ['AI growth partner', 'performance marketing', 'CAC reduction', 'ROAS improvement', 'SEO', 'marketing automation', 'growth strategy', 'SaaS marketing', 'D2C marketing'],
   authors: [{ name: 'GrowthByte' }],
   creator: 'GrowthByte',
   openGraph: {
     type: 'website',
-    locale: 'en_US',
-    url: 'https://growthbyte.com',
+    locale: 'en_IN',
+    url: 'https://www.growthbyte.ai',
     siteName: 'GrowthByte',
-    title: 'AI-Powered Marketing Agency | GrowthByte',
-    description: 'Transform your marketing with AI + human expertise. Multi-channel strategies that deliver exponential growth.',
+    title: 'GrowthByte — AI-Powered Growth Partner',
+    description: 'AI systems + human strategy. Built to drive measurable revenue growth.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI-Powered Marketing Agency | GrowthByte',
-    description: 'Transform your marketing with AI + human expertise.',
+    title: 'GrowthByte — AI-Powered Growth Partner',
+    description: 'AI systems + human strategy. Built to drive measurable revenue growth.',
   },
   robots: {
     index: true,
@@ -68,8 +68,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
-      <body className="antialiased bg-white text-secondary-dark">
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg">
+      <body className="antialiased bg-surface text-ink">
+        <a href="#main-content" className="skip-nav">
           Skip to main content
         </a>
         <Header />

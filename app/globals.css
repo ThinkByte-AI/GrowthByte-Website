@@ -2,257 +2,409 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────
+   CSS DESIGN TOKENS
+   Brand: GrowthByte — teal / amber / ink / white
+───────────────────────────────────────────── */
+:root {
+  --color-teal:         #009389;
+  --color-teal-dark:    #007870;
+  --color-teal-light:   #00b5aa;
+  --color-teal-muted:   #e6f4f3;
+
+  --color-amber:        #935600;
+  --color-amber-dark:   #7a4700;
+  --color-amber-light:  #b86e00;
+  --color-amber-muted:  #fdf3e6;
+
+  --color-ink:          #0B0B0B;
+  --color-ink-90:       #1a1a1a;
+  --color-ink-80:       #2a2a2a;
+  --color-ink-60:       #525252;
+  --color-ink-40:       #7a7a7a;
+  --color-ink-20:       #a8a8a8;
+  --color-ink-10:       #d4d4d4;
+
+  --color-surface:      #FFFFFF;
+  --color-surface-2:    #F8F8F7;
+  --color-surface-3:    #F1F1EF;
+  --color-surface-4:    #E8E8E5;
+  --color-border:       #E2E2DF;
+
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-3xl:  28px;
+
+  --shadow-card: 0 1px 3px rgba(11,11,11,0.06), 0 4px 12px rgba(11,11,11,0.06);
+  --shadow-card-hover: 0 2px 8px rgba(11,11,11,0.08), 0 8px 24px rgba(11,11,11,0.1);
+  --shadow-teal: 0 4px 20px rgba(0,147,137,0.25);
+
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+}
+
+/* ─────────────────────────────────────────────
+   BASE LAYER
+───────────────────────────────────────────── */
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply text-secondary-dark antialiased;
-    font-feature-settings: "kern" 1, "liga" 1;
-    text-rendering: optimizeLegibility;
+    @apply bg-surface text-ink;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
-  /*
-   * Material Design Typography Scale
-   * Based on 8dp grid with clear hierarchy
-   */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
-    font-weight: 700;
+  *:focus-visible {
+    @apply outline-none ring-2 ring-teal ring-offset-2;
   }
 
-  /* Display Large - Hero headlines */
+  /* Typography hierarchy */
   h1 {
-    font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
-    line-height: 1.1;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    @apply text-ink;
+  }
+
+  h2 {
+    font-size: clamp(1.875rem, 3vw + 0.5rem, 3rem);
+    line-height: 1.12;
     letter-spacing: -0.02em;
     font-weight: 700;
+    @apply text-ink;
   }
 
-  /* Display Medium - Section headlines */
-  h2 {
-    font-size: clamp(1.75rem, 3vw + 0.5rem, 2.75rem);
-    line-height: 1.2;
-    letter-spacing: -0.015em;
-    font-weight: 700;
-  }
-
-  /* Display Small - Card headlines */
   h3 {
-    font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
-    line-height: 1.25;
+    font-size: clamp(1.25rem, 2vw + 0.375rem, 1.875rem);
+    line-height: 1.22;
     letter-spacing: -0.01em;
     font-weight: 600;
+    @apply text-ink;
   }
 
-  /* Headline Large */
   h4 {
-    font-size: clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem);
+    font-size: clamp(1.125rem, 1.25vw + 0.375rem, 1.5rem);
     line-height: 1.3;
     letter-spacing: -0.005em;
     font-weight: 600;
+    @apply text-ink;
   }
 
-  /* Headline Medium */
   h5 {
-    font-size: clamp(1rem, 1vw + 0.5rem, 1.25rem);
+    font-size: clamp(1rem, 0.75vw + 0.375rem, 1.25rem);
     line-height: 1.4;
     font-weight: 600;
+    @apply text-ink;
   }
 
-  /* Headline Small */
   h6 {
-    font-size: clamp(0.875rem, 0.75vw + 0.5rem, 1.125rem);
+    font-size: clamp(0.875rem, 0.5vw + 0.375rem, 1.125rem);
     line-height: 1.4;
     font-weight: 600;
+    @apply text-ink;
   }
 
-  /* Body Large */
   p {
     font-size: 1rem;
-    line-height: 1.6;
-    letter-spacing: 0.01em;
+    line-height: 1.65;
+    @apply text-ink-60;
   }
 
-  /* Hero subtitle text */
-  .text-hero {
-    font-size: clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem);
-    line-height: 1.4;
-    letter-spacing: 0;
+  strong {
+    font-weight: 600;
+    @apply text-ink;
   }
 
-  /* Lead paragraph text */
-  .text-lead {
-    font-size: clamp(1.0625rem, 0.75vw + 0.5rem, 1.25rem);
-    line-height: 1.6;
-    letter-spacing: 0.005em;
-  }
-
-  /* Body small */
-  .text-small {
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-
-  /* Caption */
-  .text-caption {
-    font-size: 0.75rem;
-    line-height: 1.4;
-    letter-spacing: 0.02em;
+  a {
+    @apply transition-colors duration-[250ms];
   }
 }
 
+/* ─────────────────────────────────────────────
+   COMPONENT LAYER
+───────────────────────────────────────────── */
 @layer components {
-  /*
-   * Material Design Buttons
-   * Minimum touch target: 48dp, padding based on 8dp grid
-   */
-  .btn-primary {
-    @apply bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-200 inline-flex items-center justify-center text-center;
-    font-size: 0.9375rem;
-    letter-spacing: 0.02em;
-    min-height: 48px;
-  }
 
-  .btn-primary:hover {
-    @apply shadow-lg;
-    transform: translateY(-1px);
-  }
-
-  .btn-secondary {
-    @apply bg-transparent border-2 border-primary text-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary hover:text-white transition-all duration-200 inline-flex items-center justify-center text-center;
-    font-size: 0.9375rem;
-    letter-spacing: 0.02em;
-    min-height: 48px;
-  }
-
-  .btn-secondary:hover {
-    @apply shadow-lg;
-    transform: translateY(-1px);
-  }
-
-  /*
-   * Material Design Spacing System
-   * Based on 8dp grid: 8, 16, 24, 32, 48, 64, 80, 96, 128
-   * Section padding: 64dp mobile, 80dp tablet, 96dp desktop, 128dp large
-   */
-  .section-padding {
-    @apply py-16 md:py-20 lg:py-24 xl:py-32;
-  }
-
-  .section-padding-sm {
-    @apply py-12 md:py-16 lg:py-20;
-  }
-
-  .section-padding-lg {
-    @apply py-20 md:py-24 lg:py-32 xl:py-40;
-  }
-
-  /*
-   * Container System
-   * Max width with consistent horizontal padding (16dp mobile, 24dp tablet, 32dp desktop)
-   */
+  /* ── Containers ─────────────────────────── */
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-content mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .container-narrow {
-    @apply max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-readable mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .container-wide {
     @apply max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Gradient text utility */
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent;
+  /* ── Section spacing ────────────────────── */
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
   }
 
-  /*
-   * Material Design Cards
-   * 16dp padding minimum, 24dp for comfortable, 32dp for spacious
-   */
-  .card {
-    @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6;
+  .section-padding-sm {
+    @apply py-14 md:py-20;
   }
 
-  .card-lg {
-    @apply bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200 p-8;
+  .section-padding-lg {
+    @apply py-24 md:py-32 lg:py-40;
   }
 
-  /*
-   * Section Headers
-   * Consistent spacing: label 16dp below, title 8dp below, subtitle 32-48dp below
-   */
-  .section-title {
-    @apply text-center mb-4;
+  /* ── Section headers ────────────────────── */
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 text-label-sm text-teal uppercase tracking-[0.1em] mb-4;
   }
 
-  .section-subtitle {
-    @apply text-center text-lead text-gray-600 max-w-2xl mx-auto;
-    font-weight: 400;
+  .section-eyebrow-dark {
+    @apply inline-flex items-center gap-2 text-label-sm text-teal-light uppercase tracking-[0.1em] mb-4;
   }
 
-  .section-label {
-    @apply inline-block px-4 py-1.5 rounded-full text-sm font-semibold uppercase tracking-wider;
-    letter-spacing: 0.08em;
-    font-size: 0.75rem;
+  .section-heading {
+    @apply mb-4 text-balance;
   }
 
-  /* Section header group with proper Material Design spacing */
+  .section-subheading {
+    @apply text-body-lg text-ink-60 max-w-[42rem] text-balance;
+  }
+
   .section-header {
-    @apply text-center mb-12 md:mb-16;
+    @apply mb-12 md:mb-16;
   }
 
-  .section-header .section-label {
-    @apply mb-4;
+  .section-header-center {
+    @apply mb-12 md:mb-16 text-center;
   }
 
-  .section-header h2 {
-    @apply mb-4;
+  .section-header-center .section-subheading {
+    @apply mx-auto;
   }
 
-  .section-header .section-subtitle {
-    @apply mb-0;
+  /* ── Buttons ────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-lg
+           transition-all duration-[250ms] focus-visible:outline-none
+           focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    letter-spacing: 0.01em;
+    min-height: 48px;
   }
 
-  /* Text balance for better readability */
+  .btn-primary {
+    @apply btn bg-teal text-white px-6 py-3 text-[0.9375rem]
+           hover:bg-teal-dark active:bg-teal-dark;
+    box-shadow: 0 1px 3px rgba(0,147,137,0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: var(--shadow-teal);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    @apply btn border border-ink-10 text-ink bg-surface px-6 py-3 text-[0.9375rem]
+           hover:border-teal hover:text-teal;
+  }
+
+  .btn-ghost {
+    @apply btn text-teal px-4 py-2 text-[0.9375rem]
+           hover:bg-teal-muted;
+  }
+
+  .btn-ghost-dark {
+    @apply btn text-white/80 px-6 py-3 text-[0.9375rem] border border-white/20
+           hover:text-white hover:border-white/40 hover:bg-white/5;
+  }
+
+  .btn-amber {
+    @apply btn bg-amber text-white px-6 py-3 text-[0.9375rem]
+           hover:bg-amber-dark active:bg-amber-dark;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+    min-height: 36px;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-base;
+    min-height: 56px;
+  }
+
+  /* ── Cards ──────────────────────────────── */
+  .card {
+    @apply bg-surface rounded-xl border border-surface-border p-6;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .card-flat {
+    @apply bg-surface rounded-xl border border-surface-border p-6;
+  }
+
+  .card-tinted {
+    @apply bg-teal-muted rounded-xl border border-teal/10 p-6;
+  }
+
+  .card-dark {
+    @apply bg-ink-90 rounded-xl border border-white/5 p-6 text-white;
+  }
+
+  /* ── Tags / Labels ──────────────────────── */
+  .tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-label-sm;
+  }
+
+  .tag-teal {
+    @apply tag bg-teal-muted text-teal;
+  }
+
+  .tag-amber {
+    @apply tag bg-amber-muted text-amber;
+  }
+
+  .tag-dark {
+    @apply tag bg-white/10 text-white;
+  }
+
+  /* ── Dividers ───────────────────────────── */
+  .divider {
+    @apply w-12 h-[3px] rounded-full bg-teal;
+  }
+
+  /* ── Metric display blocks ──────────────── */
+  .metric-value {
+    @apply font-bold text-ink tabular-nums;
+    font-size: clamp(2rem, 3vw + 0.5rem, 2.75rem);
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  .metric-value-light {
+    @apply font-bold text-white tabular-nums;
+    font-size: clamp(2rem, 3vw + 0.5rem, 2.75rem);
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  .metric-label {
+    @apply text-label-md text-ink-40 uppercase tracking-wider mt-2;
+  }
+
+  .metric-label-light {
+    @apply text-label-md text-white/50 uppercase tracking-wider mt-2;
+  }
+
+  /* ── Icon containers ────────────────────── */
+  .icon-container {
+    @apply w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0;
+  }
+
+  .icon-teal {
+    @apply icon-container bg-teal-muted text-teal;
+  }
+
+  .icon-amber {
+    @apply icon-container bg-amber-muted text-amber;
+  }
+
+  .icon-dark {
+    @apply icon-container bg-white/10 text-white;
+  }
+
+  /* ── Number step indicator ──────────────── */
+  .step-number {
+    @apply w-8 h-8 rounded-full bg-teal text-white text-sm font-bold
+           flex items-center justify-center flex-shrink-0 tabular-nums;
+  }
+
+  /* ── Proof strip / Ticker ───────────────── */
+  .proof-strip {
+    @apply border-y border-surface-border bg-surface-2 py-5;
+  }
+
+  /* ── Text utilities ─────────────────────── */
   .text-balance {
     text-wrap: balance;
   }
 
-  /* Grid utilities */
-  .grid-auto-fit {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  .text-hero {
+    font-size: clamp(1.125rem, 1.5vw + 0.375rem, 1.375rem);
+    line-height: 1.55;
   }
 
-  .grid-auto-fill {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  .text-lead {
+    font-size: clamp(1rem, 0.75vw + 0.375rem, 1.1875rem);
+    line-height: 1.65;
   }
 
-  /* Visual effects */
-  .gradient-mask {
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  /* ── Horizontal rule accent ─────────────── */
+  .hr-teal {
+    @apply border-0 h-px bg-gradient-to-r from-transparent via-teal/30 to-transparent;
   }
 
-  .glass-effect {
-    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  /* ── Gradient backgrounds ───────────────── */
+  .bg-grid-subtle {
+    background-image:
+      linear-gradient(rgba(11,11,11,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,11,11,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 
-  .shadow-glow {
-    box-shadow: 0 0 40px rgba(255, 107, 53, 0.15);
+  .bg-grid-dark {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 
-  .shadow-glow-lg {
-    box-shadow: 0 0 60px rgba(255, 107, 53, 0.2);
+  /* ── FAQ accordion ──────────────────────── */
+  .faq-item {
+    @apply border-b border-surface-border;
+  }
+
+  .faq-trigger {
+    @apply w-full flex items-center justify-between gap-4 py-5 text-left
+           hover:text-teal transition-colors duration-[250ms] font-medium text-ink;
+  }
+
+  .faq-content {
+    @apply pb-5 text-ink-60 text-body-md leading-relaxed;
+  }
+
+  /* ── Skip nav ───────────────────────────── */
+  .skip-nav {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4
+           focus:z-[100] focus:px-4 focus:py-2 focus:bg-teal focus:text-white
+           focus:rounded-lg focus:shadow-lg;
   }
 }
 
+/* ─────────────────────────────────────────────
+   UTILITY LAYER
+───────────────────────────────────────────── */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -270,14 +422,24 @@
     border-width: 0;
   }
 
-  .focus\:not-sr-only:focus {
+  .not-sr-only {
     position: static;
     width: auto;
     height: auto;
-    padding: inherit;
-    margin: inherit;
+    padding: 0;
+    margin: 0;
     overflow: visible;
     clip: auto;
     white-space: normal;
+  }
+
+  /* Scroll margin for anchor nav */
+  .scroll-mt-header {
+    scroll-margin-top: 80px;
+  }
+
+  /* Tabular numbers for stats */
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }

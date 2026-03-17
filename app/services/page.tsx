@@ -1,38 +1,76 @@
 import type { Metadata } from 'next'
-import ServicesSection from '@/components/sections/ServicesSection'
+import Link from 'next/link'
+import { SERVICES } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'Marketing Services | SEO, PPC, Social Media, Email | GrowthByte',
-  description: 'End-to-end marketing services: SEO, PPC, social media, email marketing, content design, and marketing strategy.',
-  keywords: ['SEO services', 'PPC management', 'social media marketing', 'email marketing', 'content design', 'marketing strategy'],
+  title: 'Services — GrowthByte | AI-Powered Growth Services',
+  description: 'Six integrated growth capabilities — from performance marketing and SEO to automation and analytics. Every service feeds the same revenue outcome.',
 }
 
 export default function ServicesPage() {
   return (
     <>
-      <div className="relative section-padding bg-gradient-to-br from-secondary-dark via-secondary to-secondary-dark text-white overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
+      {/* Page hero */}
+      <section className="relative bg-ink overflow-hidden">
+        <div className="absolute inset-0 bg-grid-dark pointer-events-none" aria-hidden="true" />
+        <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
+          <p className="section-eyebrow-dark">Services</p>
+          <h1 className="text-white max-w-[40rem] text-balance mb-5">
+            Six capabilities. One growth system.
+          </h1>
+          <p className="text-white/55 text-body-lg max-w-[36rem] text-balance">
+            Each service is designed to compound with the others. You can start with one — but the real gains come from integration.
+          </p>
         </div>
-        
-        <div className="container-custom relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-6">
-              <span className="inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm rounded-full text-primary-light text-sm font-semibold">
-                Our Services
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 text-balance leading-tight">
-              Our End-to-End Marketing Services
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive solutions designed to accelerate your growth across all channels
-            </p>
+      </section>
+
+      {/* Services grid */}
+      <section className="section-padding bg-surface">
+        <div className="container-custom">
+          <div className="grid md:grid-cols-2 gap-6">
+            {SERVICES.map((service) => (
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group block bg-surface border border-surface-border rounded-2xl p-7 lg:p-8 hover:border-teal/30 hover:shadow-card-hover transition-all duration-250"
+              >
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h2 className="font-bold text-ink text-[1.1875rem] mb-1">{service.title}</h2>
+                    <p className="text-sm font-medium text-teal">{service.outcome}</p>
+                  </div>
+                  <svg
+                    className="w-5 h-5 text-ink-20 group-hover:text-teal flex-shrink-0 mt-1 transition-colors duration-250"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+                <p className="text-body-sm text-ink-60 leading-relaxed mb-5">{service.description}</p>
+                <ul className="grid grid-cols-2 gap-2">
+                  {service.capabilities.map((cap, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-ink-60">
+                      <span className="w-1 h-1 rounded-full bg-teal flex-shrink-0" />
+                      {cap}
+                    </li>
+                  ))}
+                </ul>
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
-      <ServicesSection />
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="section-padding-sm bg-surface-2 border-t border-surface-border">
+        <div className="container-custom text-center">
+          <h2 className="text-balance mb-4">Not sure which services you need?</h2>
+          <p className="text-ink-60 text-body-lg mb-8 max-w-[32rem] mx-auto">
+            Book a strategy call. We will audit your current setup and recommend a prioritised starting point.
+          </p>
+          <Link href="/contact" className="btn-primary btn-lg">Book a Strategy Call</Link>
+        </div>
+      </section>
     </>
   )
 }

@@ -1,3 +1,5 @@
+// WhyChooseSection is deprecated — content folded into AIModelSection and ProblemSection.
+// Kept as empty pass-through to avoid import errors during transition.
 export default function WhyChooseSection() {
   const differentiators = [
     {

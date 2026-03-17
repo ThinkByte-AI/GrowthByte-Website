@@ -1,12 +1,15 @@
 // JSON-LD structured data for SEO
 
+const DESCRIPTION = 'GrowthByte deploys integrated AI systems + human strategy to drive measurable revenue growth for SaaS, D2C, FinTech, and Healthcare companies.'
+const URL = 'https://www.growthbyte.ai'
+
 export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'GrowthByte',
-  url: 'https://growthbyte.com',
-  logo: 'https://growthbyte.com/logo.png',
-  description: 'AI-powered marketing agency delivering exponential growth through integrated strategies.',
+  url: URL,
+  logo: `${URL}/logo.png`,
+  description: DESCRIPTION,
   contactPoint: {
     '@type': 'ContactPoint',
     telephone: '+91-8904879011',
@@ -23,8 +26,8 @@ export const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'GrowthByte',
-  url: 'https://growthbyte.com',
-  description: 'AI-powered marketing agency delivering exponential growth through integrated strategies.',
+  url: URL,
+  description: DESCRIPTION,
   publisher: {
     '@type': 'Organization',
     name: 'GrowthByte',
@@ -34,14 +37,14 @@ export const websiteSchema = {
 export const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  serviceType: 'Marketing Agency Services',
+  serviceType: 'AI-Powered Growth Marketing',
   provider: {
     '@type': 'Organization',
     name: 'GrowthByte',
   },
-  areaServed: 'Worldwide',
+  areaServed: 'India',
   availableChannel: {
     '@type': 'ServiceChannel',
-    serviceUrl: 'https://growthbyte.com/contact',
+    serviceUrl: `${URL}/contact`,
   },
 }
