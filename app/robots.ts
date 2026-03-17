@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/'],
     },
-    sitemap: 'https://growthbyte.com/sitemap.xml',
+    sitemap: 'https://www.growthbyte.ai/sitemap.xml',
   }
 }

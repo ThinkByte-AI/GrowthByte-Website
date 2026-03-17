@@ -8,19 +8,19 @@ interface CTAProps {
   className?: string
 }
 
-export default function CTA({ 
-  primary = "Schedule Your Free Strategy Session",
-  secondary = "View Our Case Studies",
+export default function CTA({
+  primary = "Book a Strategy Call",
+  secondary = "See Case Studies",
   primaryHref = "/contact",
-  secondaryHref = "/#case-studies",
+  secondaryHref = "/case-studies",
   className = ""
 }: CTAProps) {
   return (
     <div className={`flex flex-col sm:flex-row gap-4 justify-center ${className}`}>
-      <Link href={primaryHref} className="btn-primary">
+      <Link href={primaryHref} className="btn-primary btn-lg">
         {primary}
       </Link>
-      <Link href={secondaryHref} className="btn-secondary">
+      <Link href={secondaryHref} className="btn-ghost btn-lg">
         {secondary}
       </Link>
     </div>

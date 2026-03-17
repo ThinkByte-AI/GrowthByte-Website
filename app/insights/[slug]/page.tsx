@@ -6,8 +6,12 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const title = params.slug
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
   return {
-    title: `Insights — GrowthByte`,
+    title,
     description: 'Growth strategy, performance marketing, SEO, and automation insights from GrowthByte.',
   }
 }

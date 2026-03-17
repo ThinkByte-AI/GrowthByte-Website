@@ -14,11 +14,12 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.growthbyte.ai'),
   title: {
     default: 'GrowthByte — AI-Powered Growth Partner',
     template: '%s — GrowthByte'
   },
-  description: 'GrowthByte deploys integrated AI systems across paid media, SEO, content, and lifecycle marketing — guided by senior strategists. Measurable CAC reduction, ROAS improvement, and revenue growth.',
+  description: 'Integrated AI systems + senior strategists. Driving measurable CAC reduction, ROAS improvement, and revenue growth for SaaS, D2C, FinTech, and Healthcare companies.',
   keywords: ['AI growth partner', 'performance marketing', 'CAC reduction', 'ROAS improvement', 'SEO', 'marketing automation', 'growth strategy', 'SaaS marketing', 'D2C marketing'],
   authors: [{ name: 'GrowthByte' }],
   creator: 'GrowthByte',
