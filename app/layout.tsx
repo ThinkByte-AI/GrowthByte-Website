@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     template: '%s | GrowthByte'
   },
   description: 'Transform your marketing with AI + human expertise. Multi-channel strategies that deliver exponential growth. Integrated SEO, PPC, Social, Email & Design.',
+  verification: {                                          // ✅ Correct placement
+    google: 'jbQWvQPuXS1f5YYxhgJpuqaE0Ey0DplprdQtFdcaO0s',
+  },
   keywords: ['AI marketing agency', 'marketing strategy', 'SEO services', 'PPC management', 'social media marketing', 'email marketing', 'growth marketing'],
   authors: [{ name: 'GrowthByte' }],
   creator: 'GrowthByte',
@@ -59,6 +62,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRK30WK0FW"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-BRK30WK0FW');
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
