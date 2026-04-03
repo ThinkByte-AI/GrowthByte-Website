@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   keywords: ['AI growth partner', 'performance marketing', 'CAC reduction', 'ROAS improvement', 'SEO', 'marketing automation', 'growth strategy', 'SaaS marketing', 'D2C marketing'],
   authors: [{ name: 'GrowthByte' }],
   creator: 'GrowthByte',
+  verification: {
+    google: 'jbQWvQPuXS1f5YYxhgJpuqaE0Ey0DplprdQtFdcaO0s',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
@@ -60,6 +63,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRK30WK0FW"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-BRK30WK0FW');
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
