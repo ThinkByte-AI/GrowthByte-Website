@@ -1,5 +1,3 @@
-// Convert Payload Lexical JSON to HTML
-
 interface LexicalUploadValue {
   url?: string
   alt?: string
@@ -19,114 +17,92 @@ interface LexicalNode {
   root?: { children?: LexicalNode[] }
 }
 
-// Format flags
+interface RenderState {
+  headingIndex: number
+}
+
 const FORMAT_BOLD = 1
 const FORMAT_ITALIC = 2
-const FORMAT_UNDERLINE = 8
 const FORMAT_STRIKETHROUGH = 4
+const FORMAT_UNDERLINE = 8
 
-function formatText(text: string, format?: number): string {
+const formatText = (text: string, format?: number): string => {
   if (!format) return text
-
   let result = text
-
-  if (format & FORMAT_BOLD) {
-    result = `<strong>${result}</strong>`
-  }
-  if (format & FORMAT_ITALIC) {
-    result = `<em>${result}</em>`
-  }
-  if (format & FORMAT_UNDERLINE) {
-    result = `<u>${result}</u>`
-  }
-  if (format & FORMAT_STRIKETHROUGH) {
-    result = `<s>${result}</s>`
-  }
-
+  if (format & FORMAT_BOLD) result = `<strong>${result}</strong>`
+  if (format & FORMAT_ITALIC) result = `<em>${result}</em>`
+  if (format & FORMAT_UNDERLINE) result = `<u>${result}</u>`
+  if (format & FORMAT_STRIKETHROUGH) result = `<s>${result}</s>`
   return result
 }
 
-function nodeToHtml(node: LexicalNode): string {
+const renderHeading = (node: LexicalNode, state: RenderState): string => {
+  const tag = node.tag || 'h2'
+  const inner = nodesToHtml(node.children || [], state)
+  if (tag === 'h2' || tag === 'h3') {
+    const id = `heading-${state.headingIndex++}`
+    return `<${tag} id="${id}">${inner}</${tag}>`
+  }
+  return `<${tag}>${inner}</${tag}>`
+}
+
+const renderUpload = (node: LexicalNode): string => {
+  if (!node.value?.url) return ''
+  return `<img src="${node.value.url}" alt="${node.value.alt || ''}" />`
+}
+
+const nodeToHtml = (node: LexicalNode, state: RenderState): string => {
   switch (node.type) {
     case 'text':
       return formatText(node.text || '', node.format)
-
     case 'paragraph':
-      return `<p>${nodesToHtml(node.children || [])}</p>`
-
+      return `<p>${nodesToHtml(node.children || [], state)}</p>`
     case 'heading':
-      return `<${node.tag || 'h2'}>${nodesToHtml(node.children || [])}</${node.tag || 'h2'}>`
-
-    case 'list':
+      return renderHeading(node, state)
+    case 'list': {
       const listTag = node.listType === 'number' ? 'ol' : 'ul'
-      return `<${listTag}>${nodesToHtml(node.children || [])}</${listTag}>`
-
+      return `<${listTag}>${nodesToHtml(node.children || [], state)}</${listTag}>`
+    }
     case 'listitem':
-      return `<li>${nodesToHtml(node.children || [])}</li>`
-
+      return `<li>${nodesToHtml(node.children || [], state)}</li>`
     case 'link':
-      return `<a href="${node.url || '#'}">${nodesToHtml(node.children || [])}</a>`
-
+      return `<a href="${node.url || '#'}">${nodesToHtml(node.children || [], state)}</a>`
     case 'quote':
-      return `<blockquote>${nodesToHtml(node.children || [])}</blockquote>`
-
+      return `<blockquote>${nodesToHtml(node.children || [], state)}</blockquote>`
     case 'linebreak':
       return '<br>'
-
     case 'upload':
-      // Image upload
-      if (node.value?.url) {
-        return `<img src="${node.value.url}" alt="${node.value.alt || ''}" />`
-      }
-      return ''
-
+      return renderUpload(node)
     case 'relationship':
-      // Internal link - just show text for now
-      return nodesToHtml(node.children || [])
-
+      return nodesToHtml(node.children || [], state)
     case 'autolink':
       return `<a href="${node.url || '#'}">${node.text || ''}</a>`
-
     default:
-      // For unknown types, try to render children
-      if (node.children) {
-        return nodesToHtml(node.children)
-      }
+      if (node.children) return nodesToHtml(node.children, state)
       return ''
   }
 }
 
-function nodesToHtml(nodes: LexicalNode[]): string {
-  return nodes.map(nodeToHtml).join('')
+const nodesToHtml = (nodes: LexicalNode[], state: RenderState): string =>
+  nodes.map((n) => nodeToHtml(n, state)).join('')
+
+const parseLexicalInput = (input: any): LexicalNode | null => {
+  if (!input) return null
+  try {
+    return typeof input === 'string' ? JSON.parse(input) : input
+  } catch {
+    return null
+  }
 }
 
 export function lexicalToHtml(lexicalContent: any): string {
-  if (!lexicalContent) return ''
+  const content = parseLexicalInput(lexicalContent)
+  if (!content) return ''
 
-  // Handle string (JSON) or object
-  let content: LexicalNode
-  try {
-    content = typeof lexicalContent === 'string'
-      ? JSON.parse(lexicalContent)
-      : lexicalContent
-  } catch {
-    return ''
-  }
+  const state: RenderState = { headingIndex: 0 }
 
-  // Check if it's a root document
-  if (content.root?.children) {
-    return nodesToHtml(content.root.children)
-  }
-
-  // Direct children array
-  if (Array.isArray(content)) {
-    return nodesToHtml(content)
-  }
-
-  // Single node with children
-  if (content.children) {
-    return nodesToHtml(content.children)
-  }
-
+  if (content.root?.children) return nodesToHtml(content.root.children, state)
+  if (Array.isArray(content)) return nodesToHtml(content, state)
+  if (content.children) return nodesToHtml(content.children, state)
   return ''
 }

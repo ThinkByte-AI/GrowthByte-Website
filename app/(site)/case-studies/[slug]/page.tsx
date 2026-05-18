@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${cs.headline} — GrowthByte Case Study`,
     description: cs.summary,
+    alternates: { canonical: `/case-studies/${params.slug}` },
   }
 }
 

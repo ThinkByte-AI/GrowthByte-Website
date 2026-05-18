@@ -1,7 +1,7 @@
 import type { TemplateContent } from '@/lib/templateRenderer'
 import { lexicalToHtml } from '@/lib/lexicalToHtml'
 
-const PROSE_CLASSES = 'prose prose-lg max-w-none'
+const PROSE_CLASSES = 'prose prose-lg max-w-none prose-h1:text-3xl prose-h1:mt-10 prose-h1:mb-5 prose-h2:text-2xl prose-h3:text-xl'
 
 const Meta = ({ post }: { post: TemplateContent }) => (
   <div className="flex gap-4 mt-4 text-sm text-gray-500">

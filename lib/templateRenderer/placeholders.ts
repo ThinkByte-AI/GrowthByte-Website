@@ -19,7 +19,7 @@ export const AVAILABLE_PLACEHOLDERS: Record<ContentType, string[]> = {
   landing: ['title', 'slug', 'content', 'featuredImage', 'featuredImageAlt'],
 }
 
-const DYNAMIC_PLACEHOLDERS = ['relatedPostsCount', 'relatedPosts', 'categoriesList', 'popularPosts']
+const DYNAMIC_PLACEHOLDERS = ['relatedPostsCount', 'relatedPosts', 'categoriesList', 'popularPosts', 'toc']
 
 export const getPlaceholdersForType = (contentType: ContentType): string[] => {
   const base = AVAILABLE_PLACEHOLDERS[contentType] || []

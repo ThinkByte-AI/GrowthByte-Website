@@ -442,4 +442,10 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Table-of-contents active section highlight */
+  .toc-link-active {
+    color: var(--color-teal);
+    border-color: var(--color-teal);
+  }
 }

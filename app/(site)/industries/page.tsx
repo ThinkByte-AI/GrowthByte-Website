@@ -5,6 +5,7 @@ import { INDUSTRIES } from '@/lib/constants'
 export const metadata: Metadata = {
   title: 'Industries — GrowthByte | Vertical-Specific Growth Systems',
   description: 'GrowthByte works in SaaS, D2C/E-Commerce, Healthcare, FinTech, and Professional Services. Proven playbooks, industry benchmarks, and prior results in each vertical.',
+  alternates: { canonical: '/industries' },
 }
 
 export default function IndustriesPage() {

@@ -46,6 +46,13 @@ export interface PageTemplate {
   styling: {
     theme: Theme
     customCSS?: string
+    h1Size?: number
+    h2Size?: number
+    h3Size?: number
+    bodySize?: number
+    headingColor?: string
+    bodyColor?: string
+    linkColor?: string
   }
 
   isDefault?: boolean

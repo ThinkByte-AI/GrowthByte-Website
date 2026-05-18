@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description: 'Growth strategy, performance marketing, SEO, and automation insights from GrowthByte.',
+    alternates: { canonical: `/insights/${params.slug}` },
   }
 }
 

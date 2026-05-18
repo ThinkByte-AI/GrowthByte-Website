@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { renderTemplate, type DynamicData } from '@/lib/templateRenderer'
+import { buildTypographyCss, renderTemplate, type DynamicData } from '@/lib/templateRenderer'
+import TocActiveSpy from '@/components/TocActiveSpy'
 
 import { getService, getRelatedServices, resolveServiceTemplate } from './_fetchers'
 import FallbackService from './_components/FallbackService'
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: service.metaTitle || `${service.title} — GrowthByte`,
     description: service.metaDescription || service.description,
+    alternates: { canonical: `/services/${slug}` },
   }
 }
 
@@ -34,10 +36,13 @@ export default async function ServicePage({ params }: Props) {
       service,
       { contentType: 'service', dynamicData },
     )
+    const typographyCss = buildTypographyCss(template.styling)
     return (
       <>
+        {typographyCss && <style dangerouslySetInnerHTML={{ __html: typographyCss }} />}
         {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
         <div dangerouslySetInnerHTML={{ __html: html }} />
+        <TocActiveSpy />
       </>
     )
   }

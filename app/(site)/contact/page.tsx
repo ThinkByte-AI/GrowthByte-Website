@@ -5,6 +5,7 @@ import { ContactForm } from './ContactForm'
 export const metadata: Metadata = {
   title: 'Book a Strategy Call — GrowthByte',
   description: 'Book a 30-minute strategy call with GrowthByte. We will audit your growth setup, identify the highest-leverage opportunities, and tell you exactly what we would do.',
+  alternates: { canonical: '/contact' },
 }
 
 export default function ContactPage() {

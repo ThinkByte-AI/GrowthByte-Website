@@ -14,13 +14,19 @@ const syncStatusWithPublishDate = (data: any) => {
   if (!data.publishedAt) return
   const publishDate = new Date(data.publishedAt)
   const now = new Date()
+  const isFuture = publishDate > now
+  const isPastOrNow = publishDate <= now
 
-  if (data._status === 'draft' && publishDate > now) {
-    data._status = 'scheduled'
+  if (data.workflowStatus === 'draft' && isFuture) {
+    data.workflowStatus = 'scheduled'
     return
   }
-  if (data._status === 'scheduled' && publishDate <= now) {
-    data._status = 'published'
+  if (data.workflowStatus === 'published' && isFuture) {
+    data.workflowStatus = 'scheduled'
+    return
+  }
+  if (data.workflowStatus === 'scheduled' && isPastOrNow) {
+    data.workflowStatus = 'published'
   }
 }
 

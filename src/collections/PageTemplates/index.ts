@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { stylingGroup } from './stylingGroup'
 
 export const PageTemplates: CollectionConfig = {
   slug: 'page-templates',
@@ -6,12 +7,7 @@ export const PageTemplates: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'type', 'updatedAt'],
     description: 'Create reusable page layouts for blogs and other content types',
-    preview: (doc) => {
-      if (doc?.id) {
-        return `/preview/templates/${doc.id}`
-      }
-      return null
-    },
+    preview: (doc) => (doc?.id ? `/preview/templates/${doc.id}` : null),
   },
   access: {
     read: () => true,
@@ -24,9 +20,7 @@ export const PageTemplates: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
-      admin: {
-        description: 'Template name shown in admin (e.g., "Blog Post Default", "Landing Page")',
-      },
+      admin: { description: 'Template name shown in admin (e.g., "Blog Post Default", "Landing Page")' },
     },
     {
       name: 'type',
@@ -39,18 +33,13 @@ export const PageTemplates: CollectionConfig = {
         { label: 'Landing Page', value: 'landing' },
         { label: 'Case Study', value: 'case-study' },
       ],
-      admin: {
-        description: 'What type of content this template is for',
-      },
+      admin: { description: 'What type of content this template is for' },
     },
     {
       name: 'description',
       type: 'textarea',
-      admin: {
-        description: 'Brief description of when to use this template',
-      },
+      admin: { description: 'Brief description of when to use this template' },
     },
-    // Make this the default template for its type
     {
       name: 'isDefault',
       type: 'checkbox',
@@ -59,36 +48,27 @@ export const PageTemplates: CollectionConfig = {
         description: 'Make this the default template for this content type',
       },
     },
-    // Visual Page Builder (Primary)
     {
       name: 'customLayout',
       type: 'group',
-      admin: {
-        description: 'Build your template visually - use {{placeholders}} for dynamic content',
-      },
+      admin: { description: 'Build your template visually - use {{placeholders}} for dynamic content' },
       fields: [
         {
           name: 'html',
           type: 'textarea',
-          admin: {
-            description: 'Generated HTML from the visual editor. Use placeholders like {{title}}, {{content}}, {{featuredImage}}',
-          },
+          admin: { description: 'Generated HTML. Use placeholders like {{title}}, {{content}}, {{featuredImage}}.' },
           maxLength: 1000000,
         },
         {
           name: 'css',
           type: 'textarea',
-          admin: {
-            description: 'Generated CSS from the visual editor',
-          },
+          admin: { description: 'Generated CSS from the visual editor' },
           maxLength: 500000,
         },
         {
           name: 'components',
           type: 'json',
-          admin: {
-            description: 'Component data (JSON) for the visual editor',
-          },
+          admin: { description: 'Component data (JSON) for the visual editor' },
         },
         {
           name: 'editor',
@@ -101,5 +81,6 @@ export const PageTemplates: CollectionConfig = {
         },
       ],
     },
+    stylingGroup,
   ],
 }

@@ -6,7 +6,7 @@ export const publicReadAccess: Access = ({ req }) => {
   const now = new Date().toISOString()
   const liveOnly: Where = {
     and: [
-      { _status: { equals: 'published' } },
+      { workflowStatus: { in: ['published', 'scheduled'] } },
       { publishedAt: { less_than_equal: now } },
     ],
   }

@@ -12,7 +12,7 @@ const transitionPosts = async (
   const result = await payload.find({
     collection: 'blog-posts',
     where: {
-      _status: { equals: whereStatus },
+      workflowStatus: { equals: whereStatus },
       [dateField]: { less_than_equal: now },
     },
     limit: BATCH_LIMIT,
@@ -22,7 +22,7 @@ const transitionPosts = async (
     await payload.update({
       collection: 'blog-posts',
       id: post.id,
-      data: { _status: nextStatus },
+      data: { workflowStatus: nextStatus },
     })
   }
 

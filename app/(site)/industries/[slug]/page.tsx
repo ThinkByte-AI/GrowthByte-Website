@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${industry.name} Growth Marketing — GrowthByte`,
     description: `${industry.challenge}. GrowthByte builds integrated AI-powered growth systems for ${industry.name} companies.`,
+    alternates: { canonical: `/industries/${params.slug}` },
   }
 }
 

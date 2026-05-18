@@ -7,6 +7,7 @@ import Cta from './_components/Cta'
 export const metadata: Metadata = {
   title: 'About GrowthByte — AI-Powered Growth Partner',
   description: 'GrowthByte was built because fragmented agencies and disconnected tools were failing growth-stage companies. We built an integrated AI + human growth system instead.',
+  alternates: { canonical: '/about' },
 }
 
 export default function AboutPage() {

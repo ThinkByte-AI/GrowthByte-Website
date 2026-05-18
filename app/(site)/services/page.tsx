@@ -5,6 +5,7 @@ import { SERVICES } from '@/lib/constants'
 export const metadata: Metadata = {
   title: 'Services — GrowthByte | AI-Powered Growth Services',
   description: 'Six integrated growth capabilities — from performance marketing and SEO to automation and analytics. Every service feeds the same revenue outcome.',
+  alternates: { canonical: '/services' },
 }
 
 export default function ServicesPage() {

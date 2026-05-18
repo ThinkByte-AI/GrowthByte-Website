@@ -2,7 +2,7 @@ import type { Field } from 'payload'
 
 export const workflowFields: Field[] = [
   {
-    name: '_status',
+    name: 'workflowStatus',
     type: 'select',
     defaultValue: 'draft',
     required: true,

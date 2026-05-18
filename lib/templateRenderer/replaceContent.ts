@@ -1,6 +1,7 @@
 import { lexicalToHtml } from '../lexicalToHtml'
 import type { TemplateContent } from './types'
 import { replaceNestedPlaceholder, replacePlaceholder } from './replaceField'
+import { buildTocHtml } from './buildTocHtml'
 
 const FLAT_KEYS = [
   'title', 'slug', 'excerpt', 'category', 'publishedAt', 'author',
@@ -41,10 +42,16 @@ const replaceRichContent = (html: string, content: TemplateContent): string => {
   return html.replace(/\{\{content\}\}/g, `<div class="rich-content">${contentHtml}</div>`)
 }
 
+const replaceToc = (html: string, content: TemplateContent): string => {
+  const tocHtml = content.content ? buildTocHtml(content.content) : ''
+  return html.replace(/\{\{toc\}\}/g, tocHtml)
+}
+
 export const replacePlaceholders = (html: string, content: TemplateContent): string => {
   let result = replaceFlatFields(html, content)
   result = replaceImageFields(result, content)
   result = replaceListFields(result, content)
   result = replaceRichContent(result, content)
+  result = replaceToc(result, content)
   return result
 }

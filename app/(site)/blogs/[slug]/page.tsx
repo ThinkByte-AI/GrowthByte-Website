@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { renderTemplate, type DynamicData } from '@/lib/templateRenderer'
+import { buildTypographyCss, renderTemplate, type DynamicData } from '@/lib/templateRenderer'
+import TocActiveSpy from '@/components/TocActiveSpy'
 
 import { getBlogPost, getRelatedBlogPosts, resolveBlogTemplate } from './_fetchers'
 import FallbackArticle from './_components/FallbackArticle'
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.metaTitle || post.title,
     description: post.metaDescription || post.excerpt,
+    alternates: { canonical: `/blogs/${slug}` },
   }
 }
 
@@ -34,10 +36,13 @@ export default async function BlogPostPage({ params }: Props) {
       post,
       { contentType: 'blog', dynamicData },
     )
+    const typographyCss = buildTypographyCss(template.styling)
     return (
       <>
+        {typographyCss && <style dangerouslySetInnerHTML={{ __html: typographyCss }} />}
         {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
         <article dangerouslySetInnerHTML={{ __html: html }} />
+        <TocActiveSpy />
       </>
     )
   }

@@ -8,7 +8,7 @@ export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', '_status', 'publishedAt', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'workflowStatus', '_status', 'publishedAt', 'updatedAt'],
     group: 'Content',
   },
   access: {

@@ -5,6 +5,7 @@ import Image from 'next/image'
 export const metadata: Metadata = {
   title: 'Blogs',
   description: 'Insights and strategies for growth-driven businesses',
+  alternates: { canonical: '/blogs' },
 }
 
 async function getBlogPosts() {
