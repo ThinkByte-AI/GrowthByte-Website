@@ -54,6 +54,36 @@ export const Services: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    // Template Selection
+    {
+      name: 'template',
+      type: 'relationship',
+      relationTo: 'page-templates',
+      hasMany: false,
+      filterOptions: {
+        type: { equals: 'service' },
+      },
+      admin: {
+        position: 'sidebar',
+        description: 'Select the page layout template for this service',
+      },
+    },
+    // Content for template placeholders
+    {
+      name: 'content',
+      type: 'richText',
+      admin: {
+        description: 'Main content - used in template {{content}} placeholder',
+      },
+    },
+    {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Main image - used in template {{featuredImage}} placeholder',
+      },
+    },
     {
       name: 'shortTitle',
       type: 'text',

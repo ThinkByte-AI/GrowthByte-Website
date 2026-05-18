@@ -23,6 +23,7 @@ import {
   InlineToolbarFeature,
 } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -33,6 +34,7 @@ import { CaseStudies } from './collections/CaseStudies'
 import { BlogPosts } from './collections/BlogPosts'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
+import { PageTemplates } from './collections/PageTemplates'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -51,6 +53,7 @@ export default buildConfig({
     CaseStudies,
     BlogPosts,
     Media,
+    PageTemplates,
   ],
   editor: lexicalEditor({
     features: () => [
@@ -117,6 +120,20 @@ export default buildConfig({
       collections: ['blog-posts', 'case-studies', 'services', 'industries'],
       uploadsCollection: 'media',
       tabbedUI: true,
+    }),
+    // AWS S3 Storage Plugin
+    s3Storage({
+      bucket: process.env.S3_BUCKET || '',
+      collections: {
+        media: true,
+      },
+      config: {
+        region: process.env.S3_REGION || 'ap-south-1',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
     }),
   ],
 })

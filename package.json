@@ -15,24 +15,35 @@
   "dependencies": {
     "@payloadcms/db-mongodb": "^3.84.1",
     "@payloadcms/next": "^3.84.1",
+    "@payloadcms/plugin-cloud-storage": "^3.84.1",
     "@payloadcms/plugin-seo": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
+    "@payloadcms/storage-s3": "^3.84.1",
+    "grapesjs": "^0.22.16",
+    "grapesjs-blocks-basic": "^1.0.2",
+    "grapesjs-preset-webpage": "^1.0.3",
     "graphql": "^16.14.0",
-    "next": "^16.2.6",
+    "next": "16.2.6",
     "payload": "^3.84.1",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "autoprefixer": "^10.4.17",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.2.0",
-    "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "16.2.6",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5.3.3"
+  },
+  "overrides": {
+    "postcss": "^8.5.14",
+    "picomatch": "^4.0.4",
+    "uuid": "^11.1.1",
+    "brace-expansion": "^2.0.2"
   }
 }

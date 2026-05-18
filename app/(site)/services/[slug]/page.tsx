@@ -1,146 +1,139 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { SERVICES } from '@/lib/constants'
+import { renderTemplate, TemplateContent, DynamicData } from '@/lib/templateRenderer'
+
+const API_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : 'http://localhost:3000'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
-export async function generateStaticParams() {
-  return SERVICES.map(s => ({ slug: s.slug }))
+async function getService(slug: string): Promise<TemplateContent | null> {
+  const res = await fetch(
+    `${API_URL}/api/services?where[slug][equals]=${slug}&depth=2&limit=1`,
+    { cache: 'no-store' }
+  )
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.docs?.[0] || null
+}
+
+async function getTemplate(templateId: string) {
+  const res = await fetch(
+    `${API_URL}/api/page-templates/${templateId}?depth=0`,
+    { cache: 'no-store' }
+  )
+  if (!res.ok) return null
+  return res.json()
+}
+
+async function getDefaultServiceTemplate() {
+  const res = await fetch(
+    `${API_URL}/api/page-templates?where[type][equals]=service&where[isDefault][equals]=true&limit=1`,
+    { cache: 'no-store' }
+  )
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.docs?.[0] || null
+}
+
+async function getRelatedServices(currentSlug: string, limit: number = 3): Promise<TemplateContent[]> {
+  const res = await fetch(
+    `${API_URL}/api/services?where[slug][not_equals]=${currentSlug}&limit=${limit}&depth=1`,
+    { cache: 'no-store' }
+  )
+  if (!res.ok) return []
+  const data = await res.json()
+  return data.docs || []
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const service = SERVICES.find(s => s.slug === params.slug)
+  const { slug } = await params
+  const service = await getService(slug)
   if (!service) return {}
+
   return {
-    title: `${service.title} — GrowthByte`,
-    description: service.description,
+    title: service.metaTitle || `${service.title} — GrowthByte`,
+    description: service.metaDescription || service.description,
   }
 }
 
-export default function ServicePage({ params }: Props) {
-  const service = SERVICES.find(s => s.slug === params.slug)
-  if (!service) notFound()
+export default async function ServicePage({ params }: Props) {
+  const { slug } = await params
+  const service = await getService(slug)
 
-  const otherServices = SERVICES.filter(s => s.slug !== service.slug).slice(0, 3)
+  if (!service) {
+    notFound()
+  }
 
+  // Get template - from service, or default
+  let template = null
+  if (service.template) {
+    template = typeof service.template === 'string'
+      ? await getTemplate(service.template)
+      : service.template
+  }
+
+  if (!template?.customLayout?.html) {
+    template = await getDefaultServiceTemplate()
+  }
+
+  // Get related services
+  const relatedServices = await getRelatedServices(slug, 3)
+
+  // If we have a visual builder template, use it
+  if (template?.customLayout?.html) {
+    const dynamicData: DynamicData = {
+      relatedPosts: relatedServices, // Reuse same block name for consistency
+    }
+
+    const { html, css } = renderTemplate(
+      {
+        html: template.customLayout.html,
+        css: template.customLayout.css,
+      },
+      service,
+      { contentType: 'service', dynamicData }
+    )
+
+    return (
+      <>
+        {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </>
+    )
+  }
+
+  // Fallback: Default template if no custom template
   return (
-    <>
-      {/* Hero */}
-      <section className="relative bg-ink overflow-hidden">
-        <div className="absolute inset-0 bg-grid-dark pointer-events-none" aria-hidden="true" />
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.05] pointer-events-none" aria-hidden="true"
-          style={{ background: 'radial-gradient(circle at center, #009389, transparent 70%)', transform: 'translate(20%, -20%)' }} />
-        <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left */}
-            <div>
-              <Link href="/services" className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-white/70 transition-colors mb-6">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-                All services
-              </Link>
-              <p className="section-eyebrow-dark">Service</p>
-              <h1 className="text-white text-balance mb-4">{service.title}</h1>
-              <p className="text-teal-light text-body-lg font-medium mb-5">{service.outcome}</p>
-              <p className="text-white/55 text-body-lg max-w-[38rem] leading-relaxed">{service.description}</p>
-            </div>
-            {/* Right: capabilities preview card */}
-            <div className="hidden lg:flex justify-end">
-              <div className="w-[300px]">
-                <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5">
-                  <p className="text-[0.6875rem] text-white/30 uppercase tracking-wider font-semibold mb-4">Key capabilities</p>
-                  <ul className="space-y-3">
-                    {service.capabilities.slice(0, 5).map((cap, i) => (
-                      <li key={i} className="flex items-start gap-2.5">
-                        <span className="w-4 h-4 rounded-full bg-teal/15 border border-teal/25 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <svg className="w-2.5 h-2.5 text-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </span>
-                        <span className="text-[0.8125rem] text-white/60 leading-snug">{cap}</span>
-                      </li>
-                    ))}
-                    {service.capabilities.length > 5 && (
-                      <li className="text-[0.75rem] text-teal/60 pl-6.5">
-                        +{service.capabilities.length - 5} more capabilities
-                      </li>
-                    )}
-                  </ul>
-                  <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse flex-shrink-0" />
-                    <span className="text-[0.6875rem] text-teal font-medium">AI-managed · Strategist-directed</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-white">
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{service.title}</h1>
+          {service.outcome && (
+            <p className="text-xl text-teal-600 font-medium mb-6">{service.outcome}</p>
+          )}
+          {service.description && (
+            <p className="text-lg text-gray-600 mb-8">{service.description}</p>
+          )}
 
-      {/* Capabilities */}
-      <section className="section-padding bg-surface">
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <div>
-              <p className="section-eyebrow">What is included</p>
-              <h2 className="section-heading text-balance">Capabilities within this service</h2>
-              <p className="text-body-lg text-ink-60 leading-relaxed">
-                Every capability below is run as part of an integrated system — not as a standalone deliverable. AI systems handle execution; your strategist owns the direction.
-              </p>
+          {service.capabilities && service.capabilities.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Capabilities</h2>
+              <ul className="space-y-2">
+                {service.capabilities.map((cap: any, i: number) => (
+                  <li key={i} className="flex items-center gap-2 text-gray-700">
+                    <span className="w-2 h-2 bg-teal-500 rounded-full"></span>
+                    {cap.capability}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-4">
-              {service.capabilities.map((cap, i) => (
-                <li key={i} className="flex items-start gap-4 p-4 rounded-xl border border-surface-border bg-surface hover:border-teal/20 hover:bg-teal-muted/20 transition-all duration-250">
-                  <div className="w-7 h-7 rounded-full bg-teal text-white text-xs font-bold flex items-center justify-center flex-shrink-0 tabular-nums mt-0.5">
-                    {String(i + 1).padStart(2, '0')}
-                  </div>
-                  <span className="text-ink font-medium text-[0.9375rem]">{cap}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
         </div>
       </section>
-
-      {/* Related services */}
-      <section className="section-padding-sm bg-surface-2 border-t border-surface-border">
-        <div className="container-custom">
-          <h2 className="text-[1.375rem] font-bold text-ink mb-8">Related services</h2>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {otherServices.map(s => (
-              <Link
-                key={s.slug}
-                href={`/services/${s.slug}`}
-                className="group block bg-surface border border-surface-border rounded-xl p-5 hover:border-teal/30 hover:shadow-card-hover transition-all duration-250"
-              >
-                <h3 className="font-semibold text-ink text-[0.9375rem] mb-1">{s.title}</h3>
-                <p className="text-xs text-teal mb-3">{s.outcome}</p>
-                <span className="text-xs font-semibold text-teal opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                  Learn more
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="section-padding-sm bg-surface border-t border-surface-border">
-        <div className="container-custom text-center">
-          <h2 className="text-balance mb-4 max-w-[28rem] mx-auto">Ready to get started with {service.shortTitle}?</h2>
-          <p className="text-ink-60 text-body-lg mb-8 max-w-[30rem] mx-auto">
-            Book a strategy call. We will audit your current setup and show you a clear starting point.
-          </p>
-          <Link href="/contact" className="btn-primary btn-lg">Book a Strategy Call</Link>
-        </div>
-      </section>
-    </>
+    </div>
   )
 }
