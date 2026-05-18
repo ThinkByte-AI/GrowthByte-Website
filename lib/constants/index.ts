@@ -1,0 +1,5 @@
+export { NAVIGATION_ITEMS } from './navigation'
+export { COMPANY_INFO, CONTACT_INFO, SOCIAL_LINKS } from './company'
+export { SERVICES } from './services'
+export { INDUSTRIES } from './industries'
+export { CASE_STUDY_HIGHLIGHTS, PROOF_STATS } from './homepage'

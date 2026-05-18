@@ -1,5 +1,10 @@
 // Convert Payload Lexical JSON to HTML
 
+interface LexicalUploadValue {
+  url?: string
+  alt?: string
+}
+
 interface LexicalNode {
   type: string
   children?: LexicalNode[]
@@ -10,6 +15,8 @@ interface LexicalNode {
   url?: string
   direction?: string
   indent?: number
+  value?: LexicalUploadValue
+  root?: { children?: LexicalNode[] }
 }
 
 // Format flags
@@ -122,10 +129,4 @@ export function lexicalToHtml(lexicalContent: any): string {
   }
 
   return ''
-}
-
-// Also export a React component version for server-side rendering
-export function LexicalContent({ content }: { content: any }) {
-  const html = lexicalToHtml(content)
-  return <div dangerouslySetInnerHTML={{ __html: html }} />
 }
