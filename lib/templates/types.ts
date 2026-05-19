@@ -110,6 +110,20 @@ export interface TemplateContent {
   client?: string
   industry?: string
   results?: string
+
+  faqItems?: Array<{ question: string; answer: string }>
+  howTo?: {
+    name?: string
+    description?: string
+    totalTime?: string
+    image?: MediaRef
+    steps?: Array<{
+      stepName?: string
+      stepText: string
+      stepImage?: MediaRef
+      url?: string
+    }>
+  }
 }
 
 export interface TemplateRendererProps {

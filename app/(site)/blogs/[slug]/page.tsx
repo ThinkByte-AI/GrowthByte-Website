@@ -5,6 +5,7 @@ import TocActiveSpy from '@/components/TocActiveSpy'
 
 import { getBlogPost, getRelatedBlogPosts, resolveBlogTemplate } from './_fetchers'
 import FallbackArticle from './_components/FallbackArticle'
+import PostJsonLdScripts from './_components/PostJsonLdScripts'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -39,6 +40,7 @@ export default async function BlogPostPage({ params }: Props) {
     const typographyCss = buildTypographyCss(template.styling)
     return (
       <>
+        <PostJsonLdScripts post={post} />
         {typographyCss && <style dangerouslySetInnerHTML={{ __html: typographyCss }} />}
         {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
         <article dangerouslySetInnerHTML={{ __html: html }} />
@@ -47,5 +49,10 @@ export default async function BlogPostPage({ params }: Props) {
     )
   }
 
-  return <FallbackArticle post={post} />
+  return (
+    <>
+      <PostJsonLdScripts post={post} />
+      <FallbackArticle post={post} />
+    </>
+  )
 }
