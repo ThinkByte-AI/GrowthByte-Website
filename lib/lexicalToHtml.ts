@@ -3,6 +3,13 @@ interface LexicalUploadValue {
   alt?: string
 }
 
+interface LexicalLinkFields {
+  url?: string
+  newTab?: boolean
+  linkType?: 'custom' | 'internal'
+  rel?: string[]
+}
+
 interface LexicalNode {
   type: string
   children?: LexicalNode[]
@@ -11,6 +18,7 @@ interface LexicalNode {
   format?: number
   listType?: string
   url?: string
+  fields?: LexicalLinkFields
   direction?: string
   indent?: number
   value?: LexicalUploadValue
@@ -51,6 +59,24 @@ const renderUpload = (node: LexicalNode): string => {
   return `<img src="${node.value.url}" alt="${node.value.alt || ''}" />`
 }
 
+const escapeHref = (raw: string): string =>
+  raw.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+const renderLink = (node: LexicalNode, state: RenderState): string => {
+  const url = node.fields?.url || node.url || '#'
+  const newTab = Boolean(node.fields?.newTab)
+  const relValues = node.fields?.rel ?? (newTab ? ['noopener', 'noreferrer'] : [])
+  const inner = nodesToHtml(node.children || [], state)
+  const attrs = [
+    `href="${escapeHref(url)}"`,
+    newTab ? 'target="_blank"' : '',
+    relValues.length > 0 ? `rel="${relValues.join(' ')}"` : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+  return `<a ${attrs}>${inner}</a>`
+}
+
 const nodeToHtml = (node: LexicalNode, state: RenderState): string => {
   switch (node.type) {
     case 'text':
@@ -66,7 +92,7 @@ const nodeToHtml = (node: LexicalNode, state: RenderState): string => {
     case 'listitem':
       return `<li>${nodesToHtml(node.children || [], state)}</li>`
     case 'link':
-      return `<a href="${node.url || '#'}">${nodesToHtml(node.children || [], state)}</a>`
+      return renderLink(node, state)
     case 'quote':
       return `<blockquote>${nodesToHtml(node.children || [], state)}</blockquote>`
     case 'linebreak':

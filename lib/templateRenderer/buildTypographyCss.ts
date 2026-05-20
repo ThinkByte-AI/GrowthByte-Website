@@ -7,7 +7,7 @@ const px = (value?: number) => (value && value > 0 ? `${value}px` : undefined)
 const cssRule = (selector: string, declarations: Record<string, string | undefined>): string => {
   const valid = Object.entries(declarations).filter(([, v]) => v !== undefined && v !== '')
   if (valid.length === 0) return ''
-  const body = valid.map(([key, value]) => `${key}: ${value};`).join(' ')
+  const body = valid.map(([key, value]) => `${key}: ${value} !important;`).join(' ')
   return `${selector} { ${body} }`
 }
 
