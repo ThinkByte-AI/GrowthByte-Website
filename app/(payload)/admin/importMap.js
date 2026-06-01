@@ -29,7 +29,10 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { TemplateEditorField as TemplateEditorField_c666a12deb3e0cf8096e05a5a2c6fb7a } from '@/payload-plugins/TemplateEditorPlugin'
 import { default as default_534076e2c753ea5d539a54b05f456b1b } from '@/components/admin/Icon'
 import { default as default_a44df17d0fc3dcd873dae43dc3bf66bd } from '@/components/admin/Logo'
+import { default as default_5a58492e7c704632c2b6796f048052fe } from '@/components/admin/AdminLogoutLink'
+import { default as default_0507876b7d71b325bb51c6ece531fa30 } from '@/components/admin/AIBuilderNavLink'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
+import { default as default_ec71e0f27c3c5ad2260e5cdc11909300 } from '@/components/admin/AIBuilder'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -65,6 +68,9 @@ export const importMap = {
   "@/payload-plugins/TemplateEditorPlugin#TemplateEditorField": TemplateEditorField_c666a12deb3e0cf8096e05a5a2c6fb7a,
   "@/components/admin/Icon#default": default_534076e2c753ea5d539a54b05f456b1b,
   "@/components/admin/Logo#default": default_a44df17d0fc3dcd873dae43dc3bf66bd,
+  "@/components/admin/AdminLogoutLink#default": default_5a58492e7c704632c2b6796f048052fe,
+  "@/components/admin/AIBuilderNavLink#default": default_0507876b7d71b325bb51c6ece531fa30,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
+  "@/components/admin/AIBuilder#default": default_ec71e0f27c3c5ad2260e5cdc11909300,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

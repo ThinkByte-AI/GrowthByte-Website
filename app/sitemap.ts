@@ -1,11 +1,11 @@
 import { MetadataRoute } from 'next'
 import { SERVICES } from '@/lib/constants'
 import { INDUSTRIES } from '@/lib/constants'
-import { CASE_STUDY_HIGHLIGHTS } from '@/lib/constants'
+import { getAllCaseStudies } from '@/app/(site)/case-studies/[slug]/_fetchers'
 
 const BASE_URL = 'https://www.growthbyte.ai'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const servicePages = SERVICES.map((s) => ({
     url: `${BASE_URL}/services/${s.slug}`,
     lastModified: new Date(),
@@ -20,7 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  const caseStudyPages = CASE_STUDY_HIGHLIGHTS.map((c) => ({
+  const caseStudies = await getAllCaseStudies(200)
+  const caseStudyPages = caseStudies.map((c) => ({
     url: `${BASE_URL}/case-studies/${c.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,

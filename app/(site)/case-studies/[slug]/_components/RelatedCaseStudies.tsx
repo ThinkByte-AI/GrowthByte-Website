@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { ArrowSmallIcon } from '@/components/journal'
 import CaseStudyCard from '../../_components/CaseStudyCard'
-import type { CaseStudyHighlight } from '../../_components/types'
+import type { CaseStudy } from '../../_components/types'
 
-export default function RelatedCaseStudies({ items }: { items: CaseStudyHighlight[] }) {
+export default function RelatedCaseStudies({ items }: { items: CaseStudy[] }) {
   if (items.length === 0) return null
   return (
     <section className="gbx-container" style={{ marginTop: 96 }}>

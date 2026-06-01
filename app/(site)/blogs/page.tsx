@@ -22,6 +22,8 @@ async function getBlogPosts(): Promise<JournalPost[]> {
     limit: 30,
     sort: '-publishedAt',
     depth: 1,
+    draft: false,
+    overrideAccess: false,
   })
   return docs.map((doc) => toJournalPost(doc as Record<string, unknown>))
 }

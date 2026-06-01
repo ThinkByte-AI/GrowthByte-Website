@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowSmallIcon } from '@/components/journal'
-import type { CaseStudyHighlight } from '../../_components/types'
+import type { CaseStudy } from '../../_components/types'
 
 const MetaItem = ({ k, v }: { k: string; v: string }) => (
   <div className="item">
@@ -9,7 +9,7 @@ const MetaItem = ({ k, v }: { k: string; v: string }) => (
   </div>
 )
 
-export default function CaseStudyHero({ cs }: { cs: CaseStudyHighlight }) {
+export default function CaseStudyHero({ cs }: { cs: CaseStudy }) {
   return (
     <section className="cs-hero">
       <div className="gbx-container">

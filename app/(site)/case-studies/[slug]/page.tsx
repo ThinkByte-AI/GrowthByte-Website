@@ -1,41 +1,43 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { CASE_STUDY_HIGHLIGHTS } from '@/lib/constants'
 import { BigCta } from '@/components/journal'
 import CaseStudyHero from './_components/CaseStudyHero'
 import CaseStudySection from './_components/CaseStudySection'
 import CaseStudySteps from './_components/CaseStudySteps'
 import CaseStudyResults from './_components/CaseStudyResults'
 import RelatedCaseStudies from './_components/RelatedCaseStudies'
-import { buildCaseStudyStory } from './_components/story'
+import { getCaseStudy, getRelatedCaseStudies } from './_fetchers'
+import { toCaseStudy } from '../_components/toCaseStudy'
 import '@/components/journal/journal.css'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-export async function generateStaticParams() {
-  return CASE_STUDY_HIGHLIGHTS.map((cs) => ({ slug: cs.slug }))
-}
+// Content is read live from Payload; opt out of the full route cache so
+// edits and deletes reflect immediately, matching the blog detail behaviour.
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const cs = CASE_STUDY_HIGHLIGHTS.find((c) => c.slug === slug)
-  if (!cs) return {}
+  const doc = await getCaseStudy(slug)
+  if (!doc) return { title: 'Case study not found' }
+  const cs = toCaseStudy(doc)
   return {
-    title: `${cs.headline} — GrowthByte Case Study`,
-    description: cs.summary,
+    title: `${cs.headline || cs.title} — GrowthByte Case Study`,
+    description: cs.metaDescription || cs.summary,
     alternates: { canonical: `/case-studies/${slug}` },
   }
 }
 
 export default async function CaseStudyPage({ params }: Props) {
   const { slug } = await params
-  const cs = CASE_STUDY_HIGHLIGHTS.find((c) => c.slug === slug)
-  if (!cs) notFound()
+  const doc = await getCaseStudy(slug)
+  if (!doc) notFound()
 
-  const related = CASE_STUDY_HIGHLIGHTS.filter((c) => c.slug !== cs.slug)
-  const story = buildCaseStudyStory(cs)
+  const cs = toCaseStudy(doc)
+  const relatedDocs = await getRelatedCaseStudies(slug, 3)
+  const related = relatedDocs.map(toCaseStudy)
 
   return (
     <div className="gbx">
@@ -44,13 +46,13 @@ export default async function CaseStudyPage({ params }: Props) {
         secNo="01 · The Challenge"
         heading="A growth problem disguised as a channel problem."
         label="Context"
-        paragraphs={story.challenge}
+        paragraphs={cs.challenge}
       />
       <CaseStudySection
         secNo="02 · Our Approach"
         heading="Diagnose first. Subtract before adding. Compound from there."
         label="How we framed it"
-        paragraphs={story.approach}
+        paragraphs={cs.approach}
         altBg
       />
       <CaseStudySection
@@ -58,10 +60,10 @@ export default async function CaseStudyPage({ params }: Props) {
         heading="The workstreams that moved the metric."
         label="Workstreams"
       >
-        <CaseStudySteps steps={story.steps} />
+        <CaseStudySteps steps={cs.steps} />
       </CaseStudySection>
-      <CaseStudyResults cs={cs} paragraph={story.resultsParagraph} />
-      <RelatedCaseStudies items={[...related]} />
+      <CaseStudyResults cs={cs} paragraph={cs.resultsParagraph} />
+      <RelatedCaseStudies items={related} />
       <BigCta
         eyebrow={`What would ${cs.metric} look like for you?`}
         heading="Let us put your numbers on this page next."

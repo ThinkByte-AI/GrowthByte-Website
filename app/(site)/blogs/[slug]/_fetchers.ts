@@ -8,6 +8,8 @@ export const getBlogPost = async (slug: string): Promise<TemplateContent | null>
     where: { slug: { equals: slug } },
     depth: 2,
     limit: 1,
+    draft: false,
+    overrideAccess: false,
   })
   return (docs[0] as TemplateContent) || null
 }
@@ -47,6 +49,8 @@ export const getRelatedBlogPosts = async (
     limit,
     sort: '-publishedAt',
     depth: 1,
+    draft: false,
+    overrideAccess: false,
   })
   return docs as TemplateContent[]
 }

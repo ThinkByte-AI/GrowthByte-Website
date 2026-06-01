@@ -1,7 +1,7 @@
-import type { CaseStudyHighlight } from '../../_components/types'
+import type { CaseStudy } from '../../_components/types'
 
 interface CaseStudyResultsProps {
-  cs: CaseStudyHighlight
+  cs: CaseStudy
   paragraph: string
 }
 

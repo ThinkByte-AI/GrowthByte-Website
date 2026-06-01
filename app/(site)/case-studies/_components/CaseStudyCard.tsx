@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { ArrowSmallIcon } from '@/components/journal'
-import type { CaseStudyHighlight } from './types'
+import type { CaseStudy } from './types'
 
 interface CaseStudyCardProps {
-  cs: CaseStudyHighlight
+  cs: CaseStudy
   index: number
 }
 

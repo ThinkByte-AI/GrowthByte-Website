@@ -50,6 +50,14 @@ export default buildConfig({
         Logo: '@/components/admin/Logo',
         Icon: '@/components/admin/Icon',
       },
+      beforeNavLinks: ['@/components/admin/AIBuilderNavLink'],
+      afterNavLinks: ['@/components/admin/AdminLogoutLink'],
+      views: {
+        aiBuilder: {
+          Component: '@/components/admin/AIBuilder',
+          path: '/ai-builder',
+        },
+      },
     },
     importMap: {
       baseDir: path.resolve(dirname, '..'),

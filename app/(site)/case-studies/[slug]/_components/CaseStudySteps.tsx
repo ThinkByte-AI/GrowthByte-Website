@@ -1,4 +1,4 @@
-import type { CaseStudyStep } from './story'
+import type { CaseStudyStep } from '../../_components/types'
 
 export default function CaseStudySteps({ steps }: { steps: CaseStudyStep[] }) {
   return (

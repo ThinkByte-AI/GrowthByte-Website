@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { GenerativeThumbnail, ArrowSmallIcon } from '@/components/journal'
-import type { CaseStudyHighlight } from './types'
+import type { CaseStudy } from './types'
 
 const lightTag = {
   background: 'rgba(255,255,255,0.06)',
@@ -8,7 +8,7 @@ const lightTag = {
   borderColor: 'rgba(255,255,255,0.12)',
 }
 
-export default function FeaturedCaseStudy({ cs }: { cs: CaseStudyHighlight }) {
+export default function FeaturedCaseStudy({ cs }: { cs: CaseStudy }) {
   return (
     <Link href={`/case-studies/${cs.slug}`} className="cs-featured" style={{ cursor: 'pointer' }}>
       <div className="left">
