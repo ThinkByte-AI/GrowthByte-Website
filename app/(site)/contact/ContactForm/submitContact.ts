@@ -1,11 +1,11 @@
-import type { ContactPayload } from './types'
+import type { ContactSubmission } from './types'
 
 interface SubmitResult {
   ok: boolean
   error?: string
 }
 
-const extractPayload = (form: HTMLFormElement): ContactPayload => {
+const extractFormData = (form: HTMLFormElement): ContactSubmission => {
   const fd = new FormData(form)
   const get = (key: string) => String(fd.get(key) ?? '').trim()
   return {
@@ -20,12 +20,12 @@ const extractPayload = (form: HTMLFormElement): ContactPayload => {
 }
 
 export const submitContact = async (form: HTMLFormElement): Promise<SubmitResult> => {
-  const payload = extractPayload(form)
+  const submission = extractFormData(form)
   try {
     const res = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(submission),
     })
     const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
     if (!res.ok || !data?.ok) {

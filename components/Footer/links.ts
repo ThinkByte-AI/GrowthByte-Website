@@ -19,5 +19,6 @@ export const COMPANY_LINKS = [
   { name: 'About', href: '/about' },
   { name: 'Case Studies', href: '/case-studies' },
   { name: 'Insights', href: '/insights' },
+  { name: 'Blog', href: '/blogs' },
   { name: 'Contact', href: '/contact' },
 ]

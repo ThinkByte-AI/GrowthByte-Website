@@ -1,49 +1,58 @@
 import type { TemplateContent } from '@/lib/templateRenderer'
-
-const API_URL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+import { getPayloadClient } from '@/src/get-payload'
 
 export const getBlogPost = async (slug: string): Promise<TemplateContent | null> => {
-  const res = await fetch(
-    `${API_URL}/api/blog-posts?where[slug][equals]=${slug}&depth=2&limit=1`,
-    { cache: 'no-store' },
-  )
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.docs?.[0] || null
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'blog-posts',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
+  })
+  return (docs[0] as TemplateContent) || null
 }
 
-export const getTemplate = async (templateId: string) => {
-  const res = await fetch(`${API_URL}/api/page-templates/${templateId}?depth=0`, { cache: 'no-store' })
-  if (!res.ok) return null
-  return res.json()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getTemplate = async (templateId: string): Promise<any> => {
+  const payload = await getPayloadClient()
+  try {
+    return await payload.findByID({ collection: 'page-templates', id: templateId, depth: 0 })
+  } catch {
+    return null
+  }
 }
 
-export const getDefaultBlogTemplate = async () => {
-  const res = await fetch(
-    `${API_URL}/api/page-templates?where[type][equals]=blog&where[isDefault][equals]=true&limit=1`,
-    { cache: 'no-store' },
-  )
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.docs?.[0] || null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getDefaultBlogTemplate = async (): Promise<any> => {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'page-templates',
+    where: {
+      type: { equals: 'blog' },
+      isDefault: { equals: true },
+    },
+    limit: 1,
+  })
+  return docs[0] || null
 }
 
 export const getRelatedBlogPosts = async (
   currentSlug: string,
   limit: number = 3,
 ): Promise<TemplateContent[]> => {
-  const res = await fetch(
-    `${API_URL}/api/blog-posts?where[slug][not_equals]=${currentSlug}&limit=${limit}&sort=-publishedAt&depth=1`,
-    { cache: 'no-store' },
-  )
-  if (!res.ok) return []
-  const data = await res.json()
-  return data.docs || []
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'blog-posts',
+    where: { slug: { not_equals: currentSlug } },
+    limit,
+    sort: '-publishedAt',
+    depth: 1,
+  })
+  return docs as TemplateContent[]
 }
 
-export const resolveBlogTemplate = async (post: TemplateContent) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const resolveBlogTemplate = async (post: TemplateContent): Promise<any> => {
   let template = null
   if (post.template) {
     template = typeof post.template === 'string' ? await getTemplate(post.template) : post.template

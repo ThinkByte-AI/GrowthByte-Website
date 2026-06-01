@@ -1,49 +1,57 @@
 import type { TemplateContent } from '@/lib/templateRenderer'
-
-const API_URL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+import { getPayloadClient } from '@/src/get-payload'
 
 export const getService = async (slug: string): Promise<TemplateContent | null> => {
-  const res = await fetch(
-    `${API_URL}/api/services?where[slug][equals]=${slug}&depth=2&limit=1`,
-    { cache: 'no-store' },
-  )
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.docs?.[0] || null
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'services',
+    where: { slug: { equals: slug } },
+    depth: 2,
+    limit: 1,
+  })
+  return (docs[0] as TemplateContent) || null
 }
 
-export const getTemplate = async (templateId: string) => {
-  const res = await fetch(`${API_URL}/api/page-templates/${templateId}?depth=0`, { cache: 'no-store' })
-  if (!res.ok) return null
-  return res.json()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getTemplate = async (templateId: string): Promise<any> => {
+  const payload = await getPayloadClient()
+  try {
+    return await payload.findByID({ collection: 'page-templates', id: templateId, depth: 0 })
+  } catch {
+    return null
+  }
 }
 
-export const getDefaultServiceTemplate = async () => {
-  const res = await fetch(
-    `${API_URL}/api/page-templates?where[type][equals]=service&where[isDefault][equals]=true&limit=1`,
-    { cache: 'no-store' },
-  )
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.docs?.[0] || null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getDefaultServiceTemplate = async (): Promise<any> => {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'page-templates',
+    where: {
+      type: { equals: 'service' },
+      isDefault: { equals: true },
+    },
+    limit: 1,
+  })
+  return docs[0] || null
 }
 
 export const getRelatedServices = async (
   currentSlug: string,
   limit: number = 3,
 ): Promise<TemplateContent[]> => {
-  const res = await fetch(
-    `${API_URL}/api/services?where[slug][not_equals]=${currentSlug}&limit=${limit}&depth=1`,
-    { cache: 'no-store' },
-  )
-  if (!res.ok) return []
-  const data = await res.json()
-  return data.docs || []
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'services',
+    where: { slug: { not_equals: currentSlug } },
+    limit,
+    depth: 1,
+  })
+  return docs as TemplateContent[]
 }
 
-export const resolveServiceTemplate = async (service: TemplateContent) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const resolveServiceTemplate = async (service: TemplateContent): Promise<any> => {
   let template = null
   if (service.template) {
     template = typeof service.template === 'string'

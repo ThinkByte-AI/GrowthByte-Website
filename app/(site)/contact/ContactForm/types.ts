@@ -1,6 +1,6 @@
 export type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
-export interface ContactPayload {
+export interface ContactSubmission {
   name: string
   email: string
   phone: string

@@ -42,6 +42,15 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: 'users',
+    meta: {
+      titleSuffix: ' — GrowthByte CMS',
+    },
+    components: {
+      graphics: {
+        Logo: '@/components/admin/Logo',
+        Icon: '@/components/admin/Icon',
+      },
+    },
     importMap: {
       baseDir: path.resolve(dirname, '..'),
     },
