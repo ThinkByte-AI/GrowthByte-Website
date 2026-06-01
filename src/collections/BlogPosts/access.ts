@@ -8,6 +8,12 @@ export const publicReadAccess: Access = ({ req }) => {
     and: [
       { workflowStatus: { in: ['published', 'scheduled'] } },
       { publishedAt: { less_than_equal: now } },
+      {
+        or: [
+          { unpublishAt: { exists: false } },
+          { unpublishAt: { greater_than: now } },
+        ],
+      },
     ],
   }
   return liveOnly
