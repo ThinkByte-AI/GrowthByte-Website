@@ -32,6 +32,7 @@ import { Services } from './collections/Services'
 import { Industries } from './collections/Industries'
 import { CaseStudies } from './collections/CaseStudies'
 import { BlogPosts } from './collections/BlogPosts'
+import { Authors } from './collections/Authors'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { PageTemplates } from './collections/PageTemplates'
@@ -69,6 +70,7 @@ export default buildConfig({
     Industries,
     CaseStudies,
     BlogPosts,
+    Authors,
     Media,
     PageTemplates,
   ],

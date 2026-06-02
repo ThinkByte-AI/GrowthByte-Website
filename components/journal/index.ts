@@ -11,4 +11,6 @@ export {
   LinkIcon,
   XIcon,
   LinkedInIcon,
+  GlobeIcon,
+  MailIcon,
 } from './icons'

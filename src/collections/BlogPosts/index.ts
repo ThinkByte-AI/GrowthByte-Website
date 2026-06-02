@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { publicReadAccess } from './access'
-import { beforeChangeBlogPost } from './hooks'
+import { afterDeleteBlogPost, beforeChangeBlogPost } from './hooks'
 import { publishScheduledEndpoint } from './publishScheduledEndpoint'
 import { blogPostFields } from './fields'
 
@@ -25,6 +25,7 @@ export const BlogPosts: CollectionConfig = {
   fields: blogPostFields,
   hooks: {
     beforeChange: [beforeChangeBlogPost],
+    afterDelete: [afterDeleteBlogPost],
   },
   endpoints: [publishScheduledEndpoint],
 }

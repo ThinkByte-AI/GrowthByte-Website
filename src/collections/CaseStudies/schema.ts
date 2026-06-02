@@ -35,3 +35,4 @@ export const generateCaseStudySchema = (data: CaseStudySchemaInput) => ({
     name: r.result,
   })),
 })
+

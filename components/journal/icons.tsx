@@ -66,3 +66,17 @@ export const LinkedInIcon = ({ size = 14, className }: IconProps) => (
     <path d="M3.5 14h-2V5.5h2V14zm-1-9.6a1.2 1.2 0 110-2.4 1.2 1.2 0 010 2.4zM14 14h-2v-4.4c0-1-.4-1.6-1.3-1.6-.7 0-1.2.5-1.4 1V14h-2V5.5h2v.9c.3-.5 1-1.1 2.2-1.1 1.6 0 2.5 1 2.5 3.1V14z" />
   </svg>
 )
+
+export const GlobeIcon = ({ size = 14, className }: IconProps) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} strokeWidth={1.4} className={className} {...stroke}>
+    <circle cx="8" cy="8" r="6" />
+    <path d="M2 8h12M8 2a9 9 0 010 12M8 2a9 9 0 000 12" />
+  </svg>
+)
+
+export const MailIcon = ({ size = 14, className }: IconProps) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} strokeWidth={1.4} className={className} {...stroke}>
+    <rect x="2" y="3.5" width="12" height="9" rx="1.2" />
+    <path d="M2.5 4.5l5.5 4 5.5-4" />
+  </svg>
+)

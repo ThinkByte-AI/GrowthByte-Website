@@ -8,8 +8,13 @@ export interface JournalPost {
   heroImageUrl?: string
   imageAlt?: string
   author?: string
+  authorRole?: string
   authorBio?: string
   authorImageUrl?: string
+  authorLinkedinUrl?: string
+  authorXUrl?: string
+  authorWebsiteUrl?: string
+  authorEmail?: string
   readTime?: number
   publishedAt?: string
 }

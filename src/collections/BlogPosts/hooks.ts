@@ -1,4 +1,4 @@
-import type { CollectionBeforeChangeHook } from 'payload'
+import type { CollectionAfterDeleteHook, CollectionBeforeChangeHook } from 'payload'
 import { generateBlogSchema } from './schema'
 
 const WORDS_PER_MINUTE = 200
@@ -42,4 +42,20 @@ export const beforeChangeBlogPost: CollectionBeforeChangeHook = ({ data }) => {
   syncStatusWithPublishDate(data)
   regenerateSeoSchemaIfNeeded(data)
   return data
+}
+
+// Belt-and-suspenders cleanup. Payload normally cascades version deletion
+// when the parent doc is deleted, but with autosave drafts an in-flight
+// version write can land *after* the parent delete and survive as an orphan
+// — Payload then surfaces it on read paths and the doc appears to come back.
+// Re-running the cleanup here closes the race.
+export const afterDeleteBlogPost: CollectionAfterDeleteHook = async ({ id, req }) => {
+  try {
+    await req.payload.db.deleteMany({
+      collection: '_blog-posts_versions',
+      where: { parent: { equals: id } },
+    })
+  } catch {
+    /* versions collection may not exist yet on a fresh DB; safe to ignore */
+  }
 }

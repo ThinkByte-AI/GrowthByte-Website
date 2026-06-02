@@ -13,7 +13,7 @@ export const CONTACT_INFO = {
 } as const
 
 export const SOCIAL_LINKS = {
-  linkedin: '#',
-  twitter: '#',
+  linkedin: 'https://www.linkedin.com/company/growthbyte-ai/',
+  twitter: 'https://x.com/growthbyteai_',
   instagram: '#',
 } as const
