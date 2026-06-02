@@ -23,8 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const doc = await getCaseStudy(slug)
   if (!doc) return { title: 'Case study not found' }
   const cs = toCaseStudy(doc)
+  const title = cs.metaTitle
+    ? { absolute: cs.metaTitle }
+    : `${cs.headline || cs.title} — GrowthByte Case Study`
   return {
-    title: `${cs.headline || cs.title} — GrowthByte Case Study`,
+    title,
     description: cs.metaDescription || cs.summary,
     alternates: { canonical: `/case-studies/${slug}` },
   }
