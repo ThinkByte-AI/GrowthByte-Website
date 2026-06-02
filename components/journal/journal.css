@@ -703,7 +703,8 @@
   border-bottom: 1px solid var(--gb-line);
   margin-top: 56px;
 }
-.gbx .cs-hero .meta-row .item { padding: 24px 24px 24px 0; border-right: 1px solid var(--gb-line); }
+.gbx .cs-hero .meta-row .item { padding: 24px 24px 24px 16px; border-right: 1px solid var(--gb-line); }
+.gbx .cs-hero .meta-row .item:first-child { padding-left: 0; }
 .gbx .cs-hero .meta-row .item:last-child { border-right: 0; padding-right: 0; }
 .gbx .cs-hero .meta-row .k {
   font-family: var(--gb-font-mono);
