@@ -10,6 +10,7 @@ export const BlogPosts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'workflowStatus', '_status', 'publishedAt', 'updatedAt'],
     group: 'Content',
+    preview: (doc) => (doc?.slug ? `/blogs/${doc.slug}` : null),
   },
   access: {
     read: publicReadAccess,

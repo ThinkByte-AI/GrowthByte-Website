@@ -7,6 +7,7 @@ export const CaseStudies: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'industry', 'updatedAt'],
+    preview: (doc) => (doc?.slug ? `/case-studies/${doc.slug}` : null),
   },
   access: {
     read: () => true,

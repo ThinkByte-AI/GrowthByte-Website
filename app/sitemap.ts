@@ -1,26 +1,36 @@
 import { MetadataRoute } from 'next'
-import { SERVICES } from '@/lib/constants'
-import { INDUSTRIES } from '@/lib/constants'
 import { getAllCaseStudies } from '@/app/(site)/case-studies/[slug]/_fetchers'
+import { getAllServices } from '@/app/(site)/services/[slug]/_fetchers'
+import { getAllIndustries } from '@/app/(site)/industries/_fetchers'
+
+// Sitemap pulls case-study URLs from Payload (DB call). Don't prerender at
+// build time — env may not be loaded and rebuilding for every new post is
+// pointless. Generate per request instead.
+export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://www.growthbyte.ai'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const servicePages = SERVICES.map((s) => ({
+  const [services, industries, caseStudies] = await Promise.all([
+    getAllServices(200),
+    getAllIndustries(200),
+    getAllCaseStudies(200),
+  ])
+
+  const servicePages = services.map((s) => ({
     url: `${BASE_URL}/services/${s.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
 
-  const industryPages = INDUSTRIES.map((i) => ({
+  const industryPages = industries.map((i) => ({
     url: `${BASE_URL}/industries/${i.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
 
-  const caseStudies = await getAllCaseStudies(200)
   const caseStudyPages = caseStudies.map((c) => ({
     url: `${BASE_URL}/case-studies/${c.slug}`,
     lastModified: new Date(),

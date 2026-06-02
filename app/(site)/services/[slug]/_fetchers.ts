@@ -1,6 +1,17 @@
 import type { TemplateContent } from '@/lib/templateRenderer'
 import { getPayloadClient } from '@/src/get-payload'
 
+export const getAllServices = async (limit: number = 30): Promise<TemplateContent[]> => {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'services',
+    limit,
+    sort: 'createdAt',
+    depth: 0,
+  })
+  return docs as TemplateContent[]
+}
+
 export const getService = async (slug: string): Promise<TemplateContent | null> => {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({

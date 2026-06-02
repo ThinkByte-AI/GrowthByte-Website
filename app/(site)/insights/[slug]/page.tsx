@@ -2,22 +2,24 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const title = params.slug
+  const { slug } = await params
+  const title = slug
     .split('-')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
   return {
     title,
     description: 'Growth strategy, performance marketing, SEO, and automation insights from GrowthByte.',
-    alternates: { canonical: `/insights/${params.slug}` },
+    alternates: { canonical: `/insights/${slug}` },
   }
 }
 
-export default function InsightPage({ params }: Props) {
+export default async function InsightPage({ params }: Props) {
+  await params
   return (
     <>
       {/* Breadcrumb */}

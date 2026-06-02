@@ -1,3 +1,6 @@
-import type { INDUSTRIES } from '@/lib/constants'
-
-export type Industry = (typeof INDUSTRIES)[number]
+export interface Industry {
+  slug: string
+  name: string
+  challenge: string
+  detail: string
+}

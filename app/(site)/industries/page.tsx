@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { INDUSTRIES } from '@/lib/constants'
+import { getAllIndustries } from './_fetchers'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Industries — GrowthByte | Vertical-Specific Growth Systems',
@@ -8,7 +10,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/industries' },
 }
 
-export default function IndustriesPage() {
+export default async function IndustriesPage() {
+  const industries = await getAllIndustries(30)
   return (
     <>
       {/* Hero */}
@@ -65,7 +68,7 @@ export default function IndustriesPage() {
       <section className="section-padding bg-surface">
         <div className="container-custom">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {INDUSTRIES.map((industry) => (
+            {industries.map((industry) => (
               <Link
                 key={industry.slug}
                 href={`/industries/${industry.slug}`}

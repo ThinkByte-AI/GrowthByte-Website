@@ -1,8 +1,19 @@
 import Link from 'next/link'
-import { SERVICES } from '@/lib/constants'
 import type { Industry } from './types'
 
-export default function ServicesForIndustry({ industry }: { industry: Industry }) {
+export interface IndustryServiceCard {
+  slug: string
+  title: string
+  outcome: string
+  description: string
+}
+
+interface Props {
+  industry: Industry
+  services: IndustryServiceCard[]
+}
+
+export default function ServicesForIndustry({ industry, services }: Props) {
   return (
     <section className="section-padding bg-surface">
       <div className="container-custom">
@@ -16,7 +27,7 @@ export default function ServicesForIndustry({ industry }: { industry: Industry }
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {SERVICES.map((service) => (
+          {services.map((service) => (
             <Link
               key={service.slug}
               href={`/services/${service.slug}`}

@@ -3,12 +3,34 @@ import { notFound } from 'next/navigation'
 import { buildTypographyCss, renderTemplate, type DynamicData } from '@/lib/templateRenderer'
 import TocActiveSpy from '@/components/TocActiveSpy'
 
-import { getService, getRelatedServices, resolveServiceTemplate } from './_fetchers'
-import FallbackService from './_components/FallbackService'
+import { getService, getAllServices, getRelatedServices, resolveServiceTemplate } from './_fetchers'
+import ServiceDetail, { type ServiceView, type RelatedService } from './_components/ServiceDetail'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
+
+export const dynamic = 'force-dynamic'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const toServiceView = (doc: any): ServiceView => ({
+  slug: String(doc.slug),
+  title: String(doc.title ?? ''),
+  shortTitle: String(doc.shortTitle ?? ''),
+  outcome: String(doc.outcome ?? ''),
+  description: String(doc.description ?? ''),
+  capabilities: Array.isArray(doc.capabilities)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ? doc.capabilities.map((c: any) => (typeof c === 'string' ? c : c?.capability ?? '')).filter(Boolean)
+    : [],
+})
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const toRelatedService = (doc: any): RelatedService => ({
+  slug: String(doc.slug),
+  title: String(doc.title ?? ''),
+  outcome: String(doc.outcome ?? ''),
+})
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
@@ -47,5 +69,11 @@ export default async function ServicePage({ params }: Props) {
     )
   }
 
-  return <FallbackService service={service} />
+  const allServices = await getAllServices(30)
+  const otherServices = allServices
+    .filter((s) => s.slug !== slug)
+    .slice(0, 3)
+    .map(toRelatedService)
+
+  return <ServiceDetail service={toServiceView(service)} otherServices={otherServices} />
 }

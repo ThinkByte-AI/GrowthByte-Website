@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SERVICES } from '@/lib/constants'
+import { getAllServices } from './[slug]/_fetchers'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Services — GrowthByte | AI-Powered Growth Services',
@@ -8,7 +10,29 @@ export const metadata: Metadata = {
   alternates: { canonical: '/services' },
 }
 
-export default function ServicesPage() {
+interface ServiceCard {
+  slug: string
+  title: string
+  outcome: string
+  description: string
+  capabilities: string[]
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const toServiceCard = (doc: any): ServiceCard => ({
+  slug: String(doc.slug),
+  title: String(doc.title ?? ''),
+  outcome: String(doc.outcome ?? ''),
+  description: String(doc.description ?? ''),
+  capabilities: Array.isArray(doc.capabilities)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ? doc.capabilities.map((c: any) => (typeof c === 'string' ? c : c?.capability ?? '')).filter(Boolean)
+    : [],
+})
+
+export default async function ServicesPage() {
+  const docs = await getAllServices(30)
+  const services = docs.map(toServiceCard)
   return (
     <>
       {/* Page hero */}
@@ -18,7 +42,6 @@ export default function ServicesPage() {
           style={{ background: 'radial-gradient(circle at center, #009389, transparent 70%)', transform: 'translate(20%, -20%)' }} />
         <div className="container-custom relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left */}
             <div>
               <p className="section-eyebrow-dark">Services</p>
               <h1 className="text-white text-balance mb-5">
@@ -28,12 +51,9 @@ export default function ServicesPage() {
                 Each service is designed to compound with the others. You can start with one — but the real gains come from integration.
               </p>
             </div>
-            {/* Right: service system visual */}
             <div className="hidden lg:flex justify-end">
               <div className="relative w-[340px]">
-                {/* Central hub */}
                 <div className="flex flex-col gap-3">
-                  {/* Row 1 */}
                   <div className="grid grid-cols-2 gap-3">
                     {['Growth Strategy', 'Performance Marketing'].map((name) => (
                       <div key={name} className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3">
@@ -42,7 +62,6 @@ export default function ServicesPage() {
                       </div>
                     ))}
                   </div>
-                  {/* Row 2 — center hub */}
                   <div className="flex items-center gap-3">
                     <div className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3 flex-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-teal mb-2" />
@@ -57,7 +76,6 @@ export default function ServicesPage() {
                       <p className="text-[0.75rem] font-semibold text-white/70 leading-snug">Automation</p>
                     </div>
                   </div>
-                  {/* Row 3 */}
                   <div className="grid grid-cols-2 gap-3">
                     {['Analytics & BI', 'Creative & CRO'].map((name) => (
                       <div key={name} className="bg-white/[0.04] border border-teal/20 rounded-xl px-4 py-3">
@@ -66,7 +84,6 @@ export default function ServicesPage() {
                       </div>
                     ))}
                   </div>
-                  {/* Outcome bar */}
                   <div className="mt-1 bg-teal/10 border border-teal/20 rounded-xl px-4 py-2.5 flex items-center justify-between">
                     <span className="text-xs text-teal/80 font-medium">Combined outcome</span>
                     <span className="text-xs font-bold text-teal">↑ Revenue growth</span>
@@ -82,7 +99,7 @@ export default function ServicesPage() {
       <section className="section-padding bg-surface">
         <div className="container-custom">
           <div className="grid md:grid-cols-2 gap-6">
-            {SERVICES.map((service) => (
+            {services.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
