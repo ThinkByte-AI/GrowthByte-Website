@@ -1,0 +1,5 @@
+export { TemplateRenderer } from './TemplateRenderer'
+export { TemplateHero } from './TemplateHero'
+export { TemplateSidebar } from './TemplateSidebar'
+export { TemplateContentArea } from './TemplateContentArea'
+export { TemplateFooter } from './TemplateFooter'

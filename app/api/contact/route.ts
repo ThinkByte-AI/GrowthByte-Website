@@ -3,7 +3,7 @@ export const runtime = 'nodejs'
 const GOOGLE_APPS_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbwoFhZRaQAMxbm3MSQQLbiSqB9WtQ5aAFo7fhtn-LFvX3FAXcXkzZ318-rAj4uSeLXO/exec'
 
-type ContactPayload = {
+type ContactSubmission = {
   name: string
   email: string
   phone?: string
@@ -14,25 +14,25 @@ type ContactPayload = {
 }
 
 export async function POST(request: Request) {
-  let payload: ContactPayload
+  let submission: ContactSubmission
   try {
-    payload = (await request.json()) as ContactPayload
+    submission = (await request.json()) as ContactSubmission
   } catch {
-    return Response.json({ ok: false, error: 'Invalid JSON payload' }, { status: 400 })
+    return Response.json({ ok: false, error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  if (!payload?.name || !payload?.email || !payload?.message) {
+  if (!submission?.name || !submission?.email || !submission?.message) {
     return Response.json({ ok: false, error: 'Missing required fields' }, { status: 400 })
   }
 
   const body = new URLSearchParams()
-  body.set('name', payload.name)
-  body.set('email', payload.email)
-  body.set('phone', payload.phone ?? '')
-  body.set('company', payload.company ?? '')
-  body.set('revenue', payload.revenue ?? '')
-  body.set('industry', payload.industry ?? '')
-  body.set('message', payload.message)
+  body.set('name', submission.name)
+  body.set('email', submission.email)
+  body.set('phone', submission.phone ?? '')
+  body.set('company', submission.company ?? '')
+  body.set('revenue', submission.revenue ?? '')
+  body.set('industry', submission.industry ?? '')
+  body.set('message', submission.message)
 
   try {
     const upstreamRes = await fetch(GOOGLE_APPS_SCRIPT_URL, {

@@ -17,8 +17,8 @@ export const organizationSchema = {
     email: 'harsha@thinkbyte.ai',
   },
   sameAs: [
-    'https://www.linkedin.com/company/growthbyte',
-    'https://twitter.com/growthbyte',
+    'https://www.linkedin.com/company/growthbyte-ai/',
+    'https://x.com/growthbyteai_',
   ],
 }
 
