@@ -12,7 +12,7 @@ export default function CaseStudySteps({ steps }: { steps: CaseStudyStep[] }) {
             <h4>{step.title}</h4>
             <p>{step.detail}</p>
             <div className="tag-list">
-              {step.tags.map((t) => <span key={t} className="tag">{t}</span>)}
+              {(step.tags ?? []).map((t) => <span key={t} className="tag">{t}</span>)}
             </div>
           </div>
           <div className="marker" />
