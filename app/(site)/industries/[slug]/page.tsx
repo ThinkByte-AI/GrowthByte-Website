@@ -25,9 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const industry = await getIndustry(slug)
   if (!industry) return {}
+  const title = industry.metaTitle
+    ? { absolute: industry.metaTitle }
+    : `${industry.name} Growth Marketing`
+  const description =
+    industry.metaDescription ||
+    `${industry.challenge}. GrowthByte builds integrated AI-powered growth systems for ${industry.name} companies.`
   return {
-    title: `${industry.name} Growth Marketing — GrowthByte`,
-    description: `${industry.challenge}. GrowthByte builds integrated AI-powered growth systems for ${industry.name} companies.`,
+    title,
+    description,
     alternates: { canonical: `/industries/${slug}` },
   }
 }

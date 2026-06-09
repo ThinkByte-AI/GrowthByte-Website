@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cs = toCaseStudy(doc)
   const title = cs.metaTitle
     ? { absolute: cs.metaTitle }
-    : `${cs.headline || cs.title} — GrowthByte Case Study`
+    : { absolute: `${cs.headline || cs.title} — GrowthByte Case Study` }
   return {
     title,
     description: cs.metaDescription || cs.summary,

@@ -4,8 +4,8 @@ import CategoryFilter from './_components/CategoryFilter'
 import PostsGrid from './_components/PostsGrid'
 
 export const metadata: Metadata = {
-  title: 'Insights — GrowthByte | Growth Strategy, Paid Media, SEO',
-  description: 'Practical insights on growth strategy, performance marketing, SEO, and marketing automation for SaaS, D2C, and B2B companies.',
+  title: { absolute: 'Marketing Insights for SaaS D2C FinTech | GrowthByte.ai' },
+  description: 'GrowthByte.ai publishes growth strategy, SEO and performance marketing insights for SaaS, D2C, FinTech and B2B teams. From live campaigns. No trend pieces. Real work.',
   alternates: { canonical: '/insights' },
 }
 

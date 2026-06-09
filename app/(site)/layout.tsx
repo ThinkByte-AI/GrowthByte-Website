@@ -51,9 +51,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: '/favicon.ico',
-  },
   other: {
     'script:ld+json': [
       JSON.stringify(organizationSchema),

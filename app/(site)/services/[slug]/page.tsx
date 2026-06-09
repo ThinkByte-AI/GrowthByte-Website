@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!service) return {}
   const title = service.metaTitle
     ? { absolute: service.metaTitle }
-    : `${service.title} — GrowthByte`
+    : service.title
   return {
     title,
     description: service.metaDescription || service.description,

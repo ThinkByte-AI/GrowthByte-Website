@@ -10,8 +10,9 @@ import '@/components/journal/journal.css'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Operator-grade thinking on growth, performance and AI.',
+  title: { absolute: 'AI Marketing Blog for SaaS D2C B2B | GrowthByte.ai' },
+  description:
+    'GrowthByte.ai blog covers AI marketing, SEO and growth for SaaS, D2C and B2B. Real campaign notes for founders and marketers who want data, not recycled tips.',
   alternates: { canonical: '/blogs' },
 }
 

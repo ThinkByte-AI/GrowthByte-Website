@@ -14,8 +14,8 @@ const FAQSection         = dynamic(() => import('@/components/sections/FAQSectio
 const ContactSection     = dynamic(() => import('@/components/sections/ContactSection'))
 
 export const metadata: Metadata = {
-  title: 'GrowthByte — AI-Powered Growth Partner for Ambitious Companies',
-  description: 'Integrated AI systems + senior strategists. Driving measurable CAC reduction, ROAS improvement, and revenue growth for SaaS, D2C, FinTech, and Healthcare companies.',
+  title: { absolute: 'AI Marketing Agency India for SaaS and D2C | GrowthByte.ai' },
+  description: 'GrowthByte.ai cuts CAC, improves ROAS and grows revenue for SaaS, D2C, FinTech and Healthcare brands. AI handles execution. Senior strategists own the direction.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'GrowthByte — AI-Powered Growth Partner',
