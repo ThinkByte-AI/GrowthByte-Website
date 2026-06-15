@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 
 import type { CustomLayout, EditorTab, TemplateEditorFieldProps } from './types'
 import { FOOTER_HINT, PANEL_BODY, PANEL_WRAPPER } from './styles'
@@ -10,6 +10,11 @@ import TabBar from './TabBar'
 import CodeTab from './CodeTab'
 import ReadOnlyPlaceholder from './ReadOnlyPlaceholder'
 import LoadingPlaceholder from './LoadingPlaceholder'
+
+const subscribeToNothing = () => () => {}
+
+const useHasHydrated = () =>
+  useSyncExternalStore(subscribeToNothing, () => true, () => false)
 
 const useCustomLayoutSync = (
   customLayout: CustomLayout | undefined,
@@ -24,12 +29,10 @@ const useCustomLayoutSync = (
 }
 
 export const TemplateEditorField = ({ readOnly, formData, updateFormData }: TemplateEditorFieldProps) => {
-  const [isClient, setIsClient] = useState(false)
+  const isClient = useHasHydrated()
   const [activeTab, setActiveTab] = useState<EditorTab>('code')
   const [htmlCode, setHtmlCode] = useState('')
   const [cssCode, setCssCode] = useState('')
-
-  useEffect(() => setIsClient(true), [])
 
   const customLayout = formData?.customLayout as CustomLayout | undefined
   useCustomLayoutSync(customLayout, setHtmlCode, setCssCode)

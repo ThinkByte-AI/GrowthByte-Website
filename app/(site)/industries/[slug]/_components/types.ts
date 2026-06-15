@@ -3,4 +3,6 @@ export interface Industry {
   name: string
   challenge: string
   detail: string
+  metaTitle?: string
+  metaDescription?: string
 }

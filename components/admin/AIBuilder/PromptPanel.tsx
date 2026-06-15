@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { STARTER_PROMPTS } from './templates'
 
 interface Props {
@@ -18,13 +19,13 @@ export default function PromptPanel(props: Props) {
   const { prompt, setPrompt, isGenerating, onGenerate, thinking, meta, onSave, saveStatus, savedId } = props
   return (
     <div style={{ padding: 24, borderRight: '1px solid #2a2a2c', display: 'flex', flexDirection: 'column', gap: 20, overflow: 'auto' }}>
-      <a href="/admin"
+      <Link href="/admin"
         style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#a3a3a3', textDecoration: 'none', padding: '6px 10px', marginLeft: -10, marginBottom: -4, borderRadius: 6, alignSelf: 'flex-start', transition: 'background .15s' }}
         onMouseEnter={(e) => (e.currentTarget.style.background = '#1c1c1e')}
         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
         <span aria-hidden>←</span>
         <span>Back to admin</span>
-      </a>
+      </Link>
 
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>

@@ -7,6 +7,8 @@ const toIndustry = (doc: any): Industry => ({
   name: String(doc.name ?? ''),
   challenge: String(doc.challenge ?? ''),
   detail: String(doc.detail ?? ''),
+  metaTitle: doc.metaTitle ? String(doc.metaTitle) : undefined,
+  metaDescription: doc.metaDescription ? String(doc.metaDescription) : undefined,
 })
 
 export const getIndustry = async (slug: string): Promise<Industry | null> => {

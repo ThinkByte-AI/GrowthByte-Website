@@ -5,8 +5,8 @@ import Values from './_components/Values'
 import Cta from './_components/Cta'
 
 export const metadata: Metadata = {
-  title: 'About GrowthByte — AI-Powered Growth Partner',
-  description: 'GrowthByte was built because fragmented agencies and disconnected tools were failing growth-stage companies. We built an integrated AI + human growth system instead.',
+  title: { absolute: 'About GrowthByte | AI + Human Growth Marketing Agency' },
+  description: 'Engineers and growth operators who got tired of agencies billing for activity. So we built one that owns the number. AI for speed, humans for judgment.',
   alternates: { canonical: '/about' },
 }
 

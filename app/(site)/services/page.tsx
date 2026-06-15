@@ -5,8 +5,8 @@ import { getAllServices } from './[slug]/_fetchers'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Services — GrowthByte | AI-Powered Growth Services',
-  description: 'Six integrated growth capabilities — from performance marketing and SEO to automation and analytics. Every service feeds the same revenue outcome.',
+  title: { absolute: 'Digital Marketing Services, One Team | GrowthByte' },
+  description: 'SEO, paid media, automation, analytics and CRO run as a single system, not five vendors. AI handles the execution, our strategists keep it tied to revenue.',
   alternates: { canonical: '/services' },
 }
 

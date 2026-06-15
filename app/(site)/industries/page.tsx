@@ -5,8 +5,8 @@ import { getAllIndustries } from './_fetchers'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Industries — GrowthByte | Vertical-Specific Growth Systems',
-  description: 'GrowthByte works in SaaS, D2C/E-Commerce, Healthcare, FinTech, and Professional Services. Proven playbooks, industry benchmarks, and prior results in each vertical.',
+  title: { absolute: 'Industry-Specific Marketing Playbooks | GrowthByte' },
+  description: 'SaaS, D2C, FinTech, Healthcare and Professional Services each play by different rules. We build the growth playbook around your buyers and your benchmarks.',
   alternates: { canonical: '/industries' },
 }
 

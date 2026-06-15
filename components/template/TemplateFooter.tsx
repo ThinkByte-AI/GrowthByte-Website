@@ -86,7 +86,7 @@ export function TemplateFooter({
               {config.ctaText || 'Ready to grow?'}
             </h2>
             <p className="text-white/70 mb-6 max-w-xl mx-auto">
-              Let's discuss how we can help you achieve your growth goals.
+              Let&apos;s discuss how we can help you achieve your growth goals.
             </p>
             <Link
               href={config.ctaButtonLink || '/contact'}
