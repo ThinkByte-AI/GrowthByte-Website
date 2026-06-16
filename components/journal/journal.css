@@ -339,6 +339,8 @@
 .gbx .article-body p { color: var(--gb-ink-2); }
 .gbx .article-body strong { color: var(--gb-black); }
 .gbx .article-body ul, .gbx .article-body ol { padding-left: 22px; color: var(--gb-ink-2); }
+.gbx .article-body ul { list-style: disc; }
+.gbx .article-body ol { list-style: decimal; }
 .gbx .article-body li + li { margin-top: 6px; }
 .gbx .article-body a {
   color: var(--gb-accent-deep);
