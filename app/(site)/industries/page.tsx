@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: { absolute: 'Industry-Specific Marketing Playbooks | GrowthByte' },
-  description: 'SaaS, D2C, FinTech, Healthcare and Professional Services each play by different rules. We build the growth playbook around your buyers and your benchmarks.',
+  description: 'SaaS, D2C, FinTech, Healthcare and Professional Services each play by different rules. We build the growth playbook around your market and benchmarks.',
   alternates: { canonical: '/industries' },
 }
 

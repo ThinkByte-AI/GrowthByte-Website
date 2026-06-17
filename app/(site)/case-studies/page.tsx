@@ -9,8 +9,8 @@ import '@/components/journal/journal.css'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: { absolute: 'Marketing Case Studies | Real Results | GrowthByte' },
-  description: '68% lower CPA, 4x D2C revenue, 3080% organic growth, 5x SaaS leads, 212% ROI on ad spend. Every result tied to a real client and a real timeline you can check.',
+  title: { absolute: 'Marketing Case Studies and Real Results | GrowthByte' },
+  description: '68% lower CPA, 4x D2C revenue, 3080% organic growth, 5x SaaS leads, 212% ROI. Every result tied to a real client and a timeline you can check.',
   alternates: { canonical: '/case-studies' },
 }
 

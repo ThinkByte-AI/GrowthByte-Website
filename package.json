@@ -10,7 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seed:meta": "payload run scripts/seedPageMeta.ts"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "^3.84.1",

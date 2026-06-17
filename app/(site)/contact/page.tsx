@@ -3,8 +3,8 @@ import { CONTACT_INFO } from '@/lib/constants'
 import { ContactForm } from './ContactForm'
 
 export const metadata: Metadata = {
-  title: { absolute: 'Free Growth Strategy Call | No Sales Pitch | GrowthByte' },
-  description: 'Book a free call. We audit your funnel, show you exactly where growth is leaking and hand you a plan you can act on. A working session, not a sales pitch.',
+  title: { absolute: 'Free Growth Strategy Call, No Sales Pitch | GrowthByte' },
+  description: 'Book a free call. We audit your funnel, show you where growth is leaking and hand you a plan you can act on. A working session, not a sales pitch.',
   alternates: { canonical: '/contact' },
 }
 
