@@ -8,7 +8,7 @@ export const organizationSchema = {
   '@type': 'Organization',
   name: 'GrowthByte',
   url: URL,
-  logo: `${URL}/logo.png`,
+  logo: `${URL}/logo.jpeg`,
   description: DESCRIPTION,
   contactPoint: {
     '@type': 'ContactPoint',
