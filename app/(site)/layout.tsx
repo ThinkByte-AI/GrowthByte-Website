@@ -6,6 +6,7 @@ import './gb-theme.css'
 import './gb-home.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import Wordmark from '@/components/Wordmark'
 import { organizationSchema, websiteSchema } from '@/lib/structured-data'
 
 const inter = Inter({
@@ -80,6 +81,7 @@ export default function RootLayout({
         <Header />
         <main id="main-content" className="min-h-screen bg-surface">{children}</main>
         <Footer />
+        <Wordmark />
 
         {/* Google Analytics - loads after page is interactive */}
         <Script

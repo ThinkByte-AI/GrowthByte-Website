@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useCallback } from 'react'
 import { NAVIGATION_ITEMS } from '@/lib/constants'
+import { useHeaderOverBright } from './useHeaderTheme'
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -15,9 +16,10 @@ const ArrowIcon = () => (
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const closeMenu = useCallback(() => setMenuOpen(false), [])
+  const overBright = useHeaderOverBright()
 
   return (
-    <header className="hdr">
+    <header className={`hdr${overBright ? ' hdr--light' : ''}`}>
       <nav className="nav-in" aria-label="Primary">
         <Link href="/" className="nav-logo" aria-label="GrowthByte.ai home">
           <Image className="nav-logo-img" src="/logo.jpeg" alt="" width={32} height={32} />

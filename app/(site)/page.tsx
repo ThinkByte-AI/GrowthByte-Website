@@ -14,7 +14,6 @@ import FoundersSection from '@/components/home/FoundersSection'
 import ToolsSection from '@/components/home/ToolsSection'
 import FinalCtaSection from '@/components/home/FinalCtaSection'
 import FaqSection from '@/components/home/FaqSection'
-import Wordmark from '@/components/home/Wordmark'
 
 export const metadata: Metadata = {
   title: { absolute: 'GrowthByte.ai | AI Marketing Agency India | Lower CAC, Higher ROAS' },
@@ -54,7 +53,6 @@ export default function HomePage() {
       <ToolsSection />
       <FinalCtaSection />
       <FaqSection />
-      <Wordmark />
     </div>
   )
 }

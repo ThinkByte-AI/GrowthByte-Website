@@ -54,7 +54,19 @@
 .gb-btn-ghost:hover { color: var(--T); }
 
 /* ── Header / nav ─────────────────────────────────────────── */
-.hdr { position: sticky; top: 0; z-index: 100; background: color-mix(in srgb, var(--gb-ink) 80%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ln-i); }
+.hdr { position: sticky; top: 0; z-index: 100; background: color-mix(in srgb, var(--gb-ink) 80%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ln-i); transition: background .3s ease, border-color .3s ease; }
+.nav-logo-name, .menu-btn { transition: color .3s ease, border-color .3s ease; }
+
+/* Light theme — applied by the Header when the section under it is bright, so it
+   reads as a light bar instead of a dark one clashing over white content. */
+.hdr.hdr--light { background: color-mix(in srgb, #ffffff 82%, transparent); border-bottom-color: var(--ln-p); }
+.hdr.hdr--light .nav-logo-name { color: var(--gb-ink); }
+.hdr.hdr--light .nav-links a { color: var(--mut-p); }
+.hdr.hdr--light .nav-links a:hover { color: var(--gb-ink); background: rgba(11, 11, 11, .05); }
+.hdr.hdr--light .menu-btn { color: var(--gb-ink); border-color: var(--ln-p); }
+.hdr.hdr--light .gb-mobile-menu.open { background: #fff; border-top-color: var(--ln-p); }
+.hdr.hdr--light .gb-mobile-menu a { color: var(--mut-p); }
+.hdr.hdr--light .gb-mobile-menu a:hover { color: var(--gb-ink); background: rgba(11, 11, 11, .05); }
 .nav-in { max-width: var(--gb-max); margin: 0 auto; padding: 0 40px; display: flex; align-items: center; gap: 16px; height: 64px; }
 .nav-logo { display: flex; align-items: center; gap: 10px; margin: 0 auto 0 2px; }
 .nav-logo-img { width: 32px; height: 32px; border-radius: 8px; }
@@ -99,3 +111,18 @@
 .gb-footer .foot-leg { display: flex; gap: 18px; }
 @media (max-width: 900px) { .gb-footer .foot-top { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .gb-footer .foot-top { grid-template-columns: 1fr; } }
+
+/* ── Animated wordmark (renders site-wide, directly below the footer) ─────── */
+.wordmark { background: var(--gb-ink); padding: 66px 0 38px; overflow: hidden; position: relative; }
+.wm-row { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 0 20px; }
+.wm-g { width: clamp(38px, 5.5vw, 72px); height: clamp(38px, 5.5vw, 72px); border-radius: 14px; flex-shrink: 0; transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
+.wm-row:hover .wm-g { transform: rotate(-7deg) scale(1.06); }
+.wm-text { font-family: var(--disp); font-weight: 900; font-size: clamp(44px, 12.5vw, 172px); line-height: .9; letter-spacing: -.04em; color: #fff; white-space: nowrap; cursor: default; }
+.wm-text b { color: var(--T); }
+.wm-sub { text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255, 255, 255, .32); margin-top: 22px; opacity: 0; transform: translateY(12px); transition: opacity .6s ease .5s, transform .6s ease .5s; }
+.wordmark.in .wm-sub { opacity: 1; transform: translateY(0); }
+.wm-l { display: inline-block; opacity: 0; transform: translateY(48px); transition: translate .26s cubic-bezier(.2, .8, .2, 1), color .2s ease; }
+.wordmark.in .wm-l { animation: gb-wmup .7s cubic-bezier(.2, .85, .25, 1) forwards; }
+@keyframes gb-wmup { to { opacity: 1; transform: translateY(0); } }
+.wm-text:hover .wm-l { translate: 0 -7px; }
+.wm-l:hover { color: var(--T); translate: 0 -16px; }
