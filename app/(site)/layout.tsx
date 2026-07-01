@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
+import './gb-theme.css'
+import './gb-home.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { organizationSchema, websiteSchema } from '@/lib/structured-data'
@@ -71,12 +73,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased bg-surface text-ink">
+      <body className="antialiased bg-ink text-ink">
         <a href="#main-content" className="skip-nav">
           Skip to main content
         </a>
         <Header />
-        <main id="main-content" className="min-h-screen">{children}</main>
+        <main id="main-content" className="min-h-screen bg-surface">{children}</main>
         <Footer />
 
         {/* Google Analytics - loads after page is interactive */}

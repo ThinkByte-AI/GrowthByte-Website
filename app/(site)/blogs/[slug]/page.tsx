@@ -14,9 +14,10 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-// Content is read live from Payload; opt out of the full route cache so
-// deleted posts 404 and edits/related posts reflect immediately.
-export const dynamic = 'force-dynamic'
+// Cached as static (ISR) for fast prod serving; a Payload afterChange/afterDelete
+// hook calls revalidatePath on edit/delete so changes still reflect immediately.
+// The window below is just the fallback refresh when no hook fires.
+export const revalidate = 3600
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params

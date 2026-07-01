@@ -5,9 +5,10 @@ import type { JournalPost } from './_components/types'
 import { toJournalPost } from './_components/toJournalPost'
 import '@/components/journal/journal.css'
 
-// Listing reads from Payload (not a tracked fetch), so opt out of the full route
-// cache — otherwise deleted/added posts won't show until the next build.
-export const dynamic = 'force-dynamic'
+// Cached as static (ISR); the BlogPosts afterChange/afterDelete hook revalidates
+// /blogs on publish/edit/delete, so the listing stays current. The window below
+// is just the fallback refresh.
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: { absolute: 'Digital Marketing Blog, Growth and AI | GrowthByte' },

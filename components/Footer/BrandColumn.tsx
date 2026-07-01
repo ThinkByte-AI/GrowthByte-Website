@@ -1,20 +1,17 @@
-import Link from 'next/link'
+import Image from 'next/image'
 import ContactRow from './ContactRow'
-import SocialLinks from './SocialLinks'
 
 export default function BrandColumn() {
   return (
-    <div className="lg:col-span-2 pr-0 lg:pr-8">
-      <Link href="/" className="inline-block mb-4" aria-label="GrowthByte home">
-        <span className="text-xl font-bold tracking-tight">
-          Growth<span className="text-teal">Byte</span>
-        </span>
-      </Link>
-      <p className="text-[0.9rem] text-white/50 leading-relaxed mb-6 max-w-[22rem]">
-        AI systems + human strategy. Built to drive measurable outcomes — leads, CAC improvement, conversion growth, and revenue.
+    <div>
+      <div className="fl-logo">
+        <Image className="fl-sq" src="/logo.jpeg" alt="GrowthByte.ai logo" width={30} height={30} />
+        <div className="fl-name">GrowthByte<b>.ai</b></div>
+      </div>
+      <p className="fl-tag">
+        AI systems and senior strategists on your revenue goal. For companies in the ₹5Cr to ₹100Cr range.
       </p>
       <ContactRow />
-      <SocialLinks />
     </div>
   )
 }

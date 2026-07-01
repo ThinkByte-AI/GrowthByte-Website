@@ -15,6 +15,13 @@ export const INDUSTRY_LINKS = [
   { name: 'Professional Services', href: '/industries/professional-services' },
 ]
 
+export const TOOLS_LINKS = [
+  { name: 'CAC Calculator', href: '/tools/customer-acquisition-cost-calculator' },
+  { name: 'ROI Calculator', href: '/tools/marketing-roi-calculator' },
+  { name: 'SEO Audit Tool', href: '/tools/seo-audit-tool' },
+  { name: 'All Tools', href: '/tools' },
+]
+
 export const COMPANY_LINKS = [
   { name: 'About', href: '/about' },
   { name: 'Case Studies', href: '/case-studies' },

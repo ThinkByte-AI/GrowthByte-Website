@@ -1,106 +1,57 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useCallback, useEffect } from 'react'
+import Image from 'next/image'
+import { useState, useCallback } from 'react'
 import { NAVIGATION_ITEMS } from '@/lib/constants'
 
+const ArrowIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+)
+
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  const toggleMenu  = useCallback(() => setMobileMenuOpen(p => !p), [])
-  const closeMenu   = useCallback(() => setMobileMenuOpen(false), [])
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-surface/95 backdrop-blur-md shadow-sm border-b border-surface-border'
-          : 'bg-surface/95 backdrop-blur-md border-b border-surface-border'
-      }`}
-    >
-      <nav className="container-custom" aria-label="Main navigation">
-        <div className="flex items-center justify-between h-16 md:h-[72px]">
+    <header className="hdr">
+      <nav className="nav-in" aria-label="Primary">
+        <Link href="/" className="nav-logo" aria-label="GrowthByte.ai home">
+          <Image className="nav-logo-img" src="/logo.jpeg" alt="" width={32} height={32} />
+          <span className="nav-logo-name">GrowthByte<b>.ai</b></span>
+        </Link>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group" aria-label="GrowthByte home">
-            <span className="text-xl md:text-[1.375rem] font-bold text-ink tracking-tight group-hover:text-teal transition-colors duration-250">
-              Growth<span className="text-teal">Byte</span>
-            </span>
-          </Link>
+        <ul className="nav-links" role="list">
+          {NAVIGATION_ITEMS.map((item) => (
+            <li key={item.href}><Link href={item.href}>{item.name}</Link></li>
+          ))}
+        </ul>
 
-          {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-1">
-            {NAVIGATION_ITEMS.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="relative px-3 py-2 text-[0.9rem] font-medium text-ink-60 hover:text-ink transition-colors duration-250 rounded-md hover:bg-surface-2 group"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+        <Link href="/contact" className="nav-cta">
+          <span>Book a Strategy Call</span>
+          <ArrowIcon />
+        </Link>
 
-          {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link href="/contact" className="btn-primary text-sm px-5 py-2.5">
-              Book a Strategy Call
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            className="lg:hidden p-2 -mr-2 rounded-md text-ink-60 hover:text-ink hover:bg-surface-2 transition-colors"
-            onClick={toggleMenu}
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              {mobileMenuOpen
-                ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              }
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div
-            id="mobile-menu"
-            className="lg:hidden border-t border-surface-border py-4 space-y-1"
-          >
-            {NAVIGATION_ITEMS.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="block px-3 py-2.5 text-[0.95rem] font-medium text-ink-60 hover:text-ink hover:bg-surface-2 rounded-md transition-colors"
-                onClick={closeMenu}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="pt-3 pb-1 px-0">
-              <Link
-                href="/contact"
-                className="btn-primary block text-center text-sm"
-                onClick={closeMenu}
-              >
-                Book a Strategy Call
-              </Link>
-            </div>
-          </div>
-        )}
+        <button
+          type="button"
+          className="menu-btn"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          Menu
+        </button>
       </nav>
+
+      <div className={`gb-mobile-menu${menuOpen ? ' open' : ''}`}>
+        {NAVIGATION_ITEMS.map((item) => (
+          <Link key={item.href} href={item.href} onClick={closeMenu}>{item.name}</Link>
+        ))}
+        <Link href="/contact" onClick={closeMenu}>Book a Strategy Call</Link>
+      </div>
     </header>
   )
 }

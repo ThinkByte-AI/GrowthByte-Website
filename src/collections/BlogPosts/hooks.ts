@@ -1,4 +1,8 @@
-import type { CollectionAfterDeleteHook, CollectionBeforeChangeHook } from 'payload'
+import type {
+  CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
+  CollectionBeforeChangeHook,
+} from 'payload'
 import { generateBlogSchema } from './schema'
 
 const WORDS_PER_MINUTE = 200
@@ -44,12 +48,29 @@ export const beforeChangeBlogPost: CollectionBeforeChangeHook = ({ data }) => {
   return data
 }
 
+// Refresh the ISR cache for the listing and the affected post so edits/publishes
+// go live immediately. Dynamic import + try/catch because hooks can also run
+// outside a Next request scope (CLI, migrations), where next/cache is unavailable.
+const revalidateBlogPaths = async (slug?: string) => {
+  try {
+    const { revalidatePath } = await import('next/cache')
+    revalidatePath('/blogs')
+    if (slug) revalidatePath(`/blogs/${slug}`)
+  } catch {
+    /* not in a Next request scope; nothing to revalidate */
+  }
+}
+
+export const afterChangeBlogPost: CollectionAfterChangeHook = async ({ doc }) => {
+  await revalidateBlogPaths(doc?.slug)
+}
+
 // Belt-and-suspenders cleanup. Payload normally cascades version deletion
 // when the parent doc is deleted, but with autosave drafts an in-flight
 // version write can land *after* the parent delete and survive as an orphan
 // — Payload then surfaces it on read paths and the doc appears to come back.
 // Re-running the cleanup here closes the race.
-export const afterDeleteBlogPost: CollectionAfterDeleteHook = async ({ id, req }) => {
+export const afterDeleteBlogPost: CollectionAfterDeleteHook = async ({ id, doc, req }) => {
   try {
     await req.payload.db.deleteMany({
       collection: '_blog-posts_versions',
@@ -58,4 +79,5 @@ export const afterDeleteBlogPost: CollectionAfterDeleteHook = async ({ id, req }
   } catch {
     /* versions collection may not exist yet on a fresh DB; safe to ignore */
   }
+  await revalidateBlogPaths(doc?.slug)
 }

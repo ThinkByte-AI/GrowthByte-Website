@@ -5,4 +5,5 @@ export const NAVIGATION_ITEMS = [
   { name: 'About', href: '/about' },
   { name: 'Insights', href: '/insights' },
   { name: 'Blog', href: '/blogs' },
+  { name: 'Tools', href: '/tools' },
 ] as const

@@ -26,6 +26,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
+import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { Services } from './collections/Services'
@@ -41,6 +42,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  sharp,
   admin: {
     user: 'users',
     meta: {
