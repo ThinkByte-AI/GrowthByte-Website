@@ -2,41 +2,43 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { SERVICES } from './services/serviceData'
+import { SERVICE_ICONS } from './services/serviceIcons'
 import ServicePanel from './ServicePanel'
 import { ArrowIcon } from './icons'
+import type { ServicesData } from './types'
 
-export default function ServicesSection() {
-  const [active, setActive] = useState(SERVICES[0].id)
+export default function ServicesSection({ data }: { data: ServicesData }) {
+  const items = data.items ?? []
+  const [active, setActive] = useState(0)
 
   return (
     <section className="light" id="services" aria-labelledby="svc-h">
       <div className="wrap">
         <div className="sec-flex">
           <div>
-            <span className="eyebrow">What We Do</span>
-            <h2 id="svc-h">More than you see here.</h2>
+            <span className="eyebrow">{data.eyebrow}</span>
+            <h2 id="svc-h">{data.heading}</h2>
           </div>
-          <Link href="/services" className="gb-btn gb-btn-ot">All Services <ArrowIcon /></Link>
+          <Link href={data.allHref ?? '/services'} className="gb-btn gb-btn-ot">{data.allLabel} <ArrowIcon /></Link>
         </div>
         <div className="svc-shell">
           <div className="svc-nav" role="tablist" aria-label="Services">
-            {SERVICES.map((service) => (
+            {items.map((service, i) => (
               <button
-                key={service.id}
+                key={i}
                 type="button"
-                className={`sv${active === service.id ? ' on' : ''}`}
+                className={`sv${active === i ? ' on' : ''}`}
                 role="tab"
-                aria-selected={active === service.id}
-                onClick={() => setActive(service.id)}
+                aria-selected={active === i}
+                onClick={() => setActive(i)}
               >
-                <span className="sv-ico">{service.icon}</span>{service.navLabel}
+                <span className="sv-ico">{SERVICE_ICONS[service.iconKey ?? '']}</span>{service.navLabel}
               </button>
             ))}
           </div>
           <div className="svc-panels">
-            {SERVICES.map((service) => (
-              <ServicePanel key={service.id} service={service} active={active === service.id} />
+            {items.map((service, i) => (
+              <ServicePanel key={i} service={service} active={active === i} />
             ))}
           </div>
         </div>

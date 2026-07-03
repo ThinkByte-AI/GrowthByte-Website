@@ -72,9 +72,20 @@
 .nav-logo-img { width: 32px; height: 32px; border-radius: 8px; }
 .nav-logo-name { font-family: var(--disp); font-size: 17px; font-weight: 800; color: #fff; letter-spacing: -.01em; }
 .nav-logo-name b { color: var(--T); }
-.nav-links { display: flex; gap: 2px; list-style: none; }
+.nav-links { display: flex; gap: 2px; list-style: none; height: 100%; align-items: stretch; }
+.nav-links > li { display: flex; align-items: center; position: relative; }
 .nav-links a { font-family: var(--mono); font-size: 12px; color: var(--mut-i); padding: 8px 11px; border-radius: 6px; transition: color .15s, background .15s; }
 .nav-links a:hover { color: #fff; background: var(--card-i); }
+
+/* Hover dropdown menus for Services / Industries / Tools */
+.gb-dd { position: absolute; top: 100%; left: 0; min-width: 210px; background: var(--gb-ink); border: 1px solid var(--ln-i); border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 2px; opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity .18s ease, transform .18s ease, visibility .18s; box-shadow: 0 14px 34px rgba(0, 0, 0, .32); z-index: 120; }
+.gb-dd::before { content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 10px; }
+.nav-links > li:hover .gb-dd, .nav-links > li:focus-within .gb-dd { opacity: 1; visibility: visible; transform: translateY(0); }
+.nav-links .gb-dd a { display: block; font-size: 12px; color: var(--mut-i); padding: 8px 11px; border-radius: 6px; white-space: nowrap; }
+.nav-links .gb-dd a:hover { color: #fff; background: var(--card-i); }
+.hdr--light .gb-dd { background: #fff; border-color: var(--ln-p); box-shadow: 0 14px 34px rgba(11, 11, 11, .12); }
+.hdr--light .nav-links .gb-dd a { color: var(--mut-p); }
+.hdr--light .nav-links .gb-dd a:hover { color: var(--gb-ink); background: rgba(11, 11, 11, .05); }
 .nav-cta { font-family: var(--mono); font-size: 12.5px; background: var(--T); color: #fff; padding: 10px 17px; border-radius: 100px; display: inline-flex; align-items: center; gap: 8px; transition: background .15s; }
 .nav-cta:hover { background: var(--Td); }
 .nav-cta svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -104,6 +115,8 @@
 .gb-footer .fl-contact a:hover { color: var(--T); }
 .gb-footer .fl-contact svg { width: 14px; height: 14px; stroke: var(--T); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .gb-footer .flc-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim-i); margin-bottom: 16px; }
+.gb-footer .flc-h a { color: inherit; transition: color .15s; }
+.gb-footer .flc-h a:hover { color: var(--T); }
 .gb-footer .flc ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .gb-footer .flc a { font-size: 13.5px; color: rgba(255, 255, 255, .78); }
 .gb-footer .flc a:hover { color: var(--T); }

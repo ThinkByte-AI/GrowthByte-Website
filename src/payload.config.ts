@@ -37,6 +37,7 @@ import { Authors } from './collections/Authors'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { PageTemplates } from './collections/PageTemplates'
+import { HomePage } from './globals/HomePage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -76,6 +77,7 @@ export default buildConfig({
     Media,
     PageTemplates,
   ],
+  globals: [HomePage],
   editor: lexicalEditor({
     features: () => [
       HeadingFeature({

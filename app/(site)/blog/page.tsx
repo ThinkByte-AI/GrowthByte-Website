@@ -1,6 +1,6 @@
-import { redirect } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 
-// /blog → /insights (permanent redirect)
+// /blog → /blogs (the CMS blog). Permanent (308) so link authority consolidates.
 export default function BlogRedirect() {
-  redirect('/insights')
+  permanentRedirect('/blogs')
 }

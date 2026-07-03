@@ -5,7 +5,7 @@ interface StatusMessageProps {
   errorText: string | null
 }
 
-const SUCCESS_TEXT = 'Thanks — we’ve received your request. We’ll respond within 24 hours.'
+const SUCCESS_TEXT = 'Thanks, we’ve received your request. We’ll respond within 24 hours.'
 const DEFAULT_ERROR = 'Something went wrong. Please try again.'
 
 export default function StatusMessage({ state, errorText }: StatusMessageProps) {

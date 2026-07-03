@@ -1,20 +1,15 @@
 import Link from 'next/link'
 import { CONTACT_INFO } from '@/lib/constants'
 import { ArrowIcon, PhoneIcon } from './icons'
+import type { MidCtaData } from './types'
 
-interface MidCtaProps {
-  title: string
-  subtitle: string
-  buttonLabel: string
-}
-
-export default function MidCta({ title, subtitle, buttonLabel }: MidCtaProps) {
+export default function MidCta({ data }: { data: MidCtaData }) {
   return (
     <div className="midcta">
       <div className="midcta-in">
         <div>
-          <div className="midcta-t">{title}</div>
-          <div className="midcta-sub">{subtitle}</div>
+          <div className="midcta-t">{data.title}</div>
+          <div className="midcta-sub">{data.subtitle}</div>
         </div>
         <div className="midcta-r">
           <span className="midcta-call">
@@ -22,7 +17,7 @@ export default function MidCta({ title, subtitle, buttonLabel }: MidCtaProps) {
             <a href={CONTACT_INFO.phoneHref}>{CONTACT_INFO.phone}</a>
           </span>
           <Link href="/contact" className="gb-btn gb-btn-white">
-            {buttonLabel} <ArrowIcon />
+            {data.buttonLabel} <ArrowIcon />
           </Link>
         </div>
       </div>

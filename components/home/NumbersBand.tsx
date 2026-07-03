@@ -1,21 +1,17 @@
-const NUMBERS = [
-  { value: '42%', label: 'average CAC reduction within 90 days' },
-  { value: '3.1×', label: 'average ROAS improvement' },
-  { value: '₹50Cr+', label: 'pipeline built across all clients' },
-  { value: '92%', label: 'client retention after 6 months' },
-]
+import type { NumbersData } from './types'
 
-export default function NumbersBand() {
+export default function NumbersBand({ data }: { data: NumbersData }) {
+  const items = data.items ?? []
   return (
     <section className="dark" id="numbers" aria-labelledby="num-h">
       <div className="wrap">
         <div className="sec-head">
-          <span className="eyebrow">By The Numbers</span>
-          <h2 id="num-h">Proof, not promises.</h2>
+          <span className="eyebrow">{data.eyebrow}</span>
+          <h2 id="num-h">{data.heading}</h2>
         </div>
         <div className="nums-grid">
-          {NUMBERS.map((item) => (
-            <div className="num" key={item.label}>
+          {items.map((item, i) => (
+            <div className="num" key={i}>
               <div className="num-v">{item.value}</div>
               <div className="num-l">{item.label}</div>
             </div>

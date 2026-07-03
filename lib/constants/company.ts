@@ -6,10 +6,10 @@ export const COMPANY_INFO = {
 } as const
 
 export const CONTACT_INFO = {
-  email: 'harsha@thinkbyte.ai',
-  phone: '+91-8904879011',
-  phoneHref: 'tel:+918904879011',
-  emailHref: 'mailto:harsha@thinkbyte.ai',
+  email: 'agent@growthbyte.ai',
+  phone: '+91 96425 51295',
+  phoneHref: 'tel:+919642551295',
+  emailHref: 'mailto:agent@growthbyte.ai',
 } as const
 
 export const SOCIAL_LINKS = {

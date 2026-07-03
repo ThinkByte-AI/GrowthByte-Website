@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react'
+import { lexicalToHtml } from '@/lib/lexicalToHtml'
+import type { FoundersData } from './types'
 
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -6,40 +7,22 @@ const LinkedInIcon = () => (
   </svg>
 )
 
-interface Founder { initials: string; name: string; role: string; bio: ReactNode }
-
-const FOUNDERS: Founder[] = [
-  {
-    initials: 'ST', name: 'SriHarsha Thota', role: 'Co-Founder',
-    bio: <>ex-VP Consumer Growth at <strong>MediBuddy</strong>, delivered <strong>15x growth in one year</strong>. Founding engineer through exit. BITS Pilani.</>,
-  },
-  {
-    initials: 'VK', name: 'Vinay Kumar Kovvuri', role: 'Co-Founder, AI/ML',
-    bio: <>Shipped <strong>20+ production AI products</strong> across healthcare and consumer tech. AI/ML product leadership. BITS Pilani.</>,
-  },
-  {
-    initials: 'RG', name: 'Raghu Gorrela', role: 'Co-Founder, Global GTM',
-    bio: <>Global client strategy across <strong>US, SEA, and India</strong>. BITS Pilani and <strong>XLRI Jamshedpur</strong>. Turns strategy into revenue.</>,
-  },
-]
-
 const linkedInSearch = (name: string) =>
   `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(name)}`
 
-export default function FoundersSection() {
+export default function FoundersSection({ data }: { data: FoundersData }) {
+  const items = data.items ?? []
   return (
     <section className="dark" id="team" aria-labelledby="team-h">
       <div className="wrap">
         <div className="sec-head">
-          <span className="eyebrow">The Founders</span>
-          <h2 id="team-h">Operators, not account managers.</h2>
-          <p className="lead">
-            Engineers and product leaders who built real companies, scaled them, and know what growth looks like from the inside.
-          </p>
+          <span className="eyebrow">{data.eyebrow}</span>
+          <h2 id="team-h">{data.heading}</h2>
+          <p className="lead">{data.lead}</p>
         </div>
         <div className="founders-grid">
-          {FOUNDERS.map((founder) => (
-            <div className="fc" key={founder.name}>
+          {items.map((founder, i) => (
+            <div className="fc" key={i}>
               <div className="fc-top">
                 <div className="fc-av">{founder.initials}</div>
                 <div>
@@ -47,8 +30,8 @@ export default function FoundersSection() {
                   <div className="fc-role">{founder.role}</div>
                 </div>
               </div>
-              <p className="fc-bio">{founder.bio}</p>
-              <a href={linkedInSearch(founder.name)} className="fc-li" target="_blank" rel="noopener">
+              <div className="fc-bio" dangerouslySetInnerHTML={{ __html: lexicalToHtml(founder.bio) }} />
+              <a href={linkedInSearch(founder.name ?? '')} className="fc-li" target="_blank" rel="noopener">
                 <LinkedInIcon />LinkedIn
               </a>
             </div>

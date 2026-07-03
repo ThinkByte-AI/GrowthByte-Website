@@ -3,8 +3,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useCallback } from 'react'
-import { NAVIGATION_ITEMS } from '@/lib/constants'
+import { SERVICE_LINKS, INDUSTRY_LINKS, TOOLS_LINKS } from '@/components/Footer/links'
 import { useHeaderOverBright } from './useHeaderTheme'
+
+type NavChild = { name: string; href: string }
+type NavEntry = { name: string; href: string; children?: ReadonlyArray<NavChild> }
+
+const NAV: NavEntry[] = [
+  { name: 'Services', href: '/services', children: SERVICE_LINKS },
+  { name: 'Industries', href: '/industries', children: INDUSTRY_LINKS },
+  { name: 'Case Studies', href: '/case-studies' },
+  { name: 'About', href: '/about' },
+  { name: 'Blog', href: '/blogs' },
+  { name: 'Tools', href: '/tools', children: TOOLS_LINKS },
+]
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -27,15 +39,21 @@ export default function Header() {
         </Link>
 
         <ul className="nav-links" role="list">
-          {NAVIGATION_ITEMS.map((item) => (
-            <li key={item.href}><Link href={item.href}>{item.name}</Link></li>
+          {NAV.map((item) => (
+            <li key={item.href} className={item.children ? 'nav-item' : undefined}>
+              <Link href={item.href}>{item.name}</Link>
+              {item.children && (
+                <div className="gb-dd">
+                  {item.children.map((child) => (
+                    <Link key={child.href} href={child.href}>{child.name}</Link>
+                  ))}
+                </div>
+              )}
+            </li>
           ))}
         </ul>
 
-        <Link href="/contact" className="nav-cta">
-          <span>Book a Strategy Call</span>
-          <ArrowIcon />
-        </Link>
+        <Link href="/contact" className="nav-cta"><span>Book a Strategy Call</span><ArrowIcon /></Link>
 
         <button
           type="button"
@@ -49,7 +67,7 @@ export default function Header() {
       </nav>
 
       <div className={`gb-mobile-menu${menuOpen ? ' open' : ''}`}>
-        {NAVIGATION_ITEMS.map((item) => (
+        {NAV.map((item) => (
           <Link key={item.href} href={item.href} onClick={closeMenu}>{item.name}</Link>
         ))}
         <Link href="/contact" onClick={closeMenu}>Book a Strategy Call</Link>

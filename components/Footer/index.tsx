@@ -9,9 +9,9 @@ export default function Footer() {
       <div className="wrap">
         <div className="foot-top">
           <BrandColumn />
-          <LinkColumn title="Services" links={SERVICE_LINKS} />
-          <LinkColumn title="Industries" links={INDUSTRY_LINKS} />
-          <LinkColumn title="Tools" links={TOOLS_LINKS} />
+          <LinkColumn title="Services" titleHref="/services" links={SERVICE_LINKS} />
+          <LinkColumn title="Industries" titleHref="/industries" links={INDUSTRY_LINKS} />
+          <LinkColumn title="Tools" titleHref="/tools" links={TOOLS_LINKS} />
           <LinkColumn title="Company" links={COMPANY_LINKS} />
         </div>
         <BottomBar />

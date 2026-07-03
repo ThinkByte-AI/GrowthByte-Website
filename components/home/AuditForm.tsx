@@ -20,10 +20,18 @@ const sendLead = (fields: Record<string, string>) =>
     body: new URLSearchParams({ ...fields, source: 'homepage-audit' }),
   })
 
-const buttonLabel = (state: SubmitState) =>
-  state === 'submitting' ? 'Sending…' : state === 'success' ? 'Request sent' : 'Book My Free Audit'
+interface AuditFormProps {
+  heading?: string | null
+  sub?: string | null
+  submitLabel?: string | null
+  secondaryLabel?: string | null
+  micro?: string | null
+}
 
-export default function AuditForm() {
+const buttonLabel = (state: SubmitState, submitLabel: string) =>
+  state === 'submitting' ? 'Sending…' : state === 'success' ? 'Request sent' : submitLabel
+
+export default function AuditForm({ heading, sub, submitLabel, secondaryLabel, micro }: AuditFormProps) {
   const [fields, setFields] = useState({ name: '', email: '', company: '' })
   const [state, setState] = useState<SubmitState>('idle')
 
@@ -46,8 +54,8 @@ export default function AuditForm() {
 
   return (
     <form className="cta-card" onSubmit={onSubmit}>
-      <div className="cta-card-h">Get your free growth audit</div>
-      <div className="cta-card-sub">We set up a call within 24 hours.</div>
+      <div className="cta-card-h">{heading}</div>
+      <div className="cta-card-sub">{sub}</div>
       <div className="cf-row">
         <input className="cf-inp" type="text" placeholder="Your name" aria-label="Your name" required value={fields.name} onChange={onChange('name')} disabled={busy} />
         <input className="cf-inp" type="email" placeholder="Work email address" aria-label="Work email" required value={fields.email} onChange={onChange('email')} disabled={busy} />
@@ -55,13 +63,13 @@ export default function AuditForm() {
       </div>
       <div className="cf-btns">
         <button type="submit" className="gb-btn gb-btn-teal" style={{ justifyContent: 'center' }} disabled={busy}>
-          {buttonLabel(state)} <ArrowIcon />
+          {buttonLabel(state, submitLabel ?? 'Book My Free Audit')} <ArrowIcon />
         </button>
-        <a href="#cases" className="gb-btn gb-btn-dark" style={{ justifyContent: 'center' }}>See Results First</a>
+        <a href="#cases" className="gb-btn gb-btn-dark" style={{ justifyContent: 'center' }}>{secondaryLabel}</a>
       </div>
       {state === 'success' && <p className="cf-status ok">Thanks — we’ll be in touch within 24 hours.</p>}
       {state === 'error' && <p className="cf-status err">Something went wrong. Please email us instead.</p>}
-      <p className="cf-micro">No spam. No lock-in. Response within 24 hours.</p>
+      <p className="cf-micro">{micro}</p>
       <div className="cf-contact">
         <a href={CONTACT_INFO.emailHref}><MailIcon />{CONTACT_INFO.email}</a>
         <a href={CONTACT_INFO.phoneHref}><PhoneIcon />{CONTACT_INFO.phone}</a>

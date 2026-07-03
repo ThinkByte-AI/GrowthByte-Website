@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   const BENEFITS = [
-    'A senior strategist — not a salesperson',
+    'A senior strategist, not a salesperson',
     'Live audit of your current growth setup',
     'Your top 3 highest-leverage opportunities',
-    'A clear 90-day action plan — no obligation',
+    'A clear 90-day action plan, no obligation',
   ]
 
   return (
@@ -26,11 +26,11 @@ export default function ContactPage() {
             {/* Left — framing */}
             <div className="lg:sticky lg:top-28">
               <p className="section-eyebrow">Strategy call</p>
-              <h1 className="mb-5 text-balance">
+              <h1 className="mb-5 text-[1.75rem] lg:whitespace-nowrap">
                 Book a 30-minute strategy call.
               </h1>
               <p className="text-body-lg text-ink-60 leading-relaxed mb-8">
-                This is a working session. We will look at your current marketing setup, identify what is underperforming, and map out a clear starting point — at no cost, no obligation.
+                This is a working session. We will look at your current marketing setup, identify what is underperforming, and map out a clear starting point, at no cost and no obligation.
               </p>
 
               <ul className="space-y-3 mb-8">

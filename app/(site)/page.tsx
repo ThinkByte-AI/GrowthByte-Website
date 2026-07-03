@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import { cache } from 'react'
+import { getPayloadClient } from '@/src/get-payload'
+import type { HomeData } from '@/components/home/types'
 import Hero from '@/components/home/Hero'
 import MetricBar from '@/components/home/MetricBar'
 import ProblemSection from '@/components/home/ProblemSection'
@@ -15,44 +18,48 @@ import ToolsSection from '@/components/home/ToolsSection'
 import FinalCtaSection from '@/components/home/FinalCtaSection'
 import FaqSection from '@/components/home/FaqSection'
 
-export const metadata: Metadata = {
-  title: { absolute: 'GrowthByte.ai | AI Marketing Agency India | Lower CAC, Higher ROAS' },
-  description: 'GrowthByte.ai pairs senior strategists with AI systems to lower CAC by an average of 42%, lift ROAS 3.1x, and build compounding revenue pipelines for SaaS, D2C, FinTech and Healthcare companies in India.',
-  alternates: { canonical: '/' },
-  openGraph: {
-    title: 'GrowthByte.ai | AI Marketing Agency India',
-    description: 'Senior strategists and AI systems on one mandate: your revenue number. Lower CAC, lift ROAS, build pipeline that compounds.',
-    url: 'https://www.growthbyte.ai',
-  },
+// Cached static; the HomePage global's afterChange hook revalidates '/' on edit.
+export const revalidate = 3600
+
+const getHome = cache(async (): Promise<HomeData> => {
+  const payload = await getPayloadClient()
+  return (await payload.findGlobal({ slug: 'home', depth: 0 })) as unknown as HomeData
+})
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getHome()
+  return {
+    title: seo?.metaTitle ? { absolute: seo.metaTitle } : undefined,
+    description: seo?.metaDescription ?? undefined,
+    alternates: { canonical: '/' },
+    openGraph: {
+      title: seo?.metaTitle ?? undefined,
+      description: seo?.metaDescription ?? undefined,
+      url: 'https://www.growthbyte.ai',
+    },
+  }
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const home = await getHome()
   return (
     <div className="gb-home">
-      <Hero />
-      <MetricBar />
-      <ProblemSection />
-      <ComparisonSection />
-      <MidCta
-        title="Stop running five vendors. Start running one engine."
-        subtitle="One team owns every channel and the revenue behind it."
-        buttonLabel="Book a free audit"
-      />
-      <OperatingModelSection />
-      <ServicesSection />
-      <NumbersBand />
-      <CaseStudiesSection />
-      <MidCta
-        title="See what one engine could do for your revenue."
-        subtitle="Thirty minutes with a senior strategist. Zero obligation."
-        buttonLabel="Book a strategy call"
-      />
-      <IndustriesSection />
-      <ProcessSection />
-      <FoundersSection />
-      <ToolsSection />
-      <FinalCtaSection />
-      <FaqSection />
+      <Hero data={home.hero ?? {}} />
+      <MetricBar data={home.metricBar ?? {}} />
+      <ProblemSection data={home.problem ?? {}} />
+      <ComparisonSection data={home.comparison ?? {}} />
+      <MidCta data={home.midCtaOne ?? {}} />
+      <OperatingModelSection data={home.operatingModel ?? {}} />
+      <ServicesSection data={home.services ?? {}} />
+      <NumbersBand data={home.numbers ?? {}} />
+      <CaseStudiesSection data={home.caseStudies ?? {}} />
+      <MidCta data={home.midCtaTwo ?? {}} />
+      <IndustriesSection data={home.industries ?? {}} />
+      <ProcessSection data={home.process ?? {}} />
+      <FoundersSection data={home.founders ?? {}} />
+      <ToolsSection data={home.tools ?? {}} />
+      <FinalCtaSection data={home.finalCta ?? {}} />
+      <FaqSection data={home.faq ?? {}} />
     </div>
   )
 }

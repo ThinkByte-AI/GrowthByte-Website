@@ -1,41 +1,35 @@
 import Link from 'next/link'
 import { ArrowIcon } from './icons'
+import type { ComparisonData } from './types'
 
-const COLUMNS = ['You are comparing', 'Traditional Agency', 'AI-Only Tools', 'GrowthByte.ai']
-
-const ROWS = [
-  ['Speed to first result', '90-day onboarding', 'Fast setup, zero direction', 'Live in 6 weeks'],
-  ['Strategy ownership', 'Rotating account manager', 'No one owns it', 'Senior strategist plus AI'],
-  ['Revenue accountability', 'Vanity metric reports', 'No outcome ownership', 'Your revenue goal, owned'],
-  ['Channel integration', 'Siloed, paid or SEO', 'Single-channel by design', 'Every channel, one system'],
-  ['Contract flexibility', '12-month lock-in', 'Monthly subscription', 'Flexible, no lock-in'],
-  ['CAC over time', 'Manual, lagging', 'Optimises blindly', 'Avg 42% lower in 90 days'],
-]
-
-export default function ComparisonSection() {
+export default function ComparisonSection({ data }: { data: ComparisonData }) {
+  const columns = data.columns ?? []
+  const rows = data.rows ?? []
   return (
     <section className="light" id="why" aria-labelledby="why-h">
       <div className="wrap">
         <div className="sec-head">
-          <span className="eyebrow">The GrowthByte Difference</span>
-          <h2 id="why-h">Not an agency. Not a tool.</h2>
-          <p className="lead">How the three options most companies weigh compare on the things that actually move revenue.</p>
+          <span className="eyebrow">{data.eyebrow}</span>
+          <h2 id="why-h">{data.heading}</h2>
+          <p className="lead">{data.lead}</p>
         </div>
         <div className="cmp-wrap">
           <table className="cmp">
             <thead>
-              <tr>{COLUMNS.map((col) => <th key={col} scope="col">{col}</th>)}</tr>
+              <tr>{columns.map((col, i) => <th key={i} scope="col">{col.value}</th>)}</tr>
             </thead>
             <tbody>
-              {ROWS.map((row) => (
-                <tr key={row[0]}>{row.map((cell, i) => <td key={i}>{cell}</td>)}</tr>
+              {rows.map((row, i) => (
+                <tr key={i}>
+                  <td>{row.label}</td><td>{row.agency}</td><td>{row.tools}</td><td>{row.growthbyte}</td>
+                </tr>
               ))}
             </tbody>
           </table>
         </div>
         <div className="sec-cta">
-          <span className="sec-cta-t">One system. Every channel. One number.</span>
-          <Link href="/services" className="gb-btn gb-btn-ob">Explore Services <ArrowIcon /></Link>
+          <span className="sec-cta-t">{data.ctaText}</span>
+          <Link href={data.ctaHref ?? '/services'} className="gb-btn gb-btn-ob">{data.ctaLabel} <ArrowIcon /></Link>
         </div>
       </div>
     </section>

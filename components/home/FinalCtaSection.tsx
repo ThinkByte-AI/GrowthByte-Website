@@ -1,31 +1,30 @@
 import AuditForm from './AuditForm'
 import { CheckIcon } from './icons'
+import type { FinalCtaData } from './types'
 
-const CHECKS = [
-  '30 minutes with a senior strategist, not a sales rep',
-  'We audit your current setup live on the call',
-  'Your top 3 opportunities, clearly identified',
-  'Zero obligation',
-]
-
-export default function FinalCtaSection() {
+export default function FinalCtaSection({ data }: { data: FinalCtaData }) {
+  const checks = data.checks ?? []
   return (
     <section className="final" id="contact" aria-labelledby="cta-h">
       <div className="wrap cta-in">
         <div>
-          <span className="eyebrow">Ready to Grow?</span>
-          <h2 id="cta-h">Book a 30-minute audit. <em>Keep the plan.</em></h2>
-          <p className="cta-body">
-            We walk your current setup, find the biggest opportunities in your funnel, and tell you exactly what we would fix in the first 90 days. The audit is yours whether you work with us or not.
-          </p>
+          <span className="eyebrow">{data.eyebrow}</span>
+          <h2 id="cta-h">{data.headingBefore}<em>{data.headingEmphasis}</em></h2>
+          <p className="cta-body">{data.body}</p>
           <ul className="cta-checks">
-            {CHECKS.map((check) => (
-              <li key={check}><span className="cta-chk"><CheckIcon /></span>{check}</li>
+            {checks.map((check, i) => (
+              <li key={i}><span className="cta-chk"><CheckIcon /></span>{check.value}</li>
             ))}
           </ul>
-          <p className="cta-proof">Joining 20+ SaaS, D2C, FinTech, and Healthcare companies.</p>
+          <p className="cta-proof">{data.proof}</p>
         </div>
-        <AuditForm />
+        <AuditForm
+          heading={data.formHeading}
+          sub={data.formSub}
+          submitLabel={data.submitLabel}
+          secondaryLabel={data.secondaryLabel}
+          micro={data.formMicro}
+        />
       </div>
     </section>
   )
