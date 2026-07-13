@@ -1,6 +1,8 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
-export const alt = 'GrowthByte - AI-Powered Marketing Agency'
+export const alt = 'GrowthByte — AI-Powered Growth Partner'
 export const size = {
   width: 1200,
   height: 630,
@@ -9,25 +11,34 @@ export const size = {
 export const contentType = 'image/png'
 
 export default async function Image() {
+  const logo = await readFile(join(process.cwd(), 'public', 'og-logo.png'))
+  const logoSrc = `data:image/png;base64,${logo.toString('base64')}`
+
   return new ImageResponse(
     (
       <div
         style={{
-          fontSize: 128,
-          background: 'linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)',
+          background: 'linear-gradient(135deg, #0B0B0B 0%, #05201E 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#FF6B35',
-          fontWeight: 'bold',
+          gap: 36,
         }}
       >
-        <div>GrowthByte</div>
-        <div style={{ fontSize: 48, color: '#FFFFFF', marginTop: 20 }}>
-          AI-Powered Marketing Agency
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoSrc} alt={alt} width={840} height={198} />
+        <div
+          style={{
+            fontSize: 36,
+            color: '#E6E6E6',
+            fontWeight: 600,
+            letterSpacing: '-0.01em',
+          }}
+        >
+          AI-Powered Growth Partner
         </div>
       </div>
     ),
