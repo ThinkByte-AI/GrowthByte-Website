@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { XIcon, LinkedInIcon, GlobeIcon, MailIcon } from '@/components/journal'
 import type { JournalPost } from '../../../../_components/types'
 
@@ -29,7 +30,7 @@ export default function AuthorBio({ post }: { post: JournalPost }) {
     <div className="author-bio">
       <div className="author-avatar">
         {post.authorImageUrl ? (
-          <img src={post.authorImageUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <Image src={post.authorImageUrl} alt={name} width={96} height={96} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <div style={{ width: '100%', height: '100%', background: 'var(--gb-accent)', color: 'var(--gb-white)', display: 'grid', placeItems: 'center', fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em' }}>
             {initials(name)}

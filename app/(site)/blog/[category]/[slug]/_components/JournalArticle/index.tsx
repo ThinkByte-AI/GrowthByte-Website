@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { GenerativeThumbnail, BigCta } from '@/components/journal'
 import type { JournalPost } from '../../../../_components/types'
 import { extractToc } from '../extractToc'
@@ -19,7 +20,7 @@ const ArticleHero = ({ post }: { post: JournalPost }) => {
     <div className="gbx-container-narrow">
       <div style={{ aspectRatio: '21 / 9', borderRadius: 24, overflow: 'hidden', position: 'relative' }}>
         {heroSrc
-          ? <img src={heroSrc} alt={post.imageAlt || post.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          ? <Image src={heroSrc} alt={post.imageAlt || post.title} fill priority sizes="(max-width: 820px) 100vw, 820px" style={{ objectFit: 'cover' }} />
           : <GenerativeThumbnail seed={post.slug} variant={1} category={post.categorySlug} />}
       </div>
     </div>

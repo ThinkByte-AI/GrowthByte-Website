@@ -1,11 +1,18 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { GenerativeThumbnail, AuthorChip, ClockIcon } from '@/components/journal'
 import type { JournalPost } from './types'
 import { formatPostDate } from './categories'
 import { blogPostPath } from '@/lib/blog/category'
 
 const ThumbImage = ({ url, alt }: { url: string; alt: string }) => (
-  <img src={url} alt={alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+  <Image
+    src={url}
+    alt={alt}
+    fill
+    sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 360px"
+    style={{ objectFit: 'cover' }}
+  />
 )
 
 export default function PostCard({ post }: { post: JournalPost }) {

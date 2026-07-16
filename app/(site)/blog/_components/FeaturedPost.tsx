@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { GenerativeThumbnail, AuthorChip, CalendarIcon, ClockIcon, ArrowSmallIcon } from '@/components/journal'
 import type { JournalPost } from './types'
 import { formatPostDate } from './categories'
@@ -12,7 +13,7 @@ export default function FeaturedPost({ post }: { post: JournalPost }) {
     <Link href={blogPostPath(post.categorySlug, post.slug)} className="featured" style={{ cursor: 'pointer' }} aria-label={`Featured: ${post.title}`}>
       <div className="featured-image">
         {thumb
-          ? <img src={thumb} alt={post.imageAlt || post.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          ? <Image src={thumb} alt={post.imageAlt || post.title} fill priority sizes="(max-width: 860px) 100vw, 560px" style={{ objectFit: 'cover' }} />
           : <GenerativeThumbnail seed={post.slug} variant={1} category={post.categorySlug} />}
       </div>
       <div className="featured-body">
