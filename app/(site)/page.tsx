@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { cache } from 'react'
+import './gb-home.css'
 import { getPayloadClient } from '@/src/get-payload'
 import type { HomeData } from '@/components/home/types'
 import Hero from '@/components/home/Hero'
