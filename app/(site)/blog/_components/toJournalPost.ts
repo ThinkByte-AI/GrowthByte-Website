@@ -1,4 +1,5 @@
 import type { JournalPost } from './types'
+import { resolveBlogCategory } from '@/lib/blog/category'
 
 interface MediaRef {
   url?: string
@@ -28,12 +29,15 @@ export const toJournalPost = (post: Record<string, unknown>): JournalPost => {
   const heroImage = mediaRef(heroSection?.heroImage)
   const author = authorRef(post.author)
   const authorAvatar = mediaRef(author.avatar)
+  const category = resolveBlogCategory(post.category)
   return {
     id: String(post.id),
     slug: String(post.slug),
     title: (post.title as string) || 'Untitled',
     excerpt: post.excerpt as string | undefined,
-    category: post.category as string | undefined,
+    categorySlug: category?.slug,
+    categoryName: category?.name,
+    categoryColor: category?.color,
     imageUrl: image.url,
     heroImageUrl: heroImage.url,
     imageAlt: image.alt || heroImage.alt,

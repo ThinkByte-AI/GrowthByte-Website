@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next'
 import { getAllCaseStudies } from '@/app/(site)/case-studies/[slug]/_fetchers'
 import { getAllServices } from '@/app/(site)/services/[slug]/_fetchers'
 import { getAllIndustries } from '@/app/(site)/industries/_fetchers'
+import { getPayloadClient } from '@/src/get-payload'
+import { blogCategoryPath, blogPostPath, resolveBlogCategory } from '@/lib/blog/category'
 
 // Sitemap pulls case-study URLs from Payload (DB call). Don't prerender at
 // build time — env may not be loaded and rebuilding for every new post is
@@ -10,11 +12,39 @@ export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://www.growthbyte.ai'
 
+interface BlogPostRow {
+  slug?: string
+  category?: unknown
+  updatedAt?: string
+}
+
+const getBlogEntries = async (): Promise<MetadataRoute.Sitemap> => {
+  const payload = await getPayloadClient()
+  const [posts, categories] = await Promise.all([
+    payload.find({ collection: 'blog-posts', limit: 500, depth: 1, pagination: false, draft: false, overrideAccess: false }),
+    payload.find({ collection: 'categories', limit: 100, pagination: false }),
+  ])
+  const postPages = (posts.docs as BlogPostRow[]).map((p) => ({
+    url: `${BASE_URL}${blogPostPath(resolveBlogCategory(p.category)?.slug, p.slug || '')}`,
+    lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+  const categoryPages = (categories.docs as { slug?: string }[]).map((c) => ({
+    url: `${BASE_URL}${blogCategoryPath(c.slug)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+  return [...categoryPages, ...postPages]
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [services, industries, caseStudies] = await Promise.all([
+  const [services, industries, caseStudies, blogEntries] = await Promise.all([
     getAllServices(200),
     getAllIndustries(200),
     getAllCaseStudies(200),
+    getBlogEntries(),
   ])
 
   const servicePages = services.map((s) => ({
@@ -67,11 +97,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...caseStudyPages,
     {
-      url: `${BASE_URL}/insights`,
+      url: `${BASE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.9,
     },
+    ...blogEntries,
     {
       url: `${BASE_URL}/about`,
       lastModified: new Date(),

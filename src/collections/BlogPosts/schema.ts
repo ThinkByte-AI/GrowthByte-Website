@@ -1,11 +1,15 @@
+import { blogCategorySlug, blogPostPath, resolveBlogCategory } from '@/lib/blog/category'
+
 export interface BlogSchemaInput {
   title?: string
   excerpt?: string
   publishedAt?: string
   author?: string
   slug?: string
-  category?: string
+  category?: unknown
 }
+
+const BASE_URL = 'https://www.growthbyte.ai'
 
 export const generateBlogSchema = (data: BlogSchemaInput) => ({
   '@context': 'https://schema.org',
@@ -20,12 +24,12 @@ export const generateBlogSchema = (data: BlogSchemaInput) => ({
   publisher: {
     '@type': 'Organization',
     name: 'GrowthByte',
-    url: 'https://www.growthbyte.ai',
+    url: BASE_URL,
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': `https://www.growthbyte.ai/blogs/${data.slug}`,
+    '@id': `${BASE_URL}${blogPostPath(blogCategorySlug(data.category), data.slug || '')}`,
   },
-  articleSection: data.category?.replace('-', ' ') || 'Marketing',
+  articleSection: resolveBlogCategory(data.category)?.name || 'Marketing',
   inLanguage: 'en-US',
 })

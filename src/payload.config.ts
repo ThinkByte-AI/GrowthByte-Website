@@ -33,6 +33,7 @@ import { Services } from './collections/Services'
 import { Industries } from './collections/Industries'
 import { CaseStudies } from './collections/CaseStudies'
 import { BlogPosts } from './collections/BlogPosts'
+import { Categories } from './collections/Categories'
 import { Authors } from './collections/Authors'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
@@ -73,6 +74,7 @@ export default buildConfig({
     Industries,
     CaseStudies,
     BlogPosts,
+    Categories,
     Authors,
     Media,
     PageTemplates,

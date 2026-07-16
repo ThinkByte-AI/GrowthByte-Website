@@ -1,6 +1,39 @@
-import { permanentRedirect } from 'next/navigation'
+import { Metadata } from 'next'
+import { getPayloadClient } from '@/src/get-payload'
+import BlogListingView from './_components/BlogListingView'
+import type { JournalPost } from './_components/types'
+import { toJournalPost } from './_components/toJournalPost'
+import '@/components/journal/journal.css'
 
-// /blog → /blogs (the CMS blog). Permanent (308) so link authority consolidates.
-export default function BlogRedirect() {
-  permanentRedirect('/blogs')
+// Cached as static (ISR); the BlogPosts afterChange/afterDelete hook revalidates
+// /blog on publish/edit/delete, so the listing stays current. The window below
+// is just the fallback refresh.
+export const revalidate = 3600
+
+export const metadata: Metadata = {
+  title: { absolute: 'Digital Marketing Blog, Growth and AI | GrowthByte' },
+  description: 'Honest notes from the campaigns we run. Growth, SEO, paid media and AI for founders and marketers who want the real story, not a polished one.',
+  alternates: { canonical: '/blog' },
+}
+
+async function getBlogPosts(): Promise<JournalPost[]> {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'blog-posts',
+    limit: 30,
+    sort: '-publishedAt',
+    depth: 1,
+    draft: false,
+    overrideAccess: false,
+  })
+  return docs.map((doc) => toJournalPost(doc as Record<string, unknown>))
+}
+
+export default async function BlogsPage() {
+  const posts = await getBlogPosts()
+  return (
+    <div className="gbx">
+      <BlogListingView posts={posts} />
+    </div>
+  )
 }

@@ -3,7 +3,7 @@ import type { ContentType } from './types'
 export const AVAILABLE_PLACEHOLDERS: Record<ContentType, string[]> = {
   blog: [
     'title', 'slug', 'excerpt', 'content', 'featuredImage', 'featuredImageAlt',
-    'category', 'tags', 'publishedAt', 'author', 'authorBio', 'authorImage',
+    'category', 'categorySlug', 'tags', 'publishedAt', 'author', 'authorBio', 'authorImage',
     'readTime', 'metaTitle', 'metaDescription',
   ],
   service: [

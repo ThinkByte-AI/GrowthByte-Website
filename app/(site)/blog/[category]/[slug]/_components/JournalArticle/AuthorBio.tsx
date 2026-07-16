@@ -1,5 +1,5 @@
 import { XIcon, LinkedInIcon, GlobeIcon, MailIcon } from '@/components/journal'
-import type { JournalPost } from '../../../_components/types'
+import type { JournalPost } from '../../../../_components/types'
 
 const initials = (name: string) => name.split(' ').map((s) => s[0]).join('').toUpperCase()
 

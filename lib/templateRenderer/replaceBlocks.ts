@@ -1,11 +1,14 @@
+import { resolveBlogCategory } from '../blog/category'
 import type { DynamicData, TemplateContent } from './types'
 
 const renderRelatedPostItem = (template: string, post: TemplateContent): string => {
+  const category = resolveBlogCategory(post.category)
   let item = template
   item = item.replace(/\{\{title\}\}/g, post.title || '')
   item = item.replace(/\{\{slug\}\}/g, post.slug || '')
   item = item.replace(/\{\{excerpt\}\}/g, post.excerpt || '')
-  item = item.replace(/\{\{category\}\}/g, post.category || '')
+  item = item.replace(/\{\{categorySlug\}\}/g, category?.slug || '')
+  item = item.replace(/\{\{category\}\}/g, category?.name || '')
   item = item.replace(/\{\{featuredImage\}\}/g, post.featuredImage?.url || '')
   if (post.publishedAt) {
     const date = new Date(post.publishedAt)

@@ -17,7 +17,7 @@ export default function ListingCta() {
             <Link href="/contact" className="gbx-btn gbx-btn-primary">
               Book a strategy call <ArrowSmallIcon />
             </Link>
-            <Link href="/blogs" className="gbx-btn gbx-btn-ghost">
+            <Link href="/blog" className="gbx-btn gbx-btn-ghost">
               Read the blog
             </Link>
           </div>

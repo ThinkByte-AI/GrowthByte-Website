@@ -40,3 +40,9 @@ next-env.d.ts
 _dump_mongo.mjs
 _restore_mongo.mjs
 _clean_mongo.mjs
+
+# Local database dumps (never commit — contains content/PII)
+.backups/
+
+# One-off migration/maintenance scripts (run locally, not shipped)
+scripts/

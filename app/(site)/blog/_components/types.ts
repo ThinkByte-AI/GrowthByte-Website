@@ -3,7 +3,9 @@ export interface JournalPost {
   slug: string
   title: string
   excerpt?: string
-  category?: string
+  categorySlug?: string
+  categoryName?: string
+  categoryColor?: string
   imageUrl?: string
   heroImageUrl?: string
   imageAlt?: string

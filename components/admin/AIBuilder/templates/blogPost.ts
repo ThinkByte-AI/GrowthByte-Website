@@ -3,7 +3,7 @@ import type { GeneratedTemplate } from './types'
 const html = `<article class="post">
   <header class="post-header">
     <div class="container-narrow">
-      <div class="crumb"><a href="/blogs">← All essays</a><span class="dot">/</span><span>{{category}}</span></div>
+      <div class="crumb"><a href="/blog">← All essays</a><span class="dot">/</span><span>{{category}}</span></div>
       <span class="tag">{{category}}</span>
       <h1 class="post-title">{{title}}</h1>
       <p class="post-lede">{{excerpt}}</p>
@@ -40,7 +40,7 @@ const html = `<article class="post">
       <h2>Keep reading</h2>
       <div class="related-grid">
         {{#relatedPosts}}
-          <a class="related-card" href="/blogs/{{slug}}">
+          <a class="related-card" href="/blog/{{categorySlug}}/{{slug}}">
             <span class="related-tag">{{category}}</span>
             <h3>{{title}}</h3>
             <p>{{excerpt}}</p>

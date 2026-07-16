@@ -1,8 +1,30 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, PayloadRequest } from 'payload'
 import { publicReadAccess } from './access'
 import { afterChangeBlogPost, afterDeleteBlogPost, beforeChangeBlogPost } from './hooks'
 import { publishScheduledEndpoint } from './publishScheduledEndpoint'
 import { blogPostFields } from './fields'
+import { blogCategorySlug, blogPostPath } from '@/lib/blog/category'
+
+const previewUrl = async (
+  doc: { slug?: string; category?: unknown } | undefined,
+  req: PayloadRequest,
+): Promise<string | null> => {
+  if (!doc?.slug) return null
+  let categorySlug = blogCategorySlug(doc.category)
+  if (!categorySlug && typeof doc.category === 'string' && doc.category) {
+    try {
+      const cat = (await req.payload.findByID({
+        collection: 'categories',
+        id: doc.category,
+        depth: 0,
+      })) as { slug?: string }
+      categorySlug = cat?.slug
+    } catch {
+      categorySlug = undefined
+    }
+  }
+  return blogPostPath(categorySlug, doc.slug)
+}
 
 export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
@@ -10,7 +32,7 @@ export const BlogPosts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'workflowStatus', '_status', 'publishedAt', 'updatedAt'],
     group: 'Content',
-    preview: (doc) => (doc?.slug ? `/blogs/${doc.slug}` : null),
+    preview: (doc, { req }) => previewUrl(doc, req),
   },
   access: {
     read: publicReadAccess,

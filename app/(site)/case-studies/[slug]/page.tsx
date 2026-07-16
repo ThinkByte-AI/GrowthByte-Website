@@ -72,7 +72,7 @@ export default async function CaseStudyPage({ params }: Props) {
         heading="Let us put your numbers on this page next."
         sub="A 30-minute call. We will look at your funnel and tell you, honestly, whether we are the right partner — and what the highest-leverage first move is either way."
         primary={{ label: 'Book a strategy call', href: '/contact' }}
-        secondary={{ label: 'Read the blog', href: '/blogs' }}
+        secondary={{ label: 'Read the blog', href: '/blog' }}
       />
     </div>
   )

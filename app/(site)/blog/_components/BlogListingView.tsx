@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import type { JournalPost } from './types'
-import { BLOG_CATEGORY_LABELS, categoryLabel } from './categories'
 import FeaturedPost from './FeaturedPost'
 import PostCard from './PostCard'
 import FilterBar from './FilterBar'
@@ -11,15 +10,18 @@ import Pagination from './Pagination'
 const PAGE_SIZE = 9
 
 const buildCategoryOptions = (posts: JournalPost[]) => {
-  const present = Object.keys(BLOG_CATEGORY_LABELS).filter((value) =>
-    posts.some((p) => p.category === value),
-  )
+  const labelBySlug = new Map<string, string>()
+  for (const post of posts) {
+    if (post.categorySlug && !labelBySlug.has(post.categorySlug)) {
+      labelBySlug.set(post.categorySlug, post.categoryName || post.categorySlug)
+    }
+  }
   return [
     { value: 'All', label: 'All', count: posts.length },
-    ...present.map((value) => ({
+    ...Array.from(labelBySlug, ([value, label]) => ({
       value,
-      label: categoryLabel(value),
-      count: posts.filter((p) => p.category === value).length,
+      label,
+      count: posts.filter((p) => p.categorySlug === value).length,
     })),
   ]
 }
@@ -40,7 +42,7 @@ export default function BlogListingView({ posts }: { posts: JournalPost[] }) {
   const categories = useMemo(() => buildCategoryOptions(rest), [rest])
 
   const filtered = useMemo(
-    () => rest.filter((p) => (activeCategory === 'All' || p.category === activeCategory) && matchesQuery(p, query)),
+    () => rest.filter((p) => (activeCategory === 'All' || p.categorySlug === activeCategory) && matchesQuery(p, query)),
     [rest, activeCategory, query],
   )
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)

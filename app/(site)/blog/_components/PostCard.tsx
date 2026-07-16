@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { GenerativeThumbnail, AuthorChip, ClockIcon } from '@/components/journal'
 import type { JournalPost } from './types'
-import { categoryLabel, formatPostDate } from './categories'
+import { formatPostDate } from './categories'
+import { blogPostPath } from '@/lib/blog/category'
 
 const ThumbImage = ({ url, alt }: { url: string; alt: string }) => (
   <img src={url} alt={alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -10,15 +11,15 @@ const ThumbImage = ({ url, alt }: { url: string; alt: string }) => (
 export default function PostCard({ post }: { post: JournalPost }) {
   const thumb = post.imageUrl || post.heroImageUrl
   return (
-    <Link href={`/blogs/${post.slug}`} className="gbx-card" style={{ cursor: 'pointer' }}>
+    <Link href={blogPostPath(post.categorySlug, post.slug)} className="gbx-card" style={{ cursor: 'pointer' }}>
       <div className="card-thumb">
         {thumb
           ? <ThumbImage url={thumb} alt={post.imageAlt || post.title} />
-          : <GenerativeThumbnail seed={post.slug} category={post.category} />}
+          : <GenerativeThumbnail seed={post.slug} category={post.categorySlug} />}
       </div>
       <div className="card-body">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span className="tag">{categoryLabel(post.category)}</span>
+          <span className="tag">{post.categoryName || 'Article'}</span>
           {post.readTime ? (
             <span className="meta" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
               <ClockIcon /> {post.readTime} min

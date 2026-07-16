@@ -9,15 +9,12 @@ export const taxonomyFields: Field[] = [
   },
   {
     name: 'category',
-    type: 'select',
-    options: [
-      { label: 'Growth Strategy', value: 'growth-strategy' },
-      { label: 'Performance Marketing', value: 'performance-marketing' },
-      { label: 'SEO', value: 'seo' },
-      { label: 'Marketing Automation', value: 'automation' },
-      { label: 'Analytics', value: 'analytics' },
-      { label: 'Industry Insights', value: 'insights' },
-    ],
+    type: 'relationship',
+    relationTo: 'categories',
+    required: true,
+    admin: {
+      description: 'Drives the post URL: /blog/<category-slug>/<post-slug>. Manage the list under Categories.',
+    },
   },
   {
     name: 'tags',

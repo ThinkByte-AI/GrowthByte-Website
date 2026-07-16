@@ -14,7 +14,7 @@ const NAV: NavEntry[] = [
   { name: 'Industries', href: '/industries', children: INDUSTRY_LINKS },
   { name: 'Case Studies', href: '/case-studies' },
   { name: 'About', href: '/about' },
-  { name: 'Blog', href: '/blogs' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Tools', href: '/tools', children: TOOLS_LINKS },
 ]
 

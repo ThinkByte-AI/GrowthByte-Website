@@ -1,5 +1,5 @@
 import { GenerativeThumbnail, BigCta } from '@/components/journal'
-import type { JournalPost } from '../../../_components/types'
+import type { JournalPost } from '../../../../_components/types'
 import { extractToc } from '../extractToc'
 import ArticleHeader from './ArticleHeader'
 import ArticleToc from './ArticleToc'
@@ -20,7 +20,7 @@ const ArticleHero = ({ post }: { post: JournalPost }) => {
       <div style={{ aspectRatio: '21 / 9', borderRadius: 24, overflow: 'hidden', position: 'relative' }}>
         {heroSrc
           ? <img src={heroSrc} alt={post.imageAlt || post.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          : <GenerativeThumbnail seed={post.slug} variant={1} category={post.category} />}
+          : <GenerativeThumbnail seed={post.slug} variant={1} category={post.categorySlug} />}
       </div>
     </div>
   )

@@ -25,6 +25,6 @@ export const TOOLS_LINKS = [
 export const COMPANY_LINKS = [
   { name: 'About', href: '/about' },
   { name: 'Case Studies', href: '/case-studies' },
-  { name: 'Blog', href: '/blogs' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
 ]

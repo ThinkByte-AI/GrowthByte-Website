@@ -1,13 +1,26 @@
 import { lexicalToHtml } from '../lexicalToHtml'
+import { resolveBlogCategory } from '../blog/category'
 import type { TemplateContent } from './types'
 import { replaceNestedPlaceholder, replacePlaceholder } from './replaceField'
 import { buildTocHtml } from './buildTocHtml'
 
 const FLAT_KEYS = [
-  'title', 'slug', 'excerpt', 'category', 'publishedAt', 'author',
+  'title', 'slug', 'excerpt', 'publishedAt', 'author',
   'authorBio', 'readTime', 'metaTitle', 'metaDescription',
   'shortTitle', 'outcome', 'description', 'icon', 'client', 'industry', 'results',
 ]
+
+// `category` is a relationship object on blog posts but a plain string on case
+// studies; resolve both to display name + url slug.
+const replaceCategoryFields = (html: string, content: TemplateContent): string => {
+  const resolved = resolveBlogCategory(content.category)
+  const asString = typeof content.category === 'string' ? content.category : ''
+  const name = resolved?.name ?? asString
+  const slug = resolved?.slug ?? asString
+  let result = html.replace(/\{\{categorySlug\}\}/g, slug)
+  result = result.replace(/\{\{category\}\}/g, name)
+  return result
+}
 
 const replaceFlatFields = (html: string, content: TemplateContent): string => {
   let result = html
@@ -49,6 +62,7 @@ const replaceToc = (html: string, content: TemplateContent): string => {
 
 export const replacePlaceholders = (html: string, content: TemplateContent): string => {
   let result = replaceFlatFields(html, content)
+  result = replaceCategoryFields(result, content)
   result = replaceImageFields(result, content)
   result = replaceListFields(result, content)
   result = replaceRichContent(result, content)

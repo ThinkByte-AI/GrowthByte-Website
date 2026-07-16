@@ -37,9 +37,9 @@ const nextConfig = {
     return [
       ...comingSoon.map((source) => ({ source, destination: '/contact', permanent: false })),
       // /insights was a hardcoded duplicate blog — consolidate onto the CMS blog.
-      // permanent (301) so search engines transfer ranking/authority to /blogs.
-      { source: '/insights', destination: '/blogs', permanent: true },
-      { source: '/insights/:path*', destination: '/blogs', permanent: true },
+      // permanent (301) so search engines transfer ranking/authority to /blog.
+      { source: '/insights', destination: '/blog', permanent: true },
+      { source: '/insights/:path*', destination: '/blog', permanent: true },
     ]
   },
 }
