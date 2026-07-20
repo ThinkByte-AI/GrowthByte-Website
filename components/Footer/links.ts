@@ -1,3 +1,7 @@
+export const PRODUCT_LINKS = [
+  { name: 'GrowthByte', href: '/products/growthbyte' },
+]
+
 export const SERVICE_LINKS = [
   { name: 'Growth Strategy', href: '/services/growth-strategy' },
   { name: 'Performance Marketing', href: '/services/performance-marketing' },

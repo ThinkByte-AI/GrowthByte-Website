@@ -3,14 +3,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useCallback } from 'react'
-import { SERVICE_LINKS, INDUSTRY_LINKS, TOOLS_LINKS } from '@/components/Footer/links'
+import { PRODUCT_LINKS, SERVICE_LINKS, INDUSTRY_LINKS, TOOLS_LINKS } from '@/components/Footer/links'
 import { useHeaderOverBright } from './useHeaderTheme'
 
 type NavChild = { name: string; href: string }
-type NavEntry = { name: string; href: string; children?: ReadonlyArray<NavChild> }
+// Entries without `href` are dropdown-only: the label opens the menu instead of navigating.
+type NavEntry = { name: string; href?: string; children?: ReadonlyArray<NavChild> }
 
 const NAV: NavEntry[] = [
-  { name: 'Product', href: '/products/growthbyte' },
+  { name: 'Product', children: PRODUCT_LINKS },
   { name: 'Services', href: '/services', children: SERVICE_LINKS },
   { name: 'Industries', href: '/industries', children: INDUSTRY_LINKS },
   { name: 'Case Studies', href: '/case-studies' },
@@ -41,8 +42,12 @@ export default function Header() {
 
         <ul className="nav-links" role="list">
           {NAV.map((item) => (
-            <li key={item.href} className={item.children ? 'nav-item' : undefined}>
-              <Link href={item.href}>{item.name}</Link>
+            <li key={item.name} className={item.children ? 'nav-item' : undefined}>
+              {item.href ? (
+                <Link href={item.href}>{item.name}</Link>
+              ) : (
+                <button type="button" className="nav-trigger" aria-haspopup="true">{item.name}</button>
+              )}
               {item.children && (
                 <div className="gb-dd">
                   {item.children.map((child) => (
@@ -68,9 +73,18 @@ export default function Header() {
       </nav>
 
       <div className={`gb-mobile-menu${menuOpen ? ' open' : ''}`}>
-        {NAV.map((item) => (
-          <Link key={item.href} href={item.href} onClick={closeMenu}>{item.name}</Link>
-        ))}
+        {NAV.map((item) =>
+          item.href ? (
+            <Link key={item.name} href={item.href} onClick={closeMenu}>{item.name}</Link>
+          ) : (
+            <div key={item.name} className="gb-mobile-group">
+              <span className="gb-mobile-head">{item.name}</span>
+              {item.children?.map((child) => (
+                <Link key={child.href} href={child.href} onClick={closeMenu}>{child.name}</Link>
+              ))}
+            </div>
+          ),
+        )}
         <Link href="/contact" onClick={closeMenu}>Book a Strategy Call</Link>
       </div>
     </header>
