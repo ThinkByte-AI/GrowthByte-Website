@@ -25,8 +25,6 @@ const nextConfig = {
     const comingSoon = [
       '/tools',
       '/tools/:path*',
-      '/products',
-      '/products/:path*',
       '/services/content-at-scale',
       '/services/social-media-marketing',
       '/services/email-marketing',
@@ -36,6 +34,8 @@ const nextConfig = {
     ]
     return [
       ...comingSoon.map((source) => ({ source, destination: '/contact', permanent: false })),
+      // Single product for now — send the bare /products to it.
+      { source: '/products', destination: '/products/growthbyte', permanent: false },
       // /insights was a hardcoded duplicate blog — consolidate onto the CMS blog.
       // permanent (301) so search engines transfer ranking/authority to /blog.
       { source: '/insights', destination: '/blog', permanent: true },

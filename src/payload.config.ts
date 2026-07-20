@@ -34,6 +34,7 @@ import { Industries } from './collections/Industries'
 import { CaseStudies } from './collections/CaseStudies'
 import { BlogPosts } from './collections/BlogPosts'
 import { Categories } from './collections/Categories'
+import { Waitlist } from './collections/Waitlist'
 import { Authors } from './collections/Authors'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
@@ -75,6 +76,7 @@ export default buildConfig({
     CaseStudies,
     BlogPosts,
     Categories,
+    Waitlist,
     Authors,
     Media,
     PageTemplates,
