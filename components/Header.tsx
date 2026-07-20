@@ -10,6 +10,7 @@ type NavChild = { name: string; href: string }
 type NavEntry = { name: string; href: string; children?: ReadonlyArray<NavChild> }
 
 const NAV: NavEntry[] = [
+  { name: 'Product', href: '/products/growthbyte' },
   { name: 'Services', href: '/services', children: SERVICE_LINKS },
   { name: 'Industries', href: '/industries', children: INDUSTRY_LINKS },
   { name: 'Case Studies', href: '/case-studies' },

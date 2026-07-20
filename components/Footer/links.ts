@@ -23,6 +23,7 @@ export const TOOLS_LINKS = [
 ]
 
 export const COMPANY_LINKS = [
+  { name: 'Product', href: '/products/growthbyte' },
   { name: 'About', href: '/about' },
   { name: 'Case Studies', href: '/case-studies' },
   { name: 'Blog', href: '/blog' },

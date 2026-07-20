@@ -1,4 +1,5 @@
 export const NAVIGATION_ITEMS = [
+  { name: 'Product', href: '/products/growthbyte' },
   { name: 'Services', href: '/services' },
   { name: 'Industries', href: '/industries' },
   { name: 'Case Studies', href: '/case-studies' },
