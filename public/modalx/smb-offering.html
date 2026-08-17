@@ -166,7 +166,8 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:#000;color:var(--label);font-family:var(--f);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  -webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+  -webkit-tap-highlight-color:transparent;overscroll-behavior:none;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
   font-family:var(--f);padding:0}
 [hidden]{display:none!important}
@@ -178,8 +179,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
 .row-tap{transition:background-color .12s ease}
 .row-tap:active{background:var(--fill-2)}
 
+/* The height has to be definite, not a minimum. With min-height the flex
+   column grows to its content, the inner scroller never engages, and the two
+   absolutely positioned controls land at the foot of the document instead of
+   floating over the viewport, which is what broke this on a phone. */
 .phone{position:relative;width:100%;max-width:440px;margin:0 auto;
-  min-height:100vh;min-height:100dvh;background:var(--bg);
+  height:100vh;height:100dvh;background:var(--bg);
   display:flex;flex-direction:column;overflow:hidden;
   transition:background-color .4s ease}
 
@@ -254,7 +259,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
 .navbtn .ini{position:relative;z-index:1;letter-spacing:.2px}
 
 /* ------------------------------------------------------------- content --- */
-.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   padding:0 var(--gutter) 40px;scrollbar-width:none;scroll-behavior:smooth}
 .scroll::-webkit-scrollbar{display:none}
 
@@ -556,19 +562,28 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
 
 /* ----------------------------------------------------------- creative --- */
 .art{position:relative;display:grid;place-items:center;border-radius:14px;
-  height:196px;overflow:hidden;margin-bottom:14px}
-.art.vid{height:214px}
-.over{font-size:22px;font-weight:700;line-height:1.24;text-align:center;
-  color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);padding:0 22px;
+  height:196px;overflow:hidden;margin-bottom:14px;background:var(--card-2)}
+/* taller, because the clip inside it is shot 9:16 and a 196px band shows
+   almost nothing of a vertical frame */
+.art.vid{height:320px}
+/* Artwork is an element, never a url() inside a style attribute: the quotes a
+   CSS url needs collide with the quotes the attribute needs. */
+.clip,.shotimg{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block}
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(0,0,0,.22),rgba(0,0,0,.58))}
+.scrim.soft{background:linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.34))}
+.over{position:relative;z-index:2;font-size:22px;font-weight:700;line-height:1.24;
+  text-align:center;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);padding:0 22px;
   letter-spacing:-.4px}
 .over.sm{font-size:18px;font-weight:600;max-width:88%}
-.mark{position:absolute;left:15px;bottom:13px;font-size:12px;font-weight:600;
-  color:rgba(255,255,255,.8)}
-.play{position:absolute;right:13px;bottom:12px;width:46px;height:46px;
+.mark{position:absolute;z-index:2;left:15px;bottom:13px;font-size:12px;
+  font-weight:600;color:rgba(255,255,255,.8)}
+.play{position:absolute;z-index:2;right:13px;bottom:12px;width:46px;height:46px;
   border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;
   place-items:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .play svg{width:20px;height:20px;fill:currentColor;margin-left:2px}
-.vbar{position:absolute;left:0;right:0;bottom:0;height:3px;
+.vbar{position:absolute;z-index:2;left:0;right:0;bottom:0;height:3px;
   background:rgba(255,255,255,.22)}
 .vbar i{display:block;height:100%;width:0;background:#fff;transition:width .5s linear}
 .beats{display:flex;flex-direction:column;gap:7px;margin:-2px 0 14px}
@@ -595,9 +610,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
   border-bottom:.5px solid #E5E5EA;font-size:13px}
 .pnav b{font-size:14px;margin-right:auto}
 .pnav span{width:24px;height:5px;border-radius:3px;background:#E5E5EA;display:block}
-.phero{display:grid;place-items:center;padding:34px 18px;text-align:center}
-.phero b{font-size:21px;font-weight:700;color:#fff;line-height:1.24;
-  text-shadow:0 2px 16px rgba(0,0,0,.45);letter-spacing:-.4px}
+.phero{position:relative;overflow:hidden;display:grid;place-items:center;
+  padding:34px 18px;text-align:center}
+.phero b{position:relative;z-index:2;font-size:21px;font-weight:700;color:#fff;
+  line-height:1.24;text-shadow:0 2px 16px rgba(0,0,0,.45);letter-spacing:-.4px}
 .pbody{margin:0;padding:15px 15px 10px;font-size:13px;line-height:1.65;color:#48484A}
 .psec{display:flex;align-items:center;padding:12px 15px;
   border-top:.5px solid #E5E5EA;font-size:13px;font-weight:500;color:#1C1C1E}
@@ -613,7 +629,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
 .gwho b{display:block;font-size:14px;font-weight:600}
 .gwho em{display:block;font-style:normal;font-size:12px;color:var(--label-2);
   margin-top:1px}
-.gart{height:120px}
+.gart{position:relative;overflow:hidden;height:120px}
 .gtext{margin:0;padding:12px 13px 0;font-size:15px;line-height:21px;
   color:var(--label-2);letter-spacing:-.24px}
 .gcta{margin:12px 13px 13px;padding:11px;border-radius:11px;text-align:center;
@@ -645,7 +661,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
 .pair em{font-style:normal;font-size:12px;color:var(--label-2)}
 .pair b{font-size:12px;text-align:right;font-weight:600;color:var(--label-2)}
 
-/* the closing brief, the last thing seen in a cycle */
+/* the closing brief, the last thing seen in a campaign */
 .brief{border-radius:var(--r-card);padding:19px;background:var(--tint-fill);color:#fff;
   animation:briefin .6s cubic-bezier(.2,.9,.3,1.15) both;position:relative;
   overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.3)}
@@ -742,7 +758,37 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
   letter-spacing:.36px}
 .splash h1 i{font-style:normal;color:var(--tint)}
 .splash p{margin:0;font-size:17px;line-height:24px;color:var(--label-2);
-  max-width:31ch;letter-spacing:-.41px}
+  max-width:34ch;letter-spacing:-.41px}
+
+/* Small handsets: the type scale is Apple's, which assumes a 390pt screen. On
+   a 320 to 375pt device the display sizes need a step down or the large title
+   and the revenue figure wrap. */
+@media (max-width:380px){
+  :root{--gutter:13px}
+  .navlarge h1{font-size:30px;line-height:36px}
+  .money .v{font-size:29px;line-height:36px}
+  .metric .v{font-size:23px;line-height:29px}
+  .metric{padding:13px 13px 12px}
+  .splash{padding:34px 24px}
+  .splash h1{font-size:27px;line-height:33px}
+  .splash p{font-size:16px;line-height:23px}
+  .start{height:52px;padding:0 18px;font-size:16px;right:12px}
+  .btn{padding:0 18px}
+  .chip{padding:0 14px}
+  .chip[aria-pressed="true"]{padding-left:10px}
+  .over{font-size:20px}
+}
+
+/* Short screens, from a 568pt handset down to a landscape window: the splash
+   centres its stack, which overflows once the viewport is shorter than the
+   stack itself. */
+@media (max-height:620px){
+  .splash{justify-content:flex-start;gap:12px;padding:24px 26px;overflow-y:auto}
+  .splash .sym{width:58px;height:58px;border-radius:17px;margin-bottom:0}
+  .splash .sym svg{width:29px;height:29px}
+  .splash h1{font-size:26px;line-height:32px}
+  .splash p{font-size:15px;line-height:21px}
+}
 
 @media (min-width:600px){
   body{display:grid;place-items:center;min-height:100vh;min-height:100dvh;
@@ -775,9 +821,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
 
   <div class="splash" id="splash">
     <div class="sym" id="splashsym"></div>
-    <h1>Say it once.<br>Let the <i>results</i><br>write the next one.</h1>
-    <p>VIC makes the work, publishes it, then reads what happened.
-       You just say what is going on in the business.</p>
+    <h1>Tell your <i>agent</i><br>what you want.</h1>
+    <p>It analyses your existing data and what is trending, then produces the
+       creatives and puts them out. Just say what you want, the agent will take
+       care of the rest.</p>
     <button class="btn filled tap" onclick="begin()" style="margin-top:8px">
       Get Started</button>
   </div>
@@ -802,13 +849,15 @@ const BIZ = {
 
 gym: {
   name:"Northside Fitness", cat:"Gym", ini:"NF", at:"@northside.fitness",
+  area:"Indiranagar, Bengaluru",
   theme:"t-gym", unit:"enquiries", unitOne:"enquiry",
   chans:["video","photo","seo","gmb"],
   money:{gen:"2,40,000", total:"8,40,000"}, vs:"+18% on last month",
   rev12:[112,124,131,148,142,163,171,186,194,208,221,240],
-  stats:[["Reach","41.2k","+22%",1],["Engagement","4.6%","+0.8pt",1],
-         ["Enquiries","8","+3",1],["Cost per enquiry","Rs 310","-24%",1]],
-  mix:[["Feed",46],["Search",28],["Profile",19],["AI answers",7]],
+  stats:[["People reached","41.2k","+22%",1],["Interacted with it","4.6%","+0.8pt",1],
+         ["New enquiries","8","+3",1],["Spend per enquiry","Rs 310","-24%",1]],
+  mix:[["Instagram feed",46],["Google search",28],["Google profile",19],
+       ["AI assistants",7]],
   best:["Deadlift form check","Reel, 18 Feb","22,400 reach, 5 enquiries"],
   watch:["Price list posts","Four published, zero enquiries in six weeks"],
   recur:{label:"Members", series:[318,332,347,359,371,384,398,412,431,449,467,486]},
@@ -823,11 +872,13 @@ gym: {
   nextHi:"Ek form-check tutorial banao, 45 second ka, aur subah 11:15 pe schedule kar dena. Price list wala post ab mat banana.",
   nextDev:"एक फॉर्म चेक ट्यूटोरियल बनाओ, पैंतालीस सेकंड का, और सुबह सवा ग्यारह बजे शेड्यूल कर देना। प्राइस लिस्ट वाला पोस्ट अब मत बनाना।",
   because:"Tutorials are the only format here producing enquiries, and the ones posted before noon reach 2.4x further.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/northside.fitness"],
-       ["think","Checking which formats produced enquiries","Kaunse format se enquiries aayi, check kar raha hoon"],
-       ["src","Class schedule page","northsidefitness.in/classes"],
-       ["src","Business profile","Google Business Profile"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/northside.fitness"],
+       ["think","Seeing which posts actually brought enquiries, and which ones just sat there",
+        "Dekh raha hoon kaunse post se enquiry aayi, aur kaunse bas pade rahe"],
+       ["src","Your class schedule page","northsidefitness.in/classes"],
+       ["src","Your Google profile","Google Business Profile"]],
   made:{
     video:{t:"Sunday Morning Yoga, 7 am start", spec:"0:24 vertical",
       hook:"Never done yoga? Start here.",
@@ -849,40 +900,43 @@ gym: {
       cta:"Book"}},
   live:{feed:"Reel scheduled for 11:15 am Tuesday",
     site:["Batch added to the schedule page","New page indexed: /classes/sunday-yoga",
-          "Schedule marked up so answer engines can quote it"],
+          "Schedule marked up so AI assistants can quote it"],
     gmb:"Posted to the Google Business Profile"},
   posts:[
     {t:"Deadlift form check", m:"Reel, 48s, posted 18 Feb",
-     r:[["Reach","22,400",""],["Eng","6.1%",""],["Saves","402",""],["Leads","5","up"]],
+     r:[["People reached","22,400",""],["Interacted","6.1%",""],["Saves","402",""],
+        ["Enquiries","5","up"]],
      why:[["Why it travelled","Saved 402 times. The feed keeps serving a post that gets saved, so it was still reaching people on day nine."],
           ["What it produced","<b>5 membership enquiries</b>, all through the profile link within 48 hours."],
           ["What that means","This is the format. It teaches something in under a minute and people keep it."]]},
     {t:"6 am class promo", m:"Reel, 22s, posted 02 Mar",
-     r:[["Reach","13,800",""],["Eng","2.8%",""],["Saves","121",""],["Leads","3",""]],
+     r:[["People reached","13,800",""],["Interacted","2.8%",""],["Saves","121",""],
+        ["Enquiries","3",""]],
      why:[["Why it travelled","Decent reach, but it stopped moving after day three. Almost nobody saved it."],
           ["What it produced","<b>3 enquiries</b>, two from people already following."],
           ["What that means","Works, does not compound. Good filler, not the anchor."]]},
     {t:"New price list", m:"Image, posted 09 Mar",
-     r:[["Reach","3,100","dn"],["Eng","0.7%","dn"],["Saves","9","dn"],["Leads","0","dn"]],
+     r:[["People reached","3,100","dn"],["Interacted","0.7%","dn"],["Saves","9","dn"],
+        ["Enquiries","0","dn"]],
      why:[["Why it stalled","A static price grid gives nobody a reason to stop scrolling, and it went out at 9 pm."],
           ["What it produced","<b>Nothing.</b> Six weeks, no enquiries traced to it."],
           ["What that means","Stop making these. Pricing belongs on the site, not the feed."]]}],
   surf:{
-    site:{rows:[["/classes/sunday-yoga",412,6,1.46,1.9,"Built by this loop. The only page converting above 1%."],
+    site:{rows:[["/classes/sunday-yoga",412,6,1.46,1.9,"Built by your agent. The only page converting above 1%."],
       ["/timetable",980,2,0.2,3.4,"The most visited page on the site, and the slowest on mobile."],
       ["/pricing",210,0,0.0,2.1,"Fed by the price post. Nobody has ever enquired from it."]],
-      note:"The page this loop built converts seven times better than the one the feed was pushing.",
+      note:"The page your agent built converts seven times better than the one the feed was pushing.",
       flag:"The timetable takes 3.4s on mobile. Every second past two costs roughly 7% of visits."},
     seo:{rows:[["sunday yoga class near me",4,11,58,"The page the reel created. Into the top ten in nine days."],
       ["gym near me",18,18,61,"Highest volume term locally, and no page targets it."],
       ["beginner yoga classes",0,0,0,"890 searches a month here, and nothing answers it."]],
       note:"Every one of the 1,240 impressions came from the page, not the post.",
       flag:"Fourth to third on the yoga query is worth roughly 40 more clicks a month."},
-    geo:{rows:[["best yoga class near [area]",1,"/classes/sunday-yoga","Schedule markup gives a clean fact to quote."],
-      ["beginner friendly gym [area]",0,"Competitor quoted","No page states class levels in readable text."],
-      ["yoga class timings [area]",1,"/classes/sunday-yoga","Quoted with the 7 am start, from the markup."]],
-      cited:3, total:8, note:"Both citations point at the page this loop created.",
-      flag:"Answer engines quote structured facts. Two pages carry that markup, four do not."},
+    geo:{rows:[["best yoga class near indiranagar",1,"/classes/sunday-yoga","Schedule markup gives a clean fact to quote."],
+      ["beginner friendly gym indiranagar",0,"Competitor quoted","No page states class levels in readable text."],
+      ["yoga class timings indiranagar",1,"/classes/sunday-yoga","Quoted with the 7 am start, from the markup."]],
+      cited:3, total:8, note:"Both citations point at the page your agent created.",
+      flag:"AI assistants quote structured facts. Two pages carry that markup, four do not."},
     crt:{rows:[["Local trainer",18000,61,"61 visits","Reshared the form check. Best partner this quarter."],
       ["Nutrition page",42000,9,"9 visits","Large audience, wrong audience. No enquiries."]],
       note:"The smaller account produced seven times the return of one twice its size.",
@@ -890,7 +944,7 @@ gym: {
   gmb:{rows:[["Profile views","3,140","+22%","Up since the class page went live. The profile and the page reinforce each other."],
     ["Call clicks","84","+31%","Most calls land within an hour of a post going out."],
     ["Direction requests","212","+14%","The strongest intent signal here. Someone asking for directions is coming in."],
-    ["Reviews","47","4.6 avg","Twelve arrived this quarter. Answer engines quote review text when they quote you."]],
+    ["Reviews","47","4.6 avg","Twelve arrived this quarter. AI assistants quote review text when they quote you."]],
     note:"Direction requests are the intent signal that matters here. They move with posting, not with follower count.",
     flag:"Only one of the four channels posts to the business profile. It is the cheapest reach on this list."},
   fmts:[["Tutorial",6.1,100,"3 posts, 402 saves, 5 enquiries"],
@@ -902,13 +956,15 @@ gym: {
 
 salon: {
   name:"Cedar and Co", cat:"Salon", ini:"CC", at:"@cedarandco",
+  area:"Bandra West, Mumbai",
   theme:"t-salon", unit:"bookings", unitOne:"booking",
   chans:["video","photo","seo","gmb"],
   money:{gen:"1,15,000", total:"4,20,000"}, vs:"-9% on last month",
   rev12:[128,131,127,134,130,126,124,121,119,122,118,115],
-  stats:[["Reach","18.3k","-31%",-1],["Engagement","2.4%","-1.1pt",-1],
-         ["Bookings","4","-5",-1],["Cost per booking","Rs 2,180","+61%",-1]],
-  mix:[["Feed",58],["Profile",24],["Search",14],["AI answers",4]],
+  stats:[["People reached","18.3k","-31%",-1],["Interacted with it","2.4%","-1.1pt",-1],
+         ["New bookings","4","-5",-1],["Spend per booking","Rs 2,180","+61%",-1]],
+  mix:[["Instagram feed",58],["Google profile",24],["Google search",14],
+       ["AI assistants",4]],
   best:["Balayage before and after","Reel, 28 Feb","12,900 reach, 3 bookings"],
   watch:["Static images","Four of the last five posts, reach down 31%"],
   recur:{label:"Repeat clients", series:[104,108,112,115,118,120,119,116,112,108,103,96]},
@@ -923,11 +979,13 @@ salon: {
   nextHi:"Do before-and-after reel banao, colour correction wala aur Thursday ka gloss. Static image ab band karo, usse reach gir rahi hai.",
   nextDev:"दो बिफोर आफ्टर रील बनाओ, कलर करेक्शन वाला और थर्सडे का ग्लॉस। स्टैटिक इमेज अब बंद करो, उससे रीच गिर रही है।",
   because:"Every booking this quarter came from a transformation reel, and no reel has gone out in eleven days.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/cedarandco"],
-       ["think","Reach is down 31%, finding out why","Reach 31% gir gaya hai, wajah dhoondh raha hoon"],
-       ["src","Service pages","cedarandco.in/services"],
-       ["src","Business profile","Google Business Profile"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/cedarandco"],
+       ["think","Your reach is down 31 percent, so let me find out what changed",
+        "Aapki reach 31% gir gayi hai, dekh raha hoon kya badla"],
+       ["src","Your service pages","cedarandco.in/services"],
+       ["src","Your Google profile","Google Business Profile"]],
   made:{
     video:{t:"Before and after, full colour correction", spec:"0:18 vertical",
       hook:"Four hours, one colour correction.",
@@ -940,7 +998,7 @@ salon: {
       caption:"Three tones blended through the mid-lengths. Thursday evening slots are open this week.",
       tags:"#balayage #hairgloss #cedarandco"},
     seo:{t:"/services/balayage", spec:"Service page", h1:"Balayage and Colour Correction",
-      title:"Balayage and Colour Correction in [area] | Cedar and Co",
+      title:"Balayage and Colour Correction in Bandra West | Cedar and Co",
       meta:"Hand-painted balayage and full colour correction. From Rs 4,500, three to four hours. See recent work and book Thursday evenings.",
       body:"Colour correction is not a single service, it is however many sessions your hair needs to get back to a tone that grows out cleanly. Most clients need one long session, some need two.",
       sections:["What balayage is","Correction, and when you need it","How long it takes","Prices","Recent work"]},
@@ -949,39 +1007,42 @@ salon: {
       cta:"Book"}},
   live:{feed:"Reel scheduled for 7:30 pm Thursday",
     site:["Service page published with pricing","New page indexed: /services/balayage",
-          "Prices marked up so answer engines can quote them"],
+          "Prices marked up so AI assistants can quote them"],
     gmb:"Posted to the Google Business Profile"},
   posts:[
     {t:"Balayage before and after", m:"Reel, 28s, posted 28 Feb",
-     r:[["Reach","12,900",""],["Eng","5.2%",""],["Saves","286",""],["Leads","3","up"]],
+     r:[["People reached","12,900",""],["Interacted","5.2%",""],["Saves","286",""],
+        ["Bookings","3","up"]],
      why:[["Why it travelled","The reveal cut landed in the first four seconds, so almost nobody scrolled past it."],
           ["What it produced","<b>3 bookings</b>, two of them new clients."],
           ["What that means","Transformations are the only thing on this account that books people."]]},
     {t:"Product restock", m:"Image, posted 06 Mar",
-     r:[["Reach","2,900","dn"],["Eng","0.9%","dn"],["Saves","12","dn"],["Leads","0","dn"]],
+     r:[["People reached","2,900","dn"],["Interacted","0.9%","dn"],["Saves","12","dn"],
+        ["Bookings","0","dn"]],
      why:[["Why it stalled","A shelf of bottles. Nothing on screen changes, so there is nothing to watch."],
           ["What it produced","<b>Nothing.</b> No bookings, no product enquiries."],
           ["What that means","Retail belongs in stories, not in the grid."]]},
     {t:"Team introduction", m:"Carousel, 4 slides, posted 11 Mar",
-     r:[["Reach","4,100","dn"],["Eng","1.6%","dn"],["Saves","23","dn"],["Leads","1",""]],
+     r:[["People reached","4,100","dn"],["Interacted","1.6%","dn"],["Saves","23","dn"],
+        ["Bookings","1",""]],
      why:[["Why it stalled","Four static portraits. People stopped at slide two."],
           ["What it produced","<b>1 booking</b>, from an existing client who asked for a specific stylist."],
           ["What that means","Worth doing once a quarter, not once a fortnight."]]}],
   surf:{
-    site:{rows:[["/services/balayage",286,4,1.40,2.2,"Built by this loop. Every booking from the site came through it."],
+    site:{rows:[["/services/balayage",286,4,1.40,2.2,"Built by your agent. Every booking from the site came through it."],
       ["/services",640,1,0.16,2.6,"The index. Lists everything, explains nothing."],
       ["/team",190,0,0.0,2.4,"Fed by the team carousel. No booking has ever started here."]],
       note:"One service page out-converts the whole services index nine times over.",
       flag:"Every other service is a line on an index page. None of them has a page of its own."},
-    seo:{rows:[["balayage [area]",6,14,42,"The service page moved it eight places in a fortnight."],
+    seo:{rows:[["balayage bandra",6,14,42,"The service page moved it eight places in a fortnight."],
       ["hair salon near me",24,24,18,"Highest volume term locally, and the homepage is the only thing competing."],
       ["colour correction cost",0,0,0,"620 searches a month, and no page states a price."]],
       note:"The one page built this quarter carries 71% of all search impressions.",
       flag:"Price queries are the highest intent search here, and nothing on the site answers them."},
-    geo:{rows:[["best balayage in [area]",1,"/services/balayage","Prices and duration are marked up."],
-      ["hair salon open late [area]",0,"No source","Opening hours are not marked up anywhere."],
+    geo:{rows:[["best balayage in bandra",1,"/services/balayage","Prices and duration are marked up."],
+      ["hair salon open late bandra",0,"No source","Opening hours are not marked up anywhere."],
       ["how much does colour correction cost",0,"Competitor quoted","The price is on the page as an image, not as text."]],
-      cited:1, total:7, note:"The weakest of the four surfaces, and the one with most headroom.",
+      cited:1, total:7, note:"The weakest of the four channels, and the one with the most room to grow.",
       flag:"112 reviews at 4.8 is the best asset this business has, and none of it appears on the website."},
     crt:{rows:[["Bridal page",31000,7,"7 visits","Reshared the balayage reel. One booking traced back."],
       ["Lifestyle creator",64000,2,"2 visits","Large following, no local audience."]],
@@ -989,10 +1050,10 @@ salon: {
       flag:"Both partners were chosen on reach. Neither was chosen on location."}},
   gmb:{rows:[["Profile views","1,890","+6%","Flat, because nothing new has been posted to the profile in a month."],
     ["Call clicks","61","-8%","Down with reach. The profile is the only place hours are current."],
-    ["Direction requests","96","+3%","Steady walk-ins, almost none of it attributable to content."],
+    ["Direction requests","96","+3%","Steady walk-ins, and almost none of it comes from content."],
     ["Reviews","112","4.8 avg","The strongest asset on the account, and it is doing nothing for search."]],
     note:"112 reviews at 4.8 is the best signal this business has, and nothing on the site or in the feed uses it.",
-    flag:"Review text is quotable by answer engines. None of it appears on the website."},
+    flag:"Review text is quotable by AI assistants. None of it appears on the website."},
   fmts:[["Transformation",5.2,100,"2 posts, 286 saves, 3 bookings"],
         ["Stylist story",2.4,46,"3 posts, 61 saves, 1 booking"],
         ["Team carousel",1.6,31,"2 posts, 23 saves, 1 booking"],
@@ -1002,13 +1063,15 @@ salon: {
 
 restaurant: {
   name:"The Copper Room", cat:"Restaurant", ini:"CR", at:"@thecopperroom",
-  theme:"t-restaurant", unit:"covers booked", unitOne:"booking",
+  area:"Koregaon Park, Pune",
+  theme:"t-restaurant", unit:"tables booked", unitOne:"booking",
   chans:["video","photo","seo","gmb"],
   money:{gen:"3,60,000", total:"14,20,000"}, vs:"+4% on last month",
   rev12:[286,304,291,318,342,310,335,352,338,361,349,366],
-  stats:[["Reach","33.6k","+9%",1],["Engagement","5.1%","+0.6pt",1],
-         ["Covers booked","14","+2",1],["Cost per booking","Rs 640","-11%",1]],
-  mix:[["Feed",44],["Search",31],["Profile",21],["AI answers",4]],
+  stats:[["People reached","33.6k","+9%",1],["Interacted with it","5.1%","+0.6pt",1],
+         ["Tables booked","14","+2",1],["Spend per booking","Rs 640","-11%",1]],
+  mix:[["Instagram feed",44],["Google search",31],["Google profile",21],
+       ["AI assistants",4]],
   best:["Friday specials board","Reel, 15 Mar","19,600 reach, 9 bookings"],
   watch:["Evening posts","Three published after 7 pm, a fifth of the usual reach"],
   recur:{label:"Regulars", series:[142,148,151,147,155,149,158,162,157,166,161,172]},
@@ -1023,11 +1086,13 @@ restaurant: {
   nextHi:"Daily specials wala reel banao aur subah 11:15 pe schedule kar do. Shaam ke post band karo, unse kuch nahi aata.",
   nextDev:"डेली स्पेशल्स वाला रील बनाओ और सुबह सवा ग्यारह बजे शेड्यूल कर दो। शाम के पोस्ट बंद करो, उनसे कुछ नहीं आता।",
   because:"The midday slot is the only one producing bookings. It reaches 2.9x further than the evening one.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/thecopperroom"],
-       ["think","Midday posts reach 2.9x further here","Dopahar ke post 2.9 guna zyada log tak jaate hain"],
-       ["src","Menu and specials page","coppperroom.in/menu"],
-       ["src","Business profile","Google Business Profile"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/thecopperroom"],
+       ["think","Your midday posts go almost three times further, so the hour matters here",
+        "Aapke dopahar ke post teen guna zyada log tak jaate hain, time maayne rakhta hai"],
+       ["src","Your menu and specials page","thecopperroom.in/menu"],
+       ["src","Your Google profile","Google Business Profile"]],
   made:{
     video:{t:"Friday specials, pepper crab is back", spec:"0:21 vertical",
       hook:"The pepper crab is back on.",
@@ -1049,38 +1114,41 @@ restaurant: {
       cta:"Reserve"}},
   live:{feed:"Reel scheduled for 11:15 am Friday",
     site:["Specials board rebuilt for this week","New page indexed: /menu/friday-specials",
-          "Prices and hours marked up for answer engines"],
+          "Prices and hours marked up for AI assistants"],
     gmb:"Posted to the Google Business Profile"},
   posts:[
     {t:"Friday specials board", m:"Reel, 19s, posted 15 Mar, 11:15 am",
-     r:[["Reach","19,600",""],["Eng","6.4%",""],["Saves","176",""],["Leads","9","up"]],
+     r:[["People reached","19,600",""],["Interacted","6.4%",""],["Saves","176",""],
+        ["Tables booked","9","up"]],
      why:[["Why it travelled","Sound on, food in the first frame, and it went out at the hour people decide where to eat."],
           ["What it produced","<b>9 bookings</b>, six of them on the same day."],
           ["What that means","Same-day food posted before noon is the entire engine here."]]},
     {t:"New chef introduction", m:"Reel, 34s, posted 08 Mar, 8 pm",
-     r:[["Reach","6,200","dn"],["Eng","2.1%","dn"],["Saves","37","dn"],["Leads","1",""]],
+     r:[["People reached","6,200","dn"],["Interacted","2.1%","dn"],["Saves","37","dn"],
+        ["Tables booked","1",""]],
      why:[["Why it stalled","Good film, wrong hour. It went out after people had already eaten."],
           ["What it produced","<b>1 booking.</b>"],
           ["What that means","The content was not the problem. The clock was."]]},
     {t:"Closed for maintenance", m:"Image, posted 02 Mar",
-     r:[["Reach","1,400","dn"],["Eng","0.4%","dn"],["Saves","3","dn"],["Leads","0","dn"]],
+     r:[["People reached","1,400","dn"],["Interacted","0.4%","dn"],["Saves","3","dn"],
+        ["Tables booked","0","dn"]],
      why:[["Why it stalled","A notice is not content. It only needs to reach people already looking for you."],
           ["What it produced","<b>Nothing</b>, which is correct for a notice."],
           ["What that means","This belongs on the business profile, not in the feed."]]}],
   surf:{
-    site:{rows:[["/menu/friday-specials",1620,11,0.68,2.0,"Rebuilt every Friday by this loop. Carries most of the site's bookings."],
+    site:{rows:[["/menu/friday-specials",1620,11,0.68,2.0,"Rebuilt every Friday by your agent. Carries most of the site's bookings."],
       ["/menu",2100,3,0.14,2.9,"The full menu. High traffic, and nothing on it changes."],
       ["/contact",380,0,0.0,1.8,"Hours and a map. It should be the profile's job, not a page."]],
       note:"The page that is rebuilt weekly converts nearly five times better than the one that never changes.",
       flag:"Only one page on the site is refreshed. Everything else has been static for a year."},
-    seo:{rows:[["friday specials [area]",2,14,186,"The weekly rebuild is why it moved. Fresh pages win this."],
+    seo:{rows:[["friday specials koregaon park",2,14,186,"The weekly rebuild is why it moved. Fresh pages win this."],
       ["restaurants near me",31,31,24,"Highest volume term locally, and nothing competes for it."],
-      ["late dinner [area]",0,0,0,"1,400 searches a month, and no page mentions hours."]],
+      ["late dinner koregaon park",0,0,0,"1,400 searches a month, and no page mentions hours."]],
       note:"The specials page carries 84% of all search impressions.",
       flag:"Weekly refresh is proven here. Nothing else on the site is refreshed."},
-    geo:{rows:[["what is on at [venue] tonight",1,"/menu/friday-specials","The weekly markup is the quoted source."],
-      ["best friday specials [area]",1,"/menu/friday-specials","Quoted with prices, straight off the page."],
-      ["restaurants open late [area]",0,"No source","Opening hours are not marked up anywhere."]],
+    geo:{rows:[["what is on at the copper room tonight",1,"/menu/friday-specials","The weekly markup is the quoted source."],
+      ["best friday specials koregaon park",1,"/menu/friday-specials","Quoted with prices, straight off the page."],
+      ["restaurants open late koregaon park",0,"No source","Opening hours are not marked up anywhere."]],
       cited:6, total:9, note:"The strongest of the four, and every citation is the same page.",
       flag:"One page earns all of it. Nothing else on the site is built that way."},
     crt:{rows:[["Food account",27000,140,"140 saves","Covered the specials board. Three bookings traced to it."],
@@ -1092,7 +1160,7 @@ restaurant: {
     ["Direction requests","890","+8%","The highest of any account on this list. People decide and drive."],
     ["Reviews","206","4.5 avg","Volume is good. The average has slipped a tenth since December."]],
     note:"890 direction requests is the real booking number. The website form sees a fraction of it.",
-    flag:"The average review score is drifting down and nothing in the loop is watching it."},
+    flag:"Your review score is slipping and nobody is keeping an eye on it."},
   fmts:[["Food close-up",5.8,100,"4 posts, 176 saves, 9 bookings"],
         ["Menu",3.2,55,"3 posts, 74 saves, 4 bookings"],
         ["Behind the scenes",2.9,50,"5 posts, 37 saves, 1 booking"],
@@ -1102,13 +1170,15 @@ restaurant: {
 
 realestate: {
   name:"Harbour View", cat:"Real estate", ini:"HV", at:"@harbourview.homes",
+  area:"Worli, Mumbai",
   theme:"t-realestate", unit:"enquiries", unitOne:"enquiry",
   chans:["video","photo","seo","gmb"],
   money:{gen:"8,50,000", total:"31,00,000"}, vs:"+11% on last month",
   rev12:[420,465,510,545,590,610,655,700,735,780,815,850],
-  stats:[["Reach","79.0k","+17%",1],["Engagement","3.1%","+0.4pt",1],
-         ["Enquiries","11","+4",1],["Cost per enquiry","Rs 1,940","-12%",1]],
-  mix:[["Feed",52],["Search",26],["Profile",15],["AI answers",7]],
+  stats:[["People reached","79.0k","+17%",1],["Interacted with it","3.1%","+0.4pt",1],
+         ["New enquiries","11","+4",1],["Spend per enquiry","Rs 1,940","-12%",1]],
+  mix:[["Instagram feed",52],["Google search",26],["Google profile",15],
+       ["AI assistants",7]],
   best:["Waterfront walkthrough","Reel, 12 Mar","41,200 reach, 7 enquiries"],
   watch:["Stat card carousels","Five published, not one enquiry in five weeks"],
   recur:{label:"Active mandates", series:[9,10,10,11,12,12,13,14,15,17,18,19]},
@@ -1123,11 +1193,13 @@ realestate: {
   nextHi:"Do walkthrough reel banao, Alder Street ka relist aur harbour-front flat. Stat card wale post band karo.",
   nextDev:"दो वॉकथ्रू रील बनाओ, एल्डर स्ट्रीट का रीलिस्ट और हार्बर फ्रंट फ्लैट। स्टैट कार्ड वाले पोस्ट बंद करो।",
   because:"Every enquiry this month came from a face on camera, and no walkthrough has gone out since 12 March.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/harbourview.homes"],
-       ["think","Video out-performs stat cards four to one here","Video stat cards se chaar guna aage hai"],
-       ["src","Listing pages","harbourview.in/listings"],
-       ["src","Business profile","Google Business Profile"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/harbourview.homes"],
+       ["think","Your videos are doing four times what the stat cards do",
+        "Aapke video, stat cards se chaar guna aage hain"],
+       ["src","Your listing pages","harbourview.in/listings"],
+       ["src","Your Google profile","Google Business Profile"]],
   made:{
     video:{t:"Waterfront apartment, full walkthrough", spec:"0:42 vertical",
       hook:"Two bed, harbour-front, walk it with me.",
@@ -1149,43 +1221,46 @@ realestate: {
       cta:"Learn more"}},
   live:{feed:"Reel scheduled for 9:30 am Wednesday",
     site:["Listing published with floor plan","New page indexed: /listings/waterfront-apartment",
-          "Listing marked up for answer engines"],
+          "Listing marked up for AI assistants"],
     gmb:"Posted to the Google Business Profile"},
   posts:[
     {t:"Waterfront walkthrough", m:"Reel, 42s, posted 12 Mar",
-     r:[["Reach","41,200",""],["Eng","4.1%",""],["Saves","318",""],["Leads","7","up"]],
+     r:[["People reached","41,200",""],["Interacted","4.1%",""],["Saves","318",""],
+        ["Enquiries","7","up"]],
      why:[["Why it travelled","Forty-two seconds of one room after another. People watched it twice."],
           ["What it produced","<b>7 enquiries</b>, three of which booked a viewing that week."],
           ["What that means","Long-form walkthroughs are the only thing here that scales past 30,000."]]},
     {t:"Three-bed on Alder St", m:"Reel, 31s, posted 09 Mar",
-     r:[["Reach","28,700",""],["Eng","3.6%",""],["Saves","204",""],["Leads","4","up"]],
+     r:[["People reached","28,700",""],["Interacted","3.6%",""],["Saves","204",""],
+        ["Enquiries","4","up"]],
      why:[["Why it travelled","Same format, smaller property. It tracked the first one almost exactly."],
           ["What it produced","<b>4 enquiries</b>, two of them on price."],
           ["What that means","Consistent. This is repeatable, not a fluke."]]},
     {t:"March market update", m:"Carousel, 5 slides, posted 06 Mar",
-     r:[["Reach","9,140","dn"],["Eng","0.9%","dn"],["Saves","31","dn"],["Leads","0","dn"]],
+     r:[["People reached","9,140","dn"],["Interacted","0.9%","dn"],["Saves","31","dn"],
+        ["Enquiries","0","dn"]],
      why:[["Why it stalled","Five slides of statistics. Nobody reached slide three."],
           ["What it produced","<b>Nothing.</b> Not one enquiry in five weeks."],
           ["What that means","Market data is a newsletter, not a feed post."]]}],
   surf:{
-    site:{rows:[["/listings/waterfront-apartment",1860,7,0.38,2.3,"Built by this loop. Three viewings booked from it."],
+    site:{rows:[["/listings/waterfront-apartment",1860,7,0.38,2.3,"Built by your agent. Three viewings booked from it."],
       ["/listings",3400,4,0.12,2.8,"The index. High traffic, weak conversion, no filtering."],
       ["/market-report",420,0,0.0,3.1,"The carousel drove people here. Not one enquiry followed."]],
       note:"Listing pages convert three times better than the index that holds them.",
       flag:"The index has no filters, so most visitors leave without opening a listing."},
-    seo:{rows:[["waterfront apartments [area]",3,9,124,"Volume up 22% locally, and the listing page now ranks."],
-      ["flats for sale [area]",27,27,31,"High volume, and the index is too thin to compete."],
+    seo:{rows:[["waterfront apartments worli",3,9,124,"Volume up 22% locally, and the listing page now ranks."],
+      ["flats for sale worli",27,27,31,"High volume, and the index is too thin to compete."],
       ["harbour view apartments",0,0,0,"410 searches a month, and no page carries the phrase."]],
-      note:"78% of all impressions went to the single listing page this loop created.",
+      note:"78% of all impressions went to the single listing page your agent created.",
       flag:"Every listing gets a page. The index that holds them ranks for nothing."},
     geo:{rows:[["apartments for sale near the harbour",1,"/listings/waterfront-apartment","Price, size and floor are marked up."],
-      ["is [area] a good place to buy",0,"Competitor quoted","The market report is five images. No readable page."],
-      ["two bed flats [area] under [price]",1,"/listings/waterfront-apartment","Quoted with the asking price."]],
+      ["is worli a good place to buy",0,"Competitor quoted","The market report is five images. No readable page."],
+      ["two bed flats worli under 3 crore",1,"/listings/waterfront-apartment","Quoted with the asking price."]],
       cited:2, total:7, note:"Both citations come from the same listing page.",
       flag:"The market data would be quotable as a page instead of five slides."},
     crt:{rows:[["Relocation account",15000,4,"4 enquiries","Linked the walkthrough. Four of seven enquiries came through it."],
       ["Design page",88000,0,"0 enquiries","Huge reach, no local audience, nothing to show."]],
-      note:"The smallest partner produced every attributable enquiry.",
+      note:"Every enquiry we could trace came from the smallest partner.",
       flag:"Audience size predicted nothing. Locality predicted everything."}},
   gmb:{rows:[["Profile views","2,260","+17%","Rises with each listing published, then decays over about ten days."],
     ["Call clicks","148","+21%","Half of all enquiries arrive by phone and none of them are tracked elsewhere."],
@@ -1207,13 +1282,15 @@ Object.assign(BIZ, {
 
 doctor: {
   name:"Dr Meera Rao", cat:"Family practice", ini:"MR", at:"@drmeerarao",
+  area:"Jayanagar, Bengaluru",
   theme:"t-doctor", unit:"appointments", unitOne:"appointment",
   chans:["video","photo","seo","gmb","list"], medical:true,
   money:{gen:"1,95,000", total:"6,10,000"}, vs:"+13% on last month",
   rev12:[142,148,151,159,163,158,171,178,184,190,196,208],
-  stats:[["Reach","9.8k","+14%",1],["Profile views","2.1k","+26%",1],
-         ["Appointments","36","+9",1],["No-show rate","11%","-4pt",1]],
-  mix:[["Listings",39],["Search",29],["Profile",22],["Feed",10]],
+  stats:[["People reached","9.8k","+14%",1],["Profile views","2.1k","+26%",1],
+         ["Appointments","36","+9",1],["Missed appointments","11%","-4pt",1]],
+  mix:[["Practo and Justdial",39],["Google search",29],["Google profile",22],
+       ["Instagram feed",10]],
   best:["What a fever actually needs","Reel, 04 Mar","7,300 reach, 6 appointments"],
   watch:["Awareness day posts","Six published, no appointments in two months"],
   recur:{label:"Returning patients", series:[86,88,91,94,97,99,103,108,112,117,121,128]},
@@ -1228,13 +1305,17 @@ doctor: {
   nextHi:"Ek 40 second ka explainer banao Saturday OPD ke timings ka, aur Wednesday subah post karo. Awareness day wale post band karo.",
   nextDev:"एक चालीस सेकंड का एक्सप्लेनर बनाओ सैटरडे ओपीडी की टाइमिंग का, और वेडनेसडे सुबह पोस्ट करो। अवेयरनेस डे वाले पोस्ट बंद करो।",
   because:"Every appointment traced to content came from a plain symptom explainer, and the listings profile is where 39% of them started.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/drmeerarao"],
-       ["think","Symptom explainers convert, awareness graphics do not","Symptom explainer chalte hain, awareness graphics nahi"],
-       ["src","Practice website","raofamilypractice.in"],
-       ["src","Practo and Justdial listings","Listing profiles"],
-       ["chk","Removed a phrase that implied a cure. Timings and availability only","Cure imply karne wala phrase hata diya, sirf timings rakhi hain"],
-       ["chk","Held back a patient quote. No written consent on file","Patient ka quote roka hai, likhit consent file mein nahi hai"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/drmeerarao"],
+       ["think","Your symptom explainers are filling slots, the awareness graphics are not",
+        "Aapke symptom explainer chal rahe hain, awareness graphics nahi chal rahe"],
+       ["src","Your practice website","raofamilypractice.in"],
+       ["src","Your Practo and Justdial profiles","Listing profiles"],
+       ["chk","I have taken out a line that sounded like a cure, only timings and availability stay",
+        "Ek line cure jaisi lag rahi thi, wo hata di. Sirf timings aur availability rakhi hain"],
+       ["chk","Holding back the patient quote, we do not have written consent on file",
+        "Patient ka quote roka hai, likhit consent file mein nahi hai"]],
   made:{
     video:{t:"Saturday evening OPD, 5 to 8", spec:"0:40 vertical",
       hook:"Cannot get away on a weekday? Saturdays are open now.",
@@ -1260,51 +1341,54 @@ doctor: {
       cta:"Updated on 2 profiles"}},
   live:{feed:"Reel scheduled for 8:30 am Wednesday",
     site:["Timings page updated with the Saturday slot","New page indexed: /opd-timings",
-          "Hours marked up so answer engines can quote them"],
+          "Hours marked up so AI assistants can quote them"],
     gmb:"Posted to the Google Business Profile",
     list:"Consulting hours updated on Practo and Justdial"},
   posts:[
     {t:"What a fever actually needs", m:"Reel, 44s, posted 04 Mar",
-     r:[["Reach","7,300",""],["Saves","512",""],["Profile","286",""],["Appts","6","up"]],
+     r:[["People reached","7,300",""],["Saves","512",""],["Profile visits","286",""],
+        ["Appointments","6","up"]],
      why:[["Why it travelled","It answered a question people search at 2 am, in the words they would use."],
           ["What it produced","<b>6 appointments</b>, four of them first-time patients."],
           ["What that means","Explaining a common symptom plainly is the only content on this account that fills a slot."]]},
     {t:"Clinic renovation update", m:"Carousel, 3 slides, posted 18 Feb",
-     r:[["Reach","2,100",""],["Saves","31",""],["Profile","44",""],["Appts","1",""]],
+     r:[["People reached","2,100",""],["Saves","31",""],["Profile visits","44",""],
+        ["Appointments","1",""]],
      why:[["Why it stalled","Interesting to you, not to a patient deciding where to go."],
           ["What it produced","<b>1 appointment</b>, from an existing patient."],
           ["What that means","Fine as a one-off. Not a format."]]},
     {t:"World Health Day graphic", m:"Image, posted 07 Apr",
-     r:[["Reach","890","dn"],["Saves","4","dn"],["Profile","9","dn"],["Appts","0","dn"]],
+     r:[["People reached","890","dn"],["Saves","4","dn"],["Profile visits","9","dn"],
+        ["Appointments","0","dn"]],
      why:[["Why it stalled","A stock graphic with a date on it. It says nothing only this practice could say."],
           ["What it produced","<b>Nothing.</b> Six of these have gone out in two months."],
           ["What that means","Stop. The slot is better spent on one symptom people actually search."]]}],
   surf:{
-    site:{rows:[["/opd-timings",640,14,2.19,1.7,"Built by this loop. The highest converting page on the site."],
+    site:{rows:[["/opd-timings",640,14,2.19,1.7,"Built by your agent. The highest converting page on the site."],
       ["/about",410,2,0.49,2.0,"Qualifications and registration. People read it before booking, rarely book from it."],
       ["/blog/fever-in-children",1240,3,0.24,3.6,"Most read page on the site, and the slowest. No booking link above the fold."]],
       note:"The timings page converts nine times better than the most-read page on the site.",
       flag:"The busiest page has no way to book from it without scrolling past the whole article."},
     seo:{rows:[["family doctor near me",7,16,94,"The timings page moved it nine places in three weeks."],
-      ["general physician [area]",12,12,61,"Steady. The listings profiles outrank the site for this."],
-      ["doctor open on saturday [area]",0,0,0,"1,100 searches a month, and the new slot is not on the site yet."]],
+      ["general physician jayanagar",12,12,61,"Steady. The listings profiles outrank the site for this."],
+      ["doctor open on saturday jayanagar",0,0,0,"1,100 searches a month, and the new slot is not on the site yet."]],
       note:"Two thirds of search clicks land on listing profiles, not on the practice website.",
       flag:"Saturday availability is the highest intent query in this set and nothing answers it yet."},
-    geo:{rows:[["family doctor open on saturday [area]",0,"No source","Hours are not marked up in a readable format."],
-      ["general physician consultation fee [area]",1,"/opd-timings","Fee is stated as text, so it can be quoted."],
-      ["is [practice] accepting new patients",0,"No source","Nothing on the site states this either way."]],
-      cited:1, total:6, note:"Answer engines quote fees and hours. Everything else here is prose they skip.",
+    geo:{rows:[["family doctor open on saturday jayanagar",0,"No source","Hours are not marked up in a readable format."],
+      ["general physician consultation fee jayanagar",1,"/opd-timings","Fee is stated as text, so it can be quoted."],
+      ["is dr meera rao accepting new patients",0,"No source","Nothing on the site states this either way."]],
+      cited:1, total:6, note:"AI assistants quote fees and hours. Everything else here is prose they skip.",
       flag:"Two of six prompts fail because a plain fact is missing, not because the content is weak."},
     crt:{rows:[["Parenting page",22000,54,"54 visits","Shared the fever explainer. Two appointments traced to it."],
       ["Wellness influencer",71000,3,"3 visits","Large audience, and none of it is local."]],
-      note:"The local parenting page produced every attributable appointment.",
+      note:"Every appointment we could trace came from the local parenting page.",
       flag:"Medical content shared by a non-medical account carries a claim risk. Review before repeating."}},
   gmb:{rows:[["Profile views","2,140","+26%","Rises sharply whenever hours change. The Saturday slot will move this again."],
     ["Call clicks","412","+18%","Most appointments still start with a phone call, not a form."],
     ["Direction requests","268","+11%","Steady. Patients look up the route the morning of the visit."],
     ["Reviews","38","4.9 avg","High score, low volume. Ten more would move local ranking."]],
     note:"412 call clicks is the real appointment funnel. The website form sees a tenth of it.",
-    flag:"Review volume is the single cheapest ranking lever here and nothing in the loop asks for reviews."},
+    flag:"More reviews is the cheapest way to rank higher here, and nobody is asking your patients for one."},
   fmts:[["Symptom explainer",6.8,100,"3 posts, 512 saves, 6 appointments"],
         ["Timings and access",4.2,62,"2 posts, 96 saves, 3 appointments"],
         ["Practice update",1.9,28,"3 posts, 31 saves, 1 appointment"],
@@ -1314,13 +1398,15 @@ doctor: {
 
 clinic: {
   name:"Northline Diagnostics", cat:"Diagnostics", ini:"ND", at:"@northlinediagnostics",
+  area:"Madhapur, Hyderabad",
   theme:"t-clinic", unit:"tests booked", unitOne:"booking",
   chans:["video","photo","seo","gmb","list"], medical:true,
   money:{gen:"4,10,000", total:"18,60,000"}, vs:"-14% on last month",
   rev12:[512,528,545,561,540,556,533,519,502,486,470,410],
-  stats:[["Reach","24.1k","-19%",-1],["Profile views","3.4k","-22%",-1],
-         ["Tests booked","61","-23",-1],["Cost per booking","Rs 720","+38%",-1]],
-  mix:[["Search",41],["Listings",27],["Profile",19],["Feed",13]],
+  stats:[["People reached","24.1k","-19%",-1],["Profile views","3.4k","-22%",-1],
+         ["Tests booked","61","-23",-1],["Spend per test","Rs 720","+38%",-1]],
+  mix:[["Google search",41],["Practo and Justdial",27],["Google profile",19],
+       ["Instagram feed",13]],
   best:["How to prep for a lipid test","Reel, 22 Feb","11,400 reach, 18 bookings"],
   watch:["Aggregator listings","Two aggregators now outrank the site on every package query"],
   recur:{label:"Repeat patients", series:[220,228,236,241,238,244,239,231,224,216,207,196]},
@@ -1335,13 +1421,17 @@ clinic: {
   nextHi:"Har package ka alag page banao, price aur report time text mein likha ho. Awareness post band karo.",
   nextDev:"हर पैकेज का अलग पेज बनाओ, प्राइस और रिपोर्ट टाइम टेक्स्ट में लिखा हो। अवेयरनेस पोस्ट बंद करो।",
   because:"Every query you are losing is a price or a turnaround question, and both facts currently sit inside images.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/northlinediagnostics"],
-       ["think","Rankings fell on every package query, checking who moved above","Package queries pe ranking giri hai, dekh raha hoon kaun upar aaya"],
-       ["src","Package and pricing pages","northlinediagnostics.in/packages"],
-       ["src","Practo and Justdial listings","Listing profiles"],
-       ["chk","Kept the claim to what the package includes. No outcome promised","Sirf package mein kya hai wo likha hai, koi result promise nahi"],
-       ["chk","Fasting instruction added. A prep step cannot be left out","Fasting instruction daal di hai, prep step chhod nahi sakte"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/northlinediagnostics"],
+       ["think","You have slipped on every package query, let me see who moved above you",
+        "Package queries pe ranking giri hai, dekh raha hoon kaun aapse upar aa gaya"],
+       ["src","Your package and pricing pages","northlinediagnostics.in/packages"],
+       ["src","Your Practo and Justdial profiles","Listing profiles"],
+       ["chk","Kept it to what the package includes, I have not promised any result",
+        "Sirf itna likha hai ki package mein kya hai, koi result promise nahi kiya"],
+       ["chk","Added the fasting instruction, that step should not be left out",
+        "Fasting instruction daal di hai, ye step chhodna theek nahi"]],
   made:{
     video:{t:"Full body checkup, report in 24 hours", spec:"0:28 vertical",
       hook:"Eighty tests, one sitting, report tomorrow.",
@@ -1367,39 +1457,42 @@ clinic: {
       cta:"Updated on 2 profiles"}},
   live:{feed:"Reel scheduled for 10:00 am Monday",
     site:["Package page published with the full panel list","New page indexed: /packages/full-body-checkup",
-          "Price and turnaround marked up for answer engines"],
+          "Price and turnaround marked up for AI assistants"],
     gmb:"Posted to the Google Business Profile",
     list:"Package published to Practo and Justdial"},
   posts:[
     {t:"How to prep for a lipid test", m:"Reel, 26s, posted 22 Feb",
-     r:[["Reach","11,400",""],["Saves","640",""],["Profile","410",""],["Books","18","up"]],
+     r:[["People reached","11,400",""],["Saves","640",""],["Profile visits","410",""],
+        ["Tests booked","18","up"]],
      why:[["Why it travelled","It answered the one question every person asks the night before a test."],
           ["What it produced","<b>18 bookings</b>, most of them within three days."],
           ["What that means","Prep instructions are the highest converting content this account has ever posted."]]},
     {t:"New machine installed", m:"Image, posted 01 Mar",
-     r:[["Reach","3,200","dn"],["Saves","18","dn"],["Profile","36","dn"],["Books","1","dn"]],
+     r:[["People reached","3,200","dn"],["Saves","18","dn"],["Profile visits","36","dn"],
+        ["Tests booked","1","dn"]],
      why:[["Why it stalled","A photo of equipment means nothing to somebody choosing where to get a test."],
           ["What it produced","<b>1 booking.</b>"],
           ["What that means","Translate the machine into what it changes for the patient, or skip it."]]},
     {t:"Health awareness week", m:"Carousel, 6 slides, posted 12 Mar",
-     r:[["Reach","1,900","dn"],["Saves","7","dn"],["Profile","11","dn"],["Books","0","dn"]],
+     r:[["People reached","1,900","dn"],["Saves","7","dn"],["Profile visits","11","dn"],
+        ["Tests booked","0","dn"]],
      why:[["Why it stalled","Six slides of general advice available on a thousand other accounts."],
           ["What it produced","<b>Nothing.</b>"],
           ["What that means","Generic health content competes with the entire internet. Prep instructions compete with nobody."]]}],
   surf:{
-    site:{rows:[["/packages/full-body-checkup",0,0,0.0,0,"Published by this loop today. No data yet."],
+    site:{rows:[["/packages/full-body-checkup",0,0,0.0,0,"Published by your agent today. No data yet."],
       ["/packages",2400,9,0.38,3.2,"One page listing eleven packages. Prices sit inside a JPEG."],
       ["/book",1100,42,3.82,2.1,"The booking form. Works well, and almost nothing links to it."]],
       note:"The booking page converts at 3.8%, and only one page on the site links to it.",
       flag:"Every package price on this site is inside an image. Search cannot read a single one."},
-    seo:{rows:[["full body checkup price [area]",19,6,22,"Dropped thirteen places. Two aggregators moved above."],
+    seo:{rows:[["full body checkup price madhapur",19,6,22,"Dropped thirteen places. Two aggregators moved above."],
       ["blood test near me",28,21,14,"Falling. Listing profiles are carrying this, not the site."],
       ["thyroid test cost",0,0,0,"2,300 searches a month. The price exists, as an image."]],
       note:"Every lost position this quarter was on a query containing the word price or cost.",
-      flag:"Prices inside images are invisible to both search and answer engines. This is the whole decline."},
-    geo:{rows:[["how much is a full body checkup in [area]",0,"Aggregator quoted","Our price is an image. Theirs is text."],
+      flag:"Prices inside images are invisible to both search and AI assistants. This is the whole decline."},
+    geo:{rows:[["how much is a full body checkup in madhapur",0,"Aggregator quoted","Our price is an image. Theirs is text."],
       ["do i need to fast before a lipid test",1,"/blog/lipid-prep","The prep post is quoted almost verbatim."],
-      ["fastest blood test report [area]",0,"No source","Turnaround time is stated nowhere on the site."]],
+      ["fastest blood test report madhapur",0,"No source","Turnaround time is stated nowhere on the site."]],
       cited:1, total:8, note:"The one citation came from the only page that states a fact in plain text.",
       flag:"Two aggregators are being quoted for prices this clinic actually charges less than."},
     crt:{rows:[["Local health page",13000,88,"88 visits","Shared the prep reel. Six bookings traced to it."],
@@ -1421,13 +1514,15 @@ clinic: {
 
 wedding: {
   name:"Marigold Weddings", cat:"Wedding planning", ini:"MW", at:"@marigoldweddings",
+  area:"Jaipur, Rajasthan",
   theme:"t-wedding", unit:"enquiries", unitOne:"enquiry",
   chans:["video","photo","seo","pin"],
   money:{gen:"12,40,000", total:"46,00,000"}, vs:"+61% on last month",
   rev12:[180,210,240,190,160,140,120,180,340,620,980,1240],
-  stats:[["Reach","128k","+58%",1],["Saves","4.1k","+92%",1],
-         ["Enquiries","23","+14",1],["Consults booked","9","+6",1]],
-  mix:[["Feed",38],["Pinterest",27],["Search",24],["Referral",11]],
+  stats:[["People reached","128k","+58%",1],["Saved by people","4.1k","+92%",1],
+         ["New enquiries","23","+14",1],["Consultations booked","9","+6",1]],
+  mix:[["Instagram feed",38],["Pinterest",27],["Google search",24],
+       ["Word of mouth",11]],
   best:["Udaipur wedding film","Reel, 21 Mar","74,000 reach, 11 enquiries"],
   watch:["Quote cards","Nine published this season, one enquiry between them"],
   recur:{label:"Signed weddings", series:[3,4,4,2,2,1,1,3,6,9,13,17]},
@@ -1442,11 +1537,13 @@ wedding: {
   nextHi:"Do aur real wedding film banao, Udaipur aur Goa wali, jab tak season khula hai. Quote card wale post band karo.",
   nextDev:"दो और रियल वेडिंग फिल्म बनाओ, उदयपुर और गोवा वाली, जब तक सीज़न खुला है। कोट कार्ड वाले पोस्ट बंद करो।",
   because:"You have eleven weeks of booking season left and real wedding films are the only format here that has ever produced a consultation.",
-  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
-       ["src","Last 90 days of posts","instagram.com/marigoldweddings"],
-       ["think","Booking season is open for eleven more weeks","Booking season gyarah hafte aur khula hai"],
-       ["src","Portfolio pages","marigoldweddings.in/real-weddings"],
-       ["src","Pinterest board performance","Pinterest business"]],
+  gen:[["think","Let me go through your last three months first",
+        "Pehle aapke pichhle teen mahine dekh leta hoon"],
+       ["src","Your last 90 days of posts","instagram.com/marigoldweddings"],
+       ["think","Booking season is open for eleven more weeks, so this is the window",
+        "Booking season gyarah hafte aur khula hai, yahi asli time hai"],
+       ["src","Your portfolio pages","marigoldweddings.in/real-weddings"],
+       ["src","Your Pinterest boards","Pinterest business"]],
   made:{
     video:{t:"Udaipur, three days by the lake", spec:"0:58 vertical",
       hook:"Three days, one lake, four hundred people.",
@@ -1472,39 +1569,42 @@ wedding: {
   live:{feed:"Reel scheduled for 6:00 pm Sunday",
     site:["Portfolio page published with the full timeline",
           "New page indexed: /real-weddings/aditi-rohan-udaipur",
-          "Venue and supplier names marked up for answer engines"],
+          "Venue and supplier names marked up for AI assistants"],
     pin:"Eight pins published and linked to the portfolio page"},
   posts:[
     {t:"Udaipur wedding film", m:"Reel, 58s, posted 21 Mar",
-     r:[["Reach","74,000",""],["Saves","2,940",""],["Shares","611",""],["Leads","11","up"]],
+     r:[["People reached","74,000",""],["Saves","2,940",""],["Shares","611",""],
+        ["Enquiries","11","up"]],
      why:[["Why it travelled","Almost three thousand saves. People are building a folder for their own wedding and this went into it."],
           ["What it produced","<b>11 enquiries</b>, four of which booked a consultation."],
           ["What that means","A real wedding film is the only thing on this account that both travels and converts."]]},
     {t:"Mandap detail shots", m:"Carousel, 6 slides, posted 14 Mar",
-     r:[["Reach","28,400",""],["Saves","880",""],["Shares","94",""],["Leads","4","up"]],
+     r:[["People reached","28,400",""],["Saves","880",""],["Shares","94",""],
+        ["Enquiries","4","up"]],
      why:[["Why it travelled","Detail shots are what people save. Fewer shares, but a very high save rate."],
           ["What it produced","<b>4 enquiries</b>, two asking specifically about the florist."],
           ["What that means","Strong support format. It should sit two days behind every film, not stand alone."]]},
     {t:"Planning quote card", m:"Image, posted 09 Mar",
-     r:[["Reach","2,600","dn"],["Saves","19","dn"],["Shares","2","dn"],["Leads","0","dn"]],
+     r:[["People reached","2,600","dn"],["Saves","19","dn"],["Shares","2","dn"],
+        ["Enquiries","0","dn"]],
      why:[["Why it stalled","A sentence on a beige background. Nine of these have gone out this season."],
           ["What it produced","<b>Nothing.</b> One enquiry across all nine."],
           ["What that means","Nine slots in the busiest season of the year, spent on nothing."]]}],
   surf:{
-    site:{rows:[["/real-weddings/aditi-rohan-udaipur",0,0,0.0,0,"Published by this loop today. No data yet."],
+    site:{rows:[["/real-weddings/aditi-rohan-udaipur",0,0,0.0,0,"Published by your agent today. No data yet."],
       ["/real-weddings",4900,12,0.24,2.4,"The portfolio index. Beautiful, and it takes four taps to reach an enquiry form."],
       ["/pricing",1800,31,1.72,1.9,"The highest converting page, and it is linked from nowhere in the feed."]],
       note:"The pricing page converts seven times better than the portfolio and the feed never points at it.",
       flag:"Four taps from a portfolio page to an enquiry form. Every tap loses roughly a third of them."},
     seo:{rows:[["udaipur wedding planner",5,13,240,"The portfolio pages moved it eight places this season."],
       ["destination wedding cost india",0,0,0,"8,900 searches a month. The pricing page does not target it."],
-      ["wedding planner [area]",9,9,88,"Steady, and the highest intent term in this set."]],
+      ["wedding planner jaipur",9,9,88,"Steady, and the highest intent term in this set."]],
       note:"Portfolio pages rank. The pricing page, which converts seven times better, ranks for nothing.",
       flag:"The one query about cost has 8,900 searches a month and your best page ignores it."},
     geo:{rows:[["how much does a destination wedding cost",0,"Competitor quoted","Costs are on the pricing page as a range, not as a stated figure."],
       ["best wedding planners in udaipur",1,"/real-weddings","Quoted with two venue names."],
       ["how long does wedding planning take",0,"No source","Nothing on the site states a timeline."]],
-      cited:1, total:6, note:"Answer engines want a number. Every cost on this site is a range.",
+      cited:1, total:6, note:"AI assistants want a number. Every cost on this site is a range.",
       flag:"Three of six prompts are cost and timeline questions. Both facts exist internally and neither is published."},
     crt:{rows:[["Bridal magazine",210000,190,"190 visits","Featured the Udaipur wedding. Three enquiries traced to it."],
       ["Photographer",44000,340,"340 visits","Tagged in the film. Highest referral traffic of any partner."]],
@@ -1530,19 +1630,25 @@ wedding: {
 const ORDER = ["gym","salon","restaurant","realestate","doctor","clinic","wedding"];
 
 const CHAN = {
-  video:{n:"Video", verb:"Writing the script and shot list", hi:"Script aur shot list likh raha hoon"},
-  photo:{n:"Photo", verb:"Writing the caption and picking the frame", hi:"Caption likh raha hoon, frame choose kar raha hoon"},
-  seo:{n:"Website", verb:"Writing the page, title and meta description", hi:"Page, title aur meta description likh raha hoon"},
-  gmb:{n:"Profile", verb:"Writing the business profile post", hi:"Business profile ka post likh raha hoon"},
-  list:{n:"Listings", verb:"Updating the listing profiles", hi:"Listing profiles update kar raha hoon"},
-  pin:{n:"Pinterest", verb:"Building the pin set and linking each one back", hi:"Pin set bana raha hoon aur link kar raha hoon"}
+  video:{n:"Video", verb:"Let me write the script and the shot list",
+    hi:"Script aur shot list likh deta hoon"},
+  photo:{n:"Photo", verb:"Picking the frame, then writing the caption",
+    hi:"Frame choose kar raha hoon, caption bhi likh deta hoon"},
+  seo:{n:"Website", verb:"Writing the page for your site, with the title and description",
+    hi:"Aapki site ka page likh raha hoon, title aur description bhi"},
+  gmb:{n:"Google profile", verb:"Writing the post for your Google profile",
+    hi:"Aapke Google profile ka post likh raha hoon"},
+  list:{n:"Listings", verb:"Updating your listing profiles",
+    hi:"Aapke listing profiles update kar deta hoon"},
+  pin:{n:"Pinterest", verb:"Making the pins, each one linked back to the page",
+    hi:"Pins bana raha hoon, har ek page se link kar dunga"}
 };
 
 const STEPS = [
-  {t:"Speak",       p:"Say it the way you would say it to a person."},
-  {t:"Review",      p:"One confirmation sends it to every channel you picked."},
-  {t:"Results",     p:"Every surface it reached, attributed back."},
-  {t:"What\u2019s Next", p:"What worked chooses what gets made."}
+  {t:"Talk",        p:"Say it the way you would say it to a person."},
+  {t:"Review",      p:"One tap and it goes out to everything you picked."},
+  {t:"Results",     p:"Where it went, and what it brought back."},
+  {t:"What\u2019s Next", p:"What worked decides what gets made next."}
 ];
 
 const TABS = [{n:"Posts"},{n:"Website"},{n:"Profile"}];
@@ -1610,7 +1716,7 @@ function render(keep) {
   el("nav").innerHTML = home ? navHome() : navFlow();
   el("start").hidden = !home;
   el("toolbar").hidden = home;
-  if (home) el("start").innerHTML = svg(ICON.mic) + "Speak to VIC";
+  if (home) el("start").innerHTML = svg(ICON.mic) + "Initiate Campaign";
   else el("toolbar").innerHTML = toolbar();
 
   sc.innerHTML = home ? homeScreen() : flowScreen();
@@ -1634,7 +1740,7 @@ function navHome() {
     ${themeBtn()}
   </div>
   <div class="navlarge"><h1>${b.name}</h1>
-    <p>${b.cat} &middot; ${b.perf.dir > 0 ? "growing" : "declining"}</p></div>`;
+    <p>${b.cat} &middot; ${b.area} &middot; ${b.perf.dir > 0 ? "growing" : "declining"}</p></div>`;
 }
 
 function navFlow() {
@@ -1645,7 +1751,7 @@ function navFlow() {
     ${themeBtn()}
   </div>
   <div class="navlarge"><h1>${STEPS[i].t}</h1>
-    <p>Step ${i + 1} of 4 &middot; cycle ${cyc}</p></div>
+    <p>Step ${i + 1} of 4 &middot; campaign ${cyc}</p></div>
   <div class="steps">${STEPS.map((s, n) =>
     `<i class="${n < i ? "done" : n === i ? "now" : ""}"></i>`).join("")}</div>`;
 }
@@ -1698,10 +1804,10 @@ function homeScreen() {
   const b = B(), p = b.perf, up = p.dir > 0, mx = Math.max(...b.rev12);
   return `<section class="widget">
     <span class="glow"></span>
-    <span class="kicker">Revenue generated by this loop</span>
+    <span class="kicker">Money your agent brought in</span>
     <div class="money"><span class="v num">Rs ${b.money.gen}</span>
       <span class="d ${up ? "" : "dn"}">${b.vs}</span></div>
-    <div class="sub">of Rs ${b.money.total} across the business</div>
+    <div class="sub">out of Rs ${b.money.total} the business did in total</div>
     <div class="cols">${b.rev12.map((v, n) =>
       `<i class="${n === b.rev12.length - 1 ? "on" : ""}"
           style="height:${Math.max(5, v / mx * 52)}px;animation-delay:${n * 26}ms"></i>`).join("")}</div>
@@ -1713,7 +1819,7 @@ function homeScreen() {
     `<div class="metric"><span class="k">${k}</span><span class="v num">${v}</span>
       <span class="d ${dir > 0 ? "" : "dn"}">${d}</span></div>`).join("")}</div>
 
-  <div class="grouphead">The read</div>
+  <div class="grouphead">What this means</div>
   <div class="read">
     <div class="readtop">
       <span class="badge ${up ? "good" : "bad"} lg">${svg(up ? ICON.up : ICON.down)}</span>
@@ -1723,34 +1829,35 @@ function homeScreen() {
     </div>
     <div class="readbody">${p.why}</div>
     <div class="readnext"><span class="badge">${svg(ICON.bolt)}</span>
-      <span class="tx"><b>Do next</b>${p.plan}</span></div>
+      <span class="tx"><b>Do this next</b>${p.plan}</span></div>
   </div>
 
-  <div class="grouphead">Where the business came from</div>
+  <div class="grouphead">Where your customers came from</div>
   <div class="list">${b.mix.map(([k, v], n) =>
     `<div class="barrow"><div class="barhead"><span class="k">${k}</span>
       <span class="v num">${v}%</span></div>
       <span class="track"><span class="fill ${n ? "ghost" : ""}" data-w="${v}"></span></span>
     </div>`).join("")}</div>
 
-  <div class="grouphead">Standouts</div>
+  <div class="grouphead">What worked, what did not</div>
   <div class="list disclist">
     ${disc(0, "good", ICON.up, b.best[0], `${b.best[1]} &middot; ${b.best[2]}`, [
-      ["Result", b.best[2]], ["Why it worked", p.why], ["What follows", p.plan]])}
+      ["What it brought in", b.best[2]], ["Why it worked", p.why],
+      ["What we do next", p.plan]])}
     ${disc(1, "bad", ICON.down, b.watch[0], b.watch[1], [
-      ["What is happening", b.watch[1]],
-      ["What it costs", "Each of these takes a publishing slot a converting format could have had."],
-      ["What follows", p.plan]])}
+      ["What is going on", b.watch[1]],
+      ["What it is costing you", "Every one of these uses up a slot that a format which actually brings customers could have had."],
+      ["What we do next", p.plan]])}
   </div>
 
-  <div class="grouphead">Account</div>
+  <div class="grouphead">Your account</div>
   <div class="list">
     ${item("Content made", b.stock.items, "openStock('items')")}
     ${item("Connected profiles", b.stock.profiles, "openStock('profiles')")}
     ${item("Credits remaining", b.stock.credits.toLocaleString(), "openStock('credits')")}
   </div>
-  <div class="groupfoot">Every figure here is attributed back to work this
-    loop produced.</div>
+  <div class="groupfoot">Every number here comes from work your agent did
+    for you.</div>
   <div style="height:84px"></div>`;
 }
 
@@ -1792,7 +1899,7 @@ function toggleDisc(n) {
 
 
 
-/* =========================================================== the loop === */
+/* ====================================================== the campaign === */
 function flowScreen() {
   if (i === 0) return stepSay();
   if (i === 1) return stepPublish();
@@ -1827,10 +1934,10 @@ function stepSay() {
     out += `<button class="mic tap" style="margin-top:14px" onclick="listen()">
       <span class="orb">${svg(ICON.mic)}</span>
       <span class="tx"><b>Tap and speak</b>
-        <span>However you would say it out loud</span></span>
+        <span>Hindi, English, however it comes out</span></span>
       <span class="chev">${svg(ICON.chevR)}</span></button>`;
     if (cyc > 1) out += `<div class="groupfoot" style="padding-top:12px">
-      Cycle ${cyc} opens with the line the last cycle wrote for you.</div>`;
+      Campaign ${cyc} opens with the line your agent wrote for you last time.</div>`;
     return out;
   }
 
@@ -1840,19 +1947,19 @@ function stepSay() {
       <span class="tx"><b id="micst">${talking ? "Listening" : "Transcribed"}</b>
         <span>${b.at}</span></span></button>
     <div class="said"><span class="who">${cyc === 1 ? "You said"
-        : "Written by cycle " + (cyc - 1)}</span>
+        : "Your agent wrote this"}</span>
       <div class="tt"><span id="tt">${shown}</span>${talking
         ? '<i class="cur" id="cur"></i>' : ""}</div></div>
 
-    <div class="grouphead">${cyc === 1 ? "What should it make"
-      : "Chosen from what worked, change any of it"}</div>
+    <div class="grouphead">${cyc === 1 ? "What should I make"
+      : "Picked from what worked, change anything you like"}</div>
     <div class="chips">` + chans().map(k =>
       `<button class="chip tap" aria-pressed="${!!picked[k]}" ${working ? "disabled" : ""}
         onclick="toggleChan('${k}')">
         <span class="tick">${svg(ICON.check)}</span>${CHAN[k].n}</button>`).join("") + `</div>`;
 
   if (working) {
-    out += `<div class="grouphead">Working</div>
+    out += `<div class="grouphead">Working on it</div>
       <div class="trace" id="tr"></div>
       ${built ? "" : `<div class="spinner" id="spin"></div>
         <button class="skip tap" id="skip" onclick="skipGen()">Skip</button>`}
@@ -1891,7 +1998,7 @@ function genTrace() {
   if (picked.gmb || picked.list) out.push(g[4]);
   chans().forEach(k => { if (picked[k]) out.push(["think", CHAN[k].verb, CHAN[k].hi]); });
   if (b.medical) g.filter(r => r[0] === "chk").forEach(r => out.push(r));
-  out.push(["think", "Finalising", "Final kar raha hoon"]);
+  out.push(["think", "Putting it all together now", "Sab jod kar taiyaar kar raha hoon"]);
   return out;
 }
 
@@ -1932,7 +2039,7 @@ function showMade() {
   built = true; haptic(10);
   ["spin","skip"].forEach(id => { const n = el(id); if (n) n.remove(); });
   const b = B();
-  box.innerHTML = `<div class="grouphead">What it made</div>
+  box.innerHTML = `<div class="grouphead">What I made</div>
     <div class="list">` + on().map(k => {
       const m = b.made[k];
       return `<button class="item row-tap inset" onclick="openMade('${k}')">
@@ -1950,15 +2057,18 @@ function stepPublish() {
   const b = B();
   if (!published) {
     return `<p class="body sec" style="margin:2px 0 16px">${STEPS[1].p}</p>
-      <div class="grouphead">Destinations</div>
+      <div class="grouphead">Where it will go</div>
       <div class="list">` + on().map(k =>
-        `<div class="item"><span class="badge">${svg(ICON.check)}</span>
+        `<button class="item row-tap" onclick="openMade('${k}')">
+          <span class="badge">${svg(ICON.check)}</span>
           <span class="txt"><span class="t">${CHAN[k].n}</span>
-            <span class="s">${b.made[k].t}</span></span></div>`).join("") + `</div>
+            <span class="s">${b.made[k].t}</span></span>
+          <span class="chev">${svg(ICON.chevR)}</span></button>`).join("") + `</div>
+      <div class="groupfoot">Open any of them to see exactly what goes out.</div>
       <div class="grouphead">Confirm</div>
       <div class="list">
-        <button class="item row-tap" role="switch" aria-checked="${confirmed}"
-          onclick="toggleConfirm()">
+        <button class="item row-tap" role="switch" id="confirmsw"
+          aria-checked="${confirmed}" onclick="toggleConfirm()">
           <span class="txt"><span class="t">I have reviewed these</span>
             <span class="s">All ${on().length} pieces, ready to publish</span></span>
           <span class="sw"><i></i></span></button>
@@ -1981,20 +2091,19 @@ function stepPublish() {
 
 function toggleConfirm() {
   confirmed = !confirmed; haptic(6);
-  const r = document.querySelector('[role="switch"][aria-checked]');
-  document.querySelectorAll('.list [role="switch"]').forEach(n => {
-    if (n.querySelector(".t").textContent.indexOf("ready to publish") > -1)
-      n.setAttribute("aria-checked", confirmed);
-  });
+  const sw = el("confirmsw");
+  if (sw) sw.setAttribute("aria-checked", confirmed);
   refreshBar();
 }
 
 function liveTrace() {
   const b = B(), out = [], where = [];
-  if (picked.video || picked.photo) { out.push(["Feed", b.live.feed, ""]); where.push("the feed"); }
+  if (picked.video || picked.photo) { out.push(["Instagram", b.live.feed, ""]);
+    where.push("your Instagram"); }
   if (picked.seo) { b.live.site.forEach(t => out.push(["Website", t, ""]));
-    where.push("your site", "search", "answer engines"); }
-  if (picked.gmb) { out.push(["Profile", b.live.gmb, ""]); where.push("your profile"); }
+    where.push("your site", "Google", "AI assistants"); }
+  if (picked.gmb) { out.push(["Google profile", b.live.gmb, ""]);
+    where.push("your Google profile"); }
   if (picked.list) { out.push(["Listings", b.live.list, ""]); where.push("your listings"); }
   if (picked.pin) { out.push(["Pinterest", b.live.pin, ""]); where.push("Pinterest"); }
   out.push(["Live", "Live across " + joinList(where), "done"]);
@@ -2039,13 +2148,14 @@ function stepRead() {
           <span class="trail"><span class="num">${lead[1]}</span>
             <span class="chev">${svg(ICON.chevR)}</span></span></button>`;
       }).join("") + `</div>
-      <div class="groupfoot">Numbers are ${b.unit} attributed to
-        each post.</div>`;
+      <div class="groupfoot">Beside each post is what it brought in:
+        ${b.unit}.</div>`;
   } else if (tab === 1) {
-    out += group("Pages this built", "site") + group("Queries these pages answer", "seo")
-         + group("Prompts answer engines quote", "geo");
+    out += group("Pages your agent built", "site")
+         + group("What people searched for", "seo")
+         + group("What AI assistants say about you", "geo");
   } else {
-    out += group("Business profile", "gmb") + group("Who carried it", "crt");
+    out += group("Your Google profile", "gmb") + group("Who shared your work", "crt");
   }
   return out + recurCard() + `<div style="height:120px"></div>`;
 }
@@ -2055,8 +2165,8 @@ function pickTab(n) { tab = n; haptic(5); render(); }
 function group(label, k) {
   const b = B(), d = k === "gmb" ? b.gmb : b.surf[k];
   return `<div class="grouphead">${label}</div><div class="list">${DRAW[k](d)}</div>
-    <div class="groupfoot"><b>The read.</b> ${d.note}<br><br>
-      <b>The gap.</b> ${d.flag}</div>`;
+    <div class="groupfoot"><b>What this means.</b> ${d.note}<br><br>
+      <b>What is missing.</b> ${d.flag}</div>`;
 }
 
 const rowOpen = (k, n, inner) =>
@@ -2068,11 +2178,11 @@ const DRAW = {
     const top = Math.max(...d.rows.map(r => r[3])) || 1;
     return d.rows.map(([path, sess, conv, rate, secs], n) => rowOpen("site", n, `
       <span class="barhead"><span class="k">${path}</span>
-        <span class="v num">${conv} ${conv === 1 ? "conv" : "convs"}</span></span>
+        <span class="v num">${conv} ${conv === 1 ? B().unitOne : B().unit}</span></span>
       <span class="track"><span class="fill ${rate ? "" : "zero"}"
         style="width:${Math.max(rate / top * 100, rate ? 4 : 0)}%"></span></span>
       <span class="axis" style="margin-top:7px"><span>${sess
-        ? sess.toLocaleString() + " sessions" : "No data yet"}</span>
+        ? sess.toLocaleString() + " visits" : "No data yet"}</span>
         <span>${rate.toFixed(2)}%${secs ? ` &middot; ${secs}s` : ""}</span></span>`)).join("");
   },
   seo: d => d.rows.map(([q, pos, prev, clicks], n) => {
@@ -2089,7 +2199,7 @@ const DRAW = {
         : "unchanged"}</span><span>${clicks} clicks</span></span>`);
   }).join("") ,
   geo: d => `<div class="barrow"><div class="barhead">
-      <span class="k">Quoted in ${d.cited} of ${d.total} prompts tracked</span></div>
+      <span class="k">Quoted in ${d.cited} of ${d.total} questions we track</span></div>
       <div class="cells">${Array.from({length:d.total}, (_, x) =>
         `<i class="${x < d.cited ? "on" : ""}" style="animation-delay:${x * 40}ms"></i>`
       ).join("")}</div></div>` +
@@ -2100,7 +2210,7 @@ const DRAW = {
   gmb: d => d.rows.map(([k, v, delta], n) =>
     `<button class="item row-tap" onclick="openRow('gmb',${n})">
       <span class="txt"><span class="t">${k}</span>
-        <span class="s">${delta} on the quarter</span></span>
+        <span class="s">${/avg/.test(delta) ? delta : delta + " on the quarter"}</span></span>
       <span class="trail"><span class="num">${v}</span>
         <span class="chev">${svg(ICON.chevR)}</span></span></button>`).join(""),
   crt: d => {
@@ -2136,19 +2246,19 @@ function ordinal(n) {
 /* 4 -- the brief --------------------------------------------------------- */
 function stepNext() {
   const b = B(), p = b.perf, up = p.dir > 0;
-  return `<div class="grouphead">Engagement by format</div>
+  return `<div class="grouphead">Which formats work for you</div>
     <div class="list">` + b.fmts.map(([n, v, w], x) =>
       `<button class="item row-tap" onclick="openFmt(${x})" style="display:block;padding:13px 16px">
         <span class="barhead"><span class="k">${n}</span>
           <span class="v num">${v}%</span></span>
         <span class="track"><span class="fill ${x === b.fmts.length - 1 ? "zero" : ""}"
           data-w="${w}"></span></span></button>`).join("") + `</div>
-    <div class="grouphead">The finding</div>
+    <div class="grouphead">What I found</div>
     <div class="list"><div class="item" style="display:block;padding:15px 16px">
       <span class="body">${b.found}</span></div></div>
-    <div class="grouphead">Next cycle, written for you</div>
+    <div class="grouphead">Next campaign, written for you</div>
     <div class="brief">
-      <div class="h">${hin ? "Aage kya banega" : "The brief"}</div>
+      <div class="h">${hin ? "Aage kya banega" : "What I suggest next"}</div>
       <div class="a">${hin ? b.nextHi : b.next}</div>
       <div class="w">${b.because}</div>
     </div><div style="height:120px"></div>`;
@@ -2159,8 +2269,8 @@ function toolbar() {
   let label, action, dis = false, hint = "";
   if (i === 0 && !heard)          { label = "Say It";             action = "listen()"; }
   else if (i === 0 && !working)   { label = "Generate";           action = "generate()"; }
-  else if (i === 0 && !built)     { label = "Working\u2026";          action = ""; dis = true;
-                                    hint = "Reading the account before it writes anything"; }
+  else if (i === 0 && !built)     { label = "Working on it\u2026";     action = ""; dis = true;
+                                    hint = "Going through your account before I make anything"; }
   else if (i === 0)               { label = "Review";             action = "step(1)"; }
   else if (i === 1 && !published) { label = "Publish";            action = "publish()";
                                     dis = !confirmed;
@@ -2169,7 +2279,7 @@ function toolbar() {
   else if (i === 1 && publishing) { label = "Publishing\u2026";       action = ""; dis = true; }
   else if (i === 1)               { label = "See Results";        action = "step(2)"; }
   else if (i === 2)               { label = "See What\u2019s Next";   action = "step(3)"; }
-  else                            { label = `Start Cycle ${cyc + 1}`; action = "nextCycle()"; }
+  else                            { label = `Start Campaign ${cyc + 1}`; action = "nextCycle()"; }
 
   return (hint ? `<div class="tbhint">${hint}</div>` : "") +
     `<div class="tbrow">
@@ -2206,27 +2316,29 @@ function safeRender() {
 
 
 /* ---------------------------------------------------------------- creative
-   Image hosts are unreachable, so artwork is composed from gradients built on
-   the live tint. Each persona therefore gets its own art with no hardcoded
-   colour, and the seed shifts the composition between video beats. */
-function artStyle(seed) {
-  const cs = getComputedStyle(el("phone"));
-  const tint = cs.getPropertyValue("--tint").trim();
-  const s = seed || 0;
-  const x1 = 26 + s * 17, y1 = 26 + s * 13, x2 = 82 - s * 15;
-  return `background:`
-    + `radial-gradient(58% 44% at ${x1}% ${y1}%, ${tint}, transparent 66%),`
-    + `radial-gradient(46% 36% at ${x2}% 78%, ${tint}88, transparent 72%),`
-    + `linear-gradient(158deg, #0B0B0E, ${tint}55)`;
-}
+   Stock photography and one vertical clip per business, cut to the boxes below
+   and served from this folder, so the mockups show work rather than a swatch. */
+const shot = name => `/modalx/media/${biz}-${name}.webp`;
+const reel = () => `/modalx/media/${biz}.mp4`;
+
+const shotImg = name =>
+  `<img class="shotimg" src="${shot(name)}" alt="" loading="lazy" decoding="async">`;
+
 const host = () => B().name.toLowerCase().replace(/[^a-z]/g, "") + ".in";
 
-const photoArt = m => `<div class="art" style="${artStyle(0)}">
+/* The scrim is what keeps white type readable over an arbitrary photograph. */
+const photoArt = m => `<div class="art">
+  ${shotImg("photo")}<span class="scrim"></span>
   <span class="over">${m.overlay.replace(/ \/ /g, "<br>")}</span>
   <span class="mark">${B().name}</span></div>`;
 
+/* The clip stays paused until asked: preload="none" keeps a megabyte off the
+   sheet for anyone who only reads the shot list. */
 function videoArt(m) {
-  return `<div class="art vid" id="vart" style="${artStyle(0)}">
+  return `<div class="art vid" id="vart">
+      <video class="clip" id="vclip" src="${reel()}" poster="${shot("vert")}"
+        muted loop playsinline preload="none" aria-hidden="true"></video>
+      <span class="scrim"></span>
       <span class="over sm" id="vcap">&ldquo;${m.hook}&rdquo;</span>
       <span class="mark">${m.spec}</span>
       <button class="play tap" id="vplay" onclick="playBeats()"
@@ -2239,9 +2351,14 @@ function videoArt(m) {
 function playBeats() {
   const m = B().made.video; if (!el("vart")) return;
   el("vplay").style.display = "none"; haptic(6);
+  const clip = el("vclip");
+  if (clip) {
+    clip.currentTime = 0;
+    const rolling = clip.play();
+    if (rolling && rolling.catch) rolling.catch(() => {});
+  }
   m.beats.forEach((txt, n) => later(() => {
     if (!el("vart")) return;
-    el("vart").setAttribute("style", artStyle(n));
     el("vcap").innerHTML = txt.replace(/^\S+\s+/, "");
     el("vfill").style.width = ((n + 1) / m.beats.length * 100) + "%";
     m.beats.forEach((_, k) => {
@@ -2262,25 +2379,26 @@ const pageArt = m => `<div class="brw">
   <div class="brwbar"><i></i><i></i><i></i><span class="url">${host()}${m.t}</span></div>
   <div class="brwpage">
     <div class="pnav"><b>${B().name}</b><span></span><span></span><span></span></div>
-    <div class="phero" style="${artStyle(1)}"><b>${m.h1}</b></div>
+    <div class="phero">${shotImg("hero")}<span class="scrim"></span>
+      <b>${m.h1}</b></div>
     <p class="pbody">${m.body}</p>
     ${m.sections.map(x => `<div class="psec">${x}<i>&rsaquo;</i></div>`).join("")}
     <div class="pcta">${m.sections[m.sections.length - 1]}</div>
     <div class="pfoot">${host()}</div></div></div>`;
 
-const postArt = (m, seed, sub) => `<div class="gpost">
+const postArt = (m, frame, sub) => `<div class="gpost">
   <div class="ghead"><span class="gav">${B().ini}</span>
     <span class="gwho"><b>${B().name}</b><em>${sub}</em></span></div>
-  <div class="gart" style="${artStyle(seed)}"></div>
+  <div class="gart">${shotImg(frame)}<span class="scrim soft"></span></div>
   <p class="gtext">${m.text}</p><div class="gcta">${m.cta}</div></div>`;
 
 function creative(k, m) {
   if (k === "video") return videoArt(m);
   if (k === "photo") return photoArt(m);
   if (k === "seo")   return pageArt(m);
-  if (k === "list")  return postArt(m, 3, "Listing profiles, just now");
-  if (k === "pin")   return postArt(m, 1, "Pinterest, just now");
-  return postArt(m, 2, "Business Profile, just now");
+  if (k === "list")  return postArt(m, "hero", "Listing profiles, just now");
+  if (k === "pin")   return postArt(m, "vert", "Pinterest, just now");
+  return postArt(m, "photo", "Business Profile, just now");
 }
 
 /* ------------------------------------------------------ sheet, detents ---
@@ -2390,32 +2508,36 @@ function openMade(k) {
                   ["Meta description", m.meta], ["Opening copy", m.body],
                   ["Sections", m.sections.join("<br>")], ["URL", m.t]],
     gmb:   () => [["Post", `<b>${m.text}</b>`], ["Button", m.cta],
-                  ["Why it matters", "The profile is where calls and direction requests come from, and where answer engines read your hours and prices."]],
+                  ["Why it matters", "Your Google profile is where the calls and the directions come from, and it is where AI assistants read your timings and your prices."]],
     list:  () => [["What changed", `<b>${m.text}</b>`], ["Profiles", m.cta],
-                  ["Why it matters", "Listing profiles outrank most practice websites on local searches. They are the first thing a new patient sees."]],
+                  ["Why it matters", "On a local search, Practo and Justdial usually sit above your own website. For a new patient this is the first thing they see."]],
     pin:   () => [["What was published", `<b>${m.text}</b>`], ["Status", m.cta],
-                  ["Why it matters", "Pinterest is where people plan a wedding months ahead. A pin found in June becomes an enquiry in October."]]
+                  ["Why it matters", "People plan a wedding on Pinterest months in advance. A pin someone saves in June is the enquiry that arrives in October."]]
   }[k]();
   sheet(m.t, `${CHAN[k].n} &middot; ${m.spec}`, rows, creative(k, m));
 }
 
-function openPost(n) { const p = B().posts[n]; sheet(p.t, p.m, p.why); }
+function openPost(n) {
+  const p = B().posts[n];
+  const numbers = p.r.map(([k, v]) => `${k} <b>${v}</b>`).join(" &middot; ");
+  sheet(p.t, p.m, [["The numbers", numbers]].concat(p.why));
+}
 
 function openFmt(n) {
   const b = B(), [nm, v, , detail] = b.fmts[n];
-  sheet(nm, `${v}% average engagement over 90 days`, [
+  sheet(nm, `${v}% interacted with it, average over 90 days`, [
     ["What is in it", detail],
     ["Against the rest", n === 0 ? "The best format on this account. Everything else is measured against it."
       : `About ${(b.fmts[0][1] / v).toFixed(1)}x behind ${b.fmts[0][0].toLowerCase()}.`],
-    ["What happens next", n === 0 ? "The next cycle opens by asking for more of these."
-      : v < 2 ? "Dropped from the next cycle. It is taking a slot that could earn."
+    ["What happens next", n === 0 ? "The next campaign opens by asking for more of these."
+      : v < 2 ? "Dropped from the next campaign. It is using up a slot that could have earned."
               : "Kept as filler, but it will not lead the week."]]);
 }
 
 function openStock(kind) {
   const b = B();
   if (kind === "items") return sheet("Content made", `${b.stock.items} pieces so far`, [
-    ["What is counted", `Every video, photo, page and profile post this loop has produced for ${b.name}.`],
+    ["What is counted", `Every video, photo, page and profile post your agent has made for ${b.name}.`],
     ["Where they went", "Feed, website, search and the business profile. Each piece usually lands on more than one."]]);
   if (kind === "profiles") return sheet("Connected profiles", `${b.stock.profiles} connected`, [
     ["Social", `Instagram ${b.at}<br>Facebook page`], ["Website", host()],
@@ -2428,35 +2550,36 @@ function openStock(kind) {
 
 function openRow(k, n) {
   const b = B(), d = k === "gmb" ? b.gmb : b.surf[k], r = d.rows[n];
-  if (k === "gmb") return sheet(r[0], `${r[1]} &middot; ${r[2]} on the quarter`, [
+  if (k === "gmb") return sheet(r[0],
+    `${r[1]} &middot; ${/avg/.test(r[2]) ? r[2] : r[2] + " on the quarter"}`, [
     ["What happened", r[3]],
-    ["Why it counts", "The business profile is the only surface where somebody can call you, ask for directions or leave a review. None of that shows up in feed analytics."],
-    ["Feeds the next brief", d.flag]]);
+    ["Why it counts", "Your Google profile is the only place where somebody can call you, ask for directions or leave a review. None of that turns up in Instagram analytics."],
+    ["Goes into the next campaign", d.flag]]);
   const spec = {
-    site: () => [r[0], r[1] ? `${r[1].toLocaleString()} sessions &middot; ${r[3].toFixed(2)}% convert` : "Published today",
+    site: () => [r[0], r[1] ? `${r[1].toLocaleString()} visits &middot; ${r[3].toFixed(2)}% of them acted` : "Published today",
       [["What happened", r[5]],
-       ["Speed", !r[4] ? "No data yet. It went live in this cycle."
+       ["Speed", !r[4] ? "No data yet. It went live in this campaign."
          : r[4] > 3 ? `Loads in ${r[4]}s on mobile. Past two seconds, roughly 7% of visits are lost for every extra second.`
          : `Loads in ${r[4]}s on mobile. Healthy.`],
-       ["Feeds the next brief", d.flag]]],
+       ["Goes into the next campaign", d.flag]]],
     seo: () => [r[0], r[1] ? `${ordinal(r[1])} &middot; ${r[3]} clicks` : "Not ranking",
       [["What happened", r[4]],
        ["Movement", r[1] === 0 ? "No page on the site targets this query yet."
          : r[2] > r[1] ? `Up ${r[2] - r[1]} places, from ${ordinal(r[2])} to ${ordinal(r[1])}.`
          : r[2] < r[1] ? `Down ${r[1] - r[2]} places, from ${ordinal(r[2])} to ${ordinal(r[1])}.`
          : `Held at ${ordinal(r[1])} across the quarter.`],
-       ["Feeds the next brief", d.flag]]],
-    geo: () => [r[0], r[1] ? "Quoted by answer engines" : "Not quoted",
+       ["Goes into the next campaign", d.flag]]],
+    geo: () => [r[0], r[1] ? "Quoted by AI assistants" : "Not quoted",
       [["What happened", r[3]],
-       ["Source", r[1] ? `Answer engines quote <b>${r[2]}</b>.`
+       ["Source", r[1] ? `AI assistants quote <b>${r[2]}</b>.`
          : `Nothing here is quotable, so ${r[2].toLowerCase()}.`],
-       ["Feeds the next brief", d.flag]]],
+       ["Goes into the next campaign", d.flag]]],
     crt: () => [r[0], `${r[1] / 1000}k reach &middot; ${r[3]}`,
       [["What happened", r[4]],
        ["Reach against return", r[2]
          ? `${r[1] / 1000}k reach turned into ${r[3]}. That ratio, not the follower count, is what to book on.`
          : `${r[1] / 1000}k reach returned nothing. The audience is large and in the wrong place.`],
-       ["Feeds the next brief", d.flag]]]
+       ["Goes into the next campaign", d.flag]]]
   }[k]();
   sheet(spec[0], spec[1], spec[2]);
 }
@@ -2470,7 +2593,7 @@ function openPicker() {
   s.style.transform = "";
   s.innerHTML = `<div class="grab"></div>
     <div class="shead"><span class="st"><h2 id="sheetTitle">Accounts</h2>
-      <div class="sub">The same loop, seven different businesses</div></span>
+      <div class="sub">The same agent, seven different businesses</div></span>
       <button class="sclose tap" onclick="shut()" aria-label="Close">
         ${svg(ICON.close)}</button></div>
     <div class="sbody">` + ORDER.map(k => {
@@ -2479,7 +2602,7 @@ function openPicker() {
         onclick="switchPersona('${k}',event)" ${cur ? 'aria-current="true"' : ""}>
         <span class="av">${p.ini}</span>
         <span class="nm"><b style="color:var(--label)">${p.name}</b>
-          <span>${p.cat} &middot; ${p.perf.dir > 0 ? "growing" : "declining"}</span></span>
+          <span>${p.cat} &middot; ${p.area}</span></span>
         ${cur ? `<span class="on">${svg(ICON.check)}</span>` : ""}</button>`;
     }).join("") + `<div style="height:8px"></div></div>`;
   requestAnimationFrame(() => s.classList.add("fit"));
@@ -2531,17 +2654,41 @@ if (window.speechSynthesis) {
   loadVoices();
   speechSynthesis.addEventListener("voiceschanged", loadVoices);
 }
-const VOICE_RANK = [/natural|neural|premium|enhanced/i, /siri/i,
-  /samantha|aria|jenny|sonia|libby|ava|nicky|moira/i, /google (uk|us)/i, /google/i];
+/* The line being read out is an Indian owner talking about their own shop, so
+   locale is ranked above engine quality: an ordinary en-IN voice reads truer
+   here than a neural en-US one. Falling back through en-GB before en-US only
+   because it is the nearer accent of the two. */
+const VOICE_LANGS = {
+  hinglish: [/^hi-IN/i, /^hi(-|$)/i, /^en-IN/i, /^en-GB/i, /^en(-|$)/i],
+  english:  [/^en-IN/i, /^en-GB/i, /^en(-|$)/i]
+};
+
+/* Indian voices shipped by the platforms. Microsoft: Neerja and Prabhat are
+   en-IN, Swara and Madhur hi-IN, Heera and Ravi the older en-IN pair. Apple:
+   Rishi en-IN, Lekha hi-IN. Google labels its Hindi voice in Devanagari. */
+const INDIAN_VOICE = new RegExp("neerja|prabhat|swara|madhur|heera|ravi|kalpana|"
+  + "hemant|rishi|lekha|veena|sangeeta|isha|hindi|हिन्दी"
+  + "|\\(india\\)", "i");
+
+/* Within one locale an Indian name outranks everything, then a neural engine,
+   and the three flat Windows defaults go to the back. */
+function indianVoiceScore(v) {
+  let score = 0;
+  if (INDIAN_VOICE.test(v.name)) score += 4;
+  if (/natural|neural|premium|enhanced/i.test(v.name)) score += 2;
+  if (/siri/i.test(v.name)) score += 1;
+  if (/david|mark|zira/i.test(v.name)) score -= 3;
+  return score;
+}
 
 function pickVoice() {
-  const want = hin ? /^hi(-|$)/i : /^en(-|$)/i;
-  let pool = voices.filter(v => want.test(v.lang));
-  if (!pool.length && hin) pool = voices.filter(v => /^en-IN/i.test(v.lang));
-  if (!pool.length) pool = voices.filter(v => /^en(-|$)/i.test(v.lang));
-  if (!pool.length) return null;
-  for (const r of VOICE_RANK) { const hit = pool.find(v => r.test(v.name)); if (hit) return hit; }
-  return pool.find(v => !/david|mark|zira/i.test(v.name)) || pool[0];
+  const langs = hin ? VOICE_LANGS.hinglish : VOICE_LANGS.english;
+  for (const lang of langs) {
+    const pool = voices.filter(v => lang.test(v.lang));
+    if (!pool.length) continue;
+    return pool.slice().sort((a, b) => indianVoiceScore(b) - indianVoiceScore(a))[0];
+  }
+  return null;
 }
 
 function show(txt) {
@@ -2567,15 +2714,54 @@ function reveal(text, done) {
   go();
 }
 
-function transcribe(display, spoken) {
-  said = display; spoken = spoken || display;
-  if (!sound || !window.speechSynthesis) return reveal(display, endSpeech);
+/* Every line is pre-rendered by hi-IN and en-IN neural voices and served from
+   this folder, so the accent no longer depends on what the visitor happens to
+   have installed. Absolute path, because the page answers on both
+   /modalx/smb-offering and /modalx/smb-offering.html. */
+const clipFor = (who, lang) => `/modalx/audio/${biz}-${who}-${lang}.mp3`;
+let clipEl = null;
+
+/* Reveal against real elapsed audio rather than a word-length guess. */
+function playClip(src, display, onFail) {
+  const clip = new Audio(src);
+  const words = display.split(" ");
+  let failed = false;
+  const fail = () => { if (!failed) { failed = true; onFail(); } };
+  clip.preload = "auto";
+  clip.ontimeupdate = () => {
+    if (!clip.duration || !isFinite(clip.duration)) return;
+    const upto = Math.min(words.length,
+      Math.max(1, Math.round(clip.currentTime / clip.duration * words.length)));
+    show(words.slice(0, upto).join(" "));
+  };
+  clip.onended = () => { show(display); endSpeech(); };
+  clip.onerror = fail;
+  clipEl = clip;
+  const started = clip.play();
+  if (started && started.catch) started.catch(fail);
+}
+
+/* Devanagari goes to a Hindi voice and nowhere else. Handing it to an English
+   engine is what produced the tourist-with-a-phrasebook delivery: it has no
+   Devanagari phonology, so it transliterates letter by letter. The same voice
+   reading the romanised line lands much closer, because the spelling already
+   encodes how the words are said, so this fallback swaps the script instead of
+   the accent. */
+function speakLine(display, devanagari) {
+  if (!window.speechSynthesis) return reveal(display, endSpeech);
   speechSynthesis.cancel();
+  const v = pickVoice();
+  const hindiVoice = !!v && /^hi(-|$)/i.test(v.lang);
+  const spoken = hindiVoice && devanagari ? devanagari : display;
   const u = new SpeechSynthesisUtterance(spoken);
-  const v = pickVoice(); if (v) u.voice = v;
-  u.rate = 0.97; u.pitch = 1.02;
-  /* Hinglish is displayed romanised and spoken in Devanagari, so character
-     offsets do not map. Sync on progress through the spoken words instead. */
+  /* Tag the locale even when no voice object matched: a bare utterance marked
+     en-IN still gets an Indian default on most engines, where an untagged one
+     gets the system's en-US. */
+  u.lang = (v && v.lang) || "en-IN";
+  if (v) u.voice = v;
+  u.rate = hindiVoice ? 0.94 : 0.96; u.pitch = 1.0;
+  /* When the spoken script differs from the displayed one the character offsets
+     do not map, so sync on progress through the spoken words instead. */
   const words = display.split(" "), total = spoken.split(" ").length;
   let boundaries = 0;
   u.onboundary = e => {
@@ -2591,8 +2777,16 @@ function transcribe(display, spoken) {
   vtimers.push(setTimeout(() => { if (!boundaries) reveal(display, () => {}); }, 700));
 }
 
+function transcribe(display, devanagari, clip) {
+  said = display;
+  if (!sound) return reveal(display, endSpeech);
+  if (clip) return playClip(clip, display, () => speakLine(display, devanagari));
+  speakLine(display, devanagari);
+}
+
 function stopVoice() {
   vtimers.forEach(clearTimeout); vtimers = [];
+  if (clipEl) { clipEl.pause(); clipEl.onended = clipEl.ontimeupdate = null; clipEl = null; }
   if (window.speechSynthesis) speechSynthesis.cancel();
 }
 function replay() { stopVoice(); listen(); }
@@ -2602,8 +2796,10 @@ function listen() {
   view = "flow"; i = 0; heard = true; talking = true; shown = "";
   render();
   const b = B();
-  const line = cyc === 1 ? (hin ? b.sayHi : b.say) : (hin ? b.nextHi : b.next);
-  transcribe(line, hin ? (cyc === 1 ? b.sayDev : b.nextDev) : line);
+  const first = cyc === 1;
+  const line = first ? (hin ? b.sayHi : b.say) : (hin ? b.nextHi : b.next);
+  transcribe(line, hin ? (first ? b.sayDev : b.nextDev) : null,
+    clipFor(first ? "say" : "next", hin ? "hi" : "en"));
 }
 
 
