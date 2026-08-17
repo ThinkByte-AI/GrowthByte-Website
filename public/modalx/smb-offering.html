@@ -1,0 +1,2693 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate, noai, noimageai">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="CCBot" content="nofollow">
+<meta name="referrer" content="no-referrer">
+
+<style>
+/* ===========================================================================
+   Apple Human Interface Guidelines, dark and light, seven persona tints.
+
+   Two rules from HIG drive every decision below.
+
+   1. Content is opaque, chrome is glass. Liquid Glass is a material for
+      floating controls and navigation, not for the content underneath them.
+      Frosting a card that nothing floats over just costs legibility, so the
+      navigation bar, the toolbar, the sheet and the segmented control are
+      glass, and every list and card is a solid grouped background.
+
+   2. Tint is one colour, not a palette. iOS expresses brand with a single
+      accent applied to interactive elements. Each persona re-tints; the
+      neutrals stay system neutrals so the app reads as native throughout.
+   =========================================================================== */
+
+:root{
+  color-scheme:dark;
+  /* --- system greys, dark ---------------------------------------------- */
+  --bg:#000000;
+  --group:#000000;
+  --card:#1C1C1E;          /* secondarySystemGroupedBackground */
+  --card-2:#2C2C2E;        /* tertiarySystemGroupedBackground */
+  --card-3:#3A3A3C;
+  --label:#FFFFFF;
+  --label-2:rgba(235,235,245,.68);
+  --label-3:rgba(235,235,245,.48);
+  --separator:rgba(84,84,88,.62);
+  --fill:rgba(120,120,128,.24);
+  --fill-2:rgba(120,120,128,.16);
+  --red:#FF453A;
+  --green:#30D158;
+  --amber:#FFD60A;
+
+  /* --- Liquid Glass ----------------------------------------------------- */
+  --glass:rgba(30,30,32,.58);
+  --glass-thick:rgba(24,24,26,.76);
+  --glass-line:rgba(255,255,255,.10);
+  --glass-spec:rgba(255,255,255,.16);
+  --glass-shadow:0 10px 34px rgba(0,0,0,.46);
+  --blur:26px;
+
+  /* --- SF type scale ---------------------------------------------------- */
+  --f:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",
+     "Segoe UI",system-ui,Roboto,sans-serif;
+  --f-round:-apple-system,"SF Pro Rounded",ui-rounded,var(--f);
+
+  /* --- geometry --------------------------------------------------------- */
+  --r-card:18px;           /* per-persona, kept inside a tight Apple range */
+  --r-inner:11px;
+  --r-sheet:38px;
+  --gutter:16px;
+  --tap:44px;              /* HIG minimum touch target */
+}
+
+/* ------------------------------------------------------- persona tints ---
+   One accent each. The only other thing that moves is the corner radius of
+   grouped containers, and only inside 14 to 22px, which is the range iOS
+   itself uses between widgets and cards. Anything wider stops reading as the
+   same operating system. */
+/* Two tint roles, not one. In dark mode a single accent cannot serve both
+   jobs: bright enough to read as 13pt text on a card means too bright to
+   carry a white label. --tint is the readable one, --tint-fill is the one
+   white sits on. In light mode they converge, because a colour dark enough
+   for a white label is already dark enough to read on white. */
+.t-gym       {--tint:#2FD8C3; --tint-fill:#198376; --tint-soft:rgba(47,216,195,.20);  --r-card:18px}
+.t-salon     {--tint:#FF6482; --tint-fill:#E9002D; --tint-soft:rgba(255,100,130,.20); --r-card:22px}
+.t-restaurant{--tint:#FF9F0A; --tint-fill:#A36300; --tint-soft:rgba(255,159,10,.20);  --r-card:16px}
+.t-realestate{--tint:#0A84FF; --tint-fill:#0072E5; --tint-soft:rgba(10,132,255,.20);  --r-card:14px}
+.t-doctor    {--tint:#64A8FF; --tint-fill:#006DF8; --tint-soft:rgba(100,168,255,.20); --r-card:20px}
+.t-clinic    {--tint:#BF5AF2; --tint-fill:#AE2FEF; --tint-soft:rgba(191,90,242,.20);  --r-card:16px}
+.t-wedding   {--tint:#FF7A5C; --tint-fill:#E12900; --tint-soft:rgba(255,122,92,.20);  --r-card:22px}
+
+/* --------------------------------------------------------- light mode ---
+   systemGroupedBackground is grey and the cards are white, which is the
+   inverse of dark mode and the reason iOS lists read as cards in both. */
+.light{
+  color-scheme:light;
+  --bg:#F2F2F7;
+  --group:#F2F2F7;
+  --card:#FFFFFF;
+  --card-2:#F2F2F7;
+  --card-3:#E5E5EA;
+  --label:#000000;
+  --label-2:rgba(60,60,67,.74);
+  --label-3:rgba(60,60,67,.56);
+  --separator:rgba(60,60,67,.29);
+  --fill:rgba(120,120,128,.12);
+  --fill-2:rgba(120,120,128,.08);
+  --red:#D70015;
+  --green:#248A3D;
+  --amber:#B25000;
+  --glass:rgba(250,250,252,.62);
+  --glass-thick:rgba(255,255,255,.78);
+  --glass-line:rgba(0,0,0,.07);
+  --glass-spec:rgba(255,255,255,.72);
+  --glass-shadow:0 10px 34px rgba(0,0,0,.14);
+}
+.light.t-gym       {--tint:#198376; --tint-fill:#198376; --tint-soft:rgba(25,131,118,.14)}
+.light.t-salon     {--tint:#E9002D; --tint-fill:#E9002D; --tint-soft:rgba(233,0,45,.14)}
+.light.t-restaurant{--tint:#A36300; --tint-fill:#A36300; --tint-soft:rgba(163,99,0,.14)}
+.light.t-realestate{--tint:#0072E5; --tint-fill:#0072E5; --tint-soft:rgba(0,114,229,.14)}
+.light.t-doctor    {--tint:#006DF8; --tint-fill:#006DF8; --tint-soft:rgba(58,111,216,.14)}
+.light.t-clinic    {--tint:#AE2FEF; --tint-fill:#AE2FEF; --tint-soft:rgba(174,47,239,.14)}
+.light.t-wedding   {--tint:#E12900; --tint-fill:#E12900; --tint-soft:rgba(225,41,0,.14)}
+
+
+/* ==================================================  DEVICE CHROME  =====
+   A simulated status bar and home indicator, shown only inside the desktop
+   device frame. On a real phone the operating system already draws both, and
+   a second set below the browser chrome would read as a bug rather than as
+   realism, so below 600px these are hidden and the safe-area insets do the
+   work instead. */
+.statusbar,.homebar{display:none}
+
+.statusbar{position:relative;z-index:31;flex:none;height:54px;
+  align-items:center;justify-content:space-between;padding:0 12px 0 30px;
+  color:var(--label);font-size:15px;font-weight:600;letter-spacing:-.2px;
+  font-variant-numeric:tabular-nums;pointer-events:none;
+  transition:color .4s ease}
+.sb-time{min-width:56px}
+.sb-right{display:flex;align-items:center;gap:6px}
+.sb-right svg{display:block;fill:currentColor}
+/* the Dynamic Island is hardware, so it stays black in both appearances */
+.island{position:absolute;left:50%;top:11px;transform:translateX(-50%);
+  width:118px;height:34px;border-radius:19px;background:#000;
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.06)}
+.island::after{content:"";position:absolute;right:11px;top:50%;
+  transform:translateY(-50%);width:9px;height:9px;border-radius:50%;
+  background:#0B0B0D;box-shadow:inset 0 0 2px rgba(90,120,160,.55)}
+
+/* battery: an outline, a cap, and a fill that tracks the real level when the
+   browser exposes it */
+.batt{position:relative;width:25px;height:12px;border-radius:3.6px;
+  box-shadow:inset 0 0 0 1px currentColor;opacity:.9}
+.batt::after{content:"";position:absolute;left:100%;top:50%;
+  transform:translateY(-50%);margin-left:1.6px;width:1.6px;height:4.4px;
+  border-radius:0 1.5px 1.5px 0;background:currentColor;opacity:.55}
+.batt i{position:absolute;left:1.8px;top:1.8px;bottom:1.8px;border-radius:1.8px;
+  background:currentColor;transition:width .5s ease,background-color .3s ease}
+.batt.charging i{background:#30D158}
+.batt.low i{background:#FF453A}
+
+.homebar{position:relative;z-index:31;flex:none;height:26px;
+  align-items:center;justify-content:center;touch-action:none}
+.homebar i{display:block;width:140px;height:5px;border-radius:3px;
+  background:var(--label);opacity:.9;transition:opacity .2s ease,
+  transform .3s cubic-bezier(.2,.9,.3,1.2),background-color .4s ease}
+.homebar:active i{transform:scaleX(.9);opacity:.55}
+
+@media (min-width:600px){
+  .statusbar,.homebar{display:flex}
+  .phone{--homebar:26px}
+}
+
+/* ------------------------------------------------------------------ base */
+*{box-sizing:border-box}
+html,body{margin:0;background:#000;color:var(--label);font-family:var(--f);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  -webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;
+  font-family:var(--f);padding:0}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--tint);outline-offset:2px;border-radius:8px}
+
+/* iOS press feedback: a quick scale with a spring back, no colour flash */
+.tap{transition:transform .22s cubic-bezier(.2,.9,.3,1.2),opacity .16s ease}
+.tap:active{transform:scale(.96);opacity:.72}
+.row-tap{transition:background-color .12s ease}
+.row-tap:active{background:var(--fill-2)}
+
+.phone{position:relative;width:100%;max-width:440px;margin:0 auto;
+  min-height:100vh;min-height:100dvh;background:var(--bg);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:background-color .4s ease}
+
+/* ------------------------------------------------------- type helpers --- */
+.large-title{font-size:34px;line-height:41px;font-weight:700;letter-spacing:.37px}
+.title1{font-size:28px;line-height:34px;font-weight:700;letter-spacing:.36px}
+.title2{font-size:22px;line-height:28px;font-weight:700;letter-spacing:.35px}
+.title3{font-size:20px;line-height:25px;font-weight:600;letter-spacing:.38px}
+.headline{font-size:17px;line-height:22px;font-weight:600;letter-spacing:-.41px}
+.body{font-size:17px;line-height:22px;letter-spacing:-.41px}
+.callout{font-size:16px;line-height:21px;letter-spacing:-.32px}
+.subhead{font-size:15px;line-height:20px;letter-spacing:-.24px}
+.foot{font-size:13px;line-height:18px;letter-spacing:-.08px}
+.cap1{font-size:12px;line-height:16px}
+.cap2{font-size:11px;line-height:13px}
+.sec{color:var(--label-2)}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* =====================================================  LIQUID GLASS  ==== */
+.glass{position:relative;background:var(--glass);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(190%);
+  backdrop-filter:blur(var(--blur)) saturate(190%)}
+/* the specular edge: a bright hairline on top, dimming towards the bottom.
+   This is what separates glass from a plain translucent panel. */
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;
+  box-shadow:inset 0 .5px 0 var(--glass-spec),
+             inset 0 0 0 .5px var(--glass-line),
+             inset 0 -.5px 0 rgba(0,0,0,.16)}
+.glass-thick{background:var(--glass-thick);
+  -webkit-backdrop-filter:blur(40px) saturate(190%);
+  backdrop-filter:blur(40px) saturate(190%)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass,.glass-thick{background:var(--card)}
+  .light .glass,.light .glass-thick{background:#FFF}
+}
+
+/* ------------------------------------------------------ navigation bar ---
+   Large title that collapses on scroll, exactly as UINavigationController
+   does it: the title shrinks into the bar, the bar gains its material and a
+   hairline, and the whole thing floats over the content. */
+.nav{position:sticky;top:0;z-index:20;flex:none;
+  padding-top:env(safe-area-inset-top);
+  transition:background-color .25s ease}
+.nav::after{content:"";position:absolute;left:0;right:0;bottom:0;height:.5px;
+  background:var(--separator);opacity:0;transition:opacity .25s ease}
+.nav.compact::after{opacity:1}
+.nav:not(.compact){background:transparent;-webkit-backdrop-filter:none;
+  backdrop-filter:none}
+.nav:not(.compact)::after{opacity:0}
+.navbar{display:flex;align-items:center;gap:8px;height:52px;padding:0 8px}
+.navttl{flex:1;min-width:0;text-align:center;font-size:17px;line-height:22px;
+  font-weight:600;letter-spacing:-.41px;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;opacity:0;transform:translateY(7px);
+  transition:opacity .22s ease,transform .22s ease}
+.nav.compact .navttl{opacity:1;transform:none}
+.navlarge{padding:0 var(--gutter) 8px;overflow:hidden;
+  transition:opacity .2s ease,max-height .26s ease,padding .26s ease}
+.nav.compact .navlarge{opacity:0;max-height:0;padding-top:0;padding-bottom:0;
+  pointer-events:none}
+.navlarge h1{margin:0;font-size:34px;line-height:41px;font-weight:700;
+  letter-spacing:.37px}
+.navlarge p{margin:2px 0 0;font-size:15px;line-height:20px;color:var(--label-2)}
+
+/* circular glass buttons, the iOS 26 navigation idiom */
+.navbtn{flex:none;width:38px;height:38px;border-radius:50%;display:grid;
+  place-items:center;color:var(--tint);overflow:hidden;
+  box-shadow:var(--glass-shadow)}
+.navbtn svg{width:21px;height:21px;fill:currentColor}
+.navbtn.avatar{color:var(--label);font-size:13px;font-weight:700;
+  font-family:var(--f-round)}
+.navbtn .ini{position:relative;z-index:1;letter-spacing:.2px}
+
+/* ------------------------------------------------------------- content --- */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  padding:0 var(--gutter) 40px;scrollbar-width:none;scroll-behavior:smooth}
+.scroll::-webkit-scrollbar{display:none}
+
+/* grouped list section headers: uppercase, small, indented, iOS Settings */
+.grouphead{padding:26px 16px 7px;font-size:13px;line-height:18px;
+  font-weight:400;letter-spacing:-.08px;color:var(--label-2);
+  text-transform:uppercase}
+.groupfoot{padding:7px 16px 0;font-size:13px;line-height:18px;
+  color:var(--label-2)}
+
+/* inset grouped list, the core Apple content container */
+.list{background:var(--card);border-radius:var(--r-card);overflow:hidden;
+  transition:border-radius .4s cubic-bezier(.2,.9,.3,1.2),background-color .4s ease}
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  min-height:var(--tap);padding:11px 16px;position:relative}
+.item+.item::before{content:"";position:absolute;left:16px;right:0;top:0;
+  height:.5px;background:var(--separator)}
+.item.inset+.item.inset::before{left:60px}
+.txt{flex:1;min-width:0}
+.txt .t{display:block;font-size:17px;line-height:22px;letter-spacing:-.41px}
+.txt .s{display:block;font-size:13px;line-height:18px;color:var(--label-2);
+  margin-top:1px}
+.trail{flex:none;display:flex;align-items:center;gap:6px;
+  font-size:17px;letter-spacing:-.41px;color:var(--label-2)}
+.chev{flex:none;width:9px;height:15px;color:var(--label-3)}
+.chev svg{width:9px;height:15px;fill:currentColor;display:block}
+
+/* Status is a leading badge, not a pill wedged beside the title.
+   That is the layout fault in the old cards: a tag competing with a title for
+   the same line will always truncate one of them on a narrow screen. */
+.badge{flex:none;width:30px;height:30px;border-radius:8px;display:grid;
+  place-items:center;background:var(--tint-fill);color:#fff}
+.badge svg{width:18px;height:18px;fill:currentColor}
+.badge.good{background:var(--green)}
+.badge.bad{background:var(--red)}
+.badge.warn{background:var(--amber);color:#000}
+.badge.lg{width:34px;height:34px;border-radius:9px}
+.light .badge.warn{color:#fff}
+</style>
+
+<style>
+/* ------------------------------------------------------------- widgets --- */
+.widget{background:var(--card);border-radius:var(--r-card);padding:18px 18px 16px;
+  position:relative;overflow:hidden;
+  transition:border-radius .4s cubic-bezier(.2,.9,.3,1.2),background-color .4s ease}
+.widget .glow{position:absolute;top:-56%;right:-22%;width:76%;aspect-ratio:1;
+  border-radius:50%;pointer-events:none;opacity:.5;
+  background:radial-gradient(circle,var(--tint),transparent 66%)}
+.widget .kicker{position:relative;font-size:13px;line-height:18px;font-weight:600;
+  color:var(--tint);letter-spacing:-.08px}
+.money{position:relative;display:flex;align-items:baseline;gap:9px;
+  margin-top:7px;flex-wrap:wrap}
+.money .v{font-size:34px;line-height:41px;font-weight:700;letter-spacing:.37px}
+.money .d{font-size:15px;line-height:20px;font-weight:600;color:var(--green)}
+.money .d.dn{color:var(--red)}
+.widget .sub{position:relative;font-size:13px;line-height:18px;
+  color:var(--label-2);margin-top:3px}
+
+/* 12 month column chart. Rounded caps, last column tinted, axis beneath. */
+.cols{position:relative;display:flex;align-items:flex-end;gap:4px;height:52px;
+  margin-top:18px}
+.cols i{flex:1;display:block;border-radius:4px;background:var(--fill);
+  transform-origin:bottom;animation:col .55s cubic-bezier(.2,.9,.3,1.1) both}
+.cols i.on{background:var(--tint)}
+@keyframes col{from{transform:scaleY(0)}}
+.axis{position:relative;display:flex;justify-content:space-between;margin-top:8px;
+  font-size:12px;line-height:16px;color:var(--label-2)}
+
+/* 2 up metric cards */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.metric{background:var(--card);border-radius:var(--r-card);padding:14px 15px 13px;
+  transition:border-radius .4s cubic-bezier(.2,.9,.3,1.2),background-color .4s ease}
+.metric .k{display:block;font-size:13px;line-height:18px;color:var(--label-2)}
+.metric .v{display:block;font-size:26px;line-height:32px;font-weight:600;
+  letter-spacing:.35px;margin-top:5px}
+.metric .d{display:block;font-size:13px;line-height:18px;font-weight:600;
+  margin-top:1px;color:var(--green)}
+.metric .d.dn{color:var(--red)}
+
+/* the read: a card with a trend line, not a row with a graph squeezed in */
+.read{background:var(--card);border-radius:var(--r-card);overflow:hidden;
+  transition:border-radius .4s cubic-bezier(.2,.9,.3,1.2),background-color .4s ease}
+.readtop{display:flex;align-items:center;gap:12px;padding:15px 16px 12px}
+.readtop .lbl{flex:1;min-width:0}
+.readtop .lbl b{display:block;font-size:17px;line-height:22px;font-weight:600;
+  letter-spacing:-.41px}
+.readtop .lbl span{display:block;font-size:13px;line-height:18px;
+  color:var(--label-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.growth{flex:none;display:flex;align-items:flex-end;gap:3.5px;height:26px}
+.growth i{display:block;width:5px;border-radius:2.5px;background:var(--tint);
+  transform-origin:bottom;animation:climb 2.8s cubic-bezier(.2,.9,.3,1.15) infinite}
+.growth i:nth-child(1){height:32%;animation-delay:0s}
+.growth i:nth-child(2){height:50%;animation-delay:.11s}
+.growth i:nth-child(3){height:68%;animation-delay:.22s}
+.growth i:nth-child(4){height:84%;animation-delay:.33s}
+.growth i:nth-child(5){height:100%;animation-delay:.44s}
+.growth.dn{flex-direction:row-reverse}
+.growth.dn i{background:var(--red)}
+@keyframes climb{
+  0%{transform:scaleY(.22);opacity:.3}
+  20%{transform:scaleY(1);opacity:1}
+  72%{transform:scaleY(1);opacity:1}
+  100%{transform:scaleY(.22);opacity:.3}}
+/* the shared reduced-motion rule would freeze these on the final keyframe,
+   which is the collapsed state, so pin them open explicitly */
+@media (prefers-reduced-motion:reduce){
+  .growth i{animation:none!important;transform:none!important;opacity:1!important}}
+.readbody{padding:0 16px 14px;font-size:15px;line-height:21px;color:var(--label-2);
+  letter-spacing:-.24px}
+/* Inset, so the card's own background stays visible around it. As a
+   full-bleed band it used --card-2, which in the light scheme is the same
+   value as the page background, so the card appeared to stop early and this
+   block to fall out onto the page. */
+.readnext{display:flex;gap:11px;margin:0 14px 14px;padding:13px 14px;
+  border-radius:13px;background:var(--fill);align-items:flex-start}
+.readnext .badge{margin-top:1px}
+.readnext .tx{flex:1;font-size:15px;line-height:21px;letter-spacing:-.24px}
+/* The eyebrow is a neutral secondary label rather than tint: 13px semibold
+   tint on a filled band measures 3.5 to 4.2 across the seven themes, under
+   the 4.5 threshold. The tinted badge carries the accent, and an icon only
+   needs 3.0. */
+.readnext .tx b{display:block;font-size:13px;line-height:18px;
+  color:var(--label-2);font-weight:600;text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:1px}
+
+/* bar rows inside a grouped list */
+.barrow{display:block;padding:12px 16px;position:relative}
+.barrow+.barrow::before{content:"";position:absolute;left:16px;right:0;top:0;
+  height:.5px;background:var(--separator)}
+.barhead{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.barhead .k{flex:1;font-size:15px;line-height:20px;letter-spacing:-.24px}
+.barhead .v{font-size:15px;line-height:20px;color:var(--label-2)}
+.track{display:block;height:6px;border-radius:3px;background:var(--fill);
+  overflow:hidden}
+.fill{display:block;height:100%;border-radius:3px;background:var(--tint);width:0;
+  transition:width .7s cubic-bezier(.2,.9,.3,1)}
+.fill.ghost{background:var(--fill)}
+.fill.zero{background:var(--red)}
+
+/* disclosure row that expands in place */
+.disc .item{cursor:pointer}
+.disc .chev{transition:transform .3s cubic-bezier(.2,.9,.3,1.2)}
+.disc [aria-expanded="true"] .chev{transform:rotate(90deg)}
+.panel{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .34s cubic-bezier(.32,.72,0,1)}
+.disc.open .panel{grid-template-rows:1fr}
+.panel>.inner{overflow:hidden;min-height:0}
+.panel .pad{padding:2px 16px 14px}
+.prow{padding:11px 0;position:relative}
+.prow+.prow::before{content:"";position:absolute;left:0;right:0;top:0;height:.5px;
+  background:var(--separator)}
+.prow .k{display:block;font-size:13px;line-height:18px;color:var(--label-2);
+  margin-bottom:2px}
+.prow .v{display:block;font-size:15px;line-height:21px;letter-spacing:-.24px}
+.prow .v b{font-weight:600}
+
+/* -------------------------------------------------- segmented control --- */
+.seg{position:relative;display:flex;padding:2px;border-radius:10px;
+  background:var(--fill-2);margin:4px 0 2px;overflow:hidden}
+.seg .knob{position:absolute;top:2px;bottom:2px;border-radius:8px;
+  background:var(--card);box-shadow:0 3px 8px rgba(0,0,0,.28),
+  0 0 0 .5px rgba(0,0,0,.04);
+  transition:transform .32s cubic-bezier(.32,.72,0,1),width .32s cubic-bezier(.32,.72,0,1)}
+.light .seg .knob{background:#FFF}
+.seg button{position:relative;z-index:1;flex:1;height:32px;font-size:13px;
+  font-weight:600;letter-spacing:-.08px;color:var(--label-2);
+  transition:color .2s ease}
+.seg button[aria-selected="true"]{color:var(--label)}
+.seg.glass{background:var(--glass);border-radius:12px}
+
+/* ------------------------------------------------------------ controls --- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:50px;padding:0 22px;border-radius:14px;font-size:17px;
+  font-weight:600;letter-spacing:-.41px}
+.btn.filled{background:var(--tint-fill);color:#fff}
+.light .btn.filled{color:#fff}
+.btn.tinted{background:var(--tint-soft);color:var(--tint)}
+.btn.plain{color:var(--tint);min-height:44px;padding:0 8px}
+.btn[disabled]{background:var(--fill);color:var(--label-3);pointer-events:none}
+.btn.wide{display:flex;width:100%}
+
+/* iOS switch */
+.sw{flex:none;width:51px;height:31px;border-radius:16px;background:var(--fill);
+  position:relative;transition:background-color .28s cubic-bezier(.32,.72,0,1)}
+.sw i{position:absolute;left:2px;top:2px;width:27px;height:27px;border-radius:50%;
+  background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.3),0 0 0 .5px rgba(0,0,0,.06);
+  transition:transform .28s cubic-bezier(.32,.72,0,1)}
+[aria-checked="true"]>.sw{background:var(--green)}
+[aria-checked="true"]>.sw i{transform:translateX(20px)}
+
+/* choice chips for channels: capsule, tinted when on, check slides in */
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{display:inline-flex;align-items:center;gap:5px;height:var(--tap);
+  padding:0 17px;border-radius:22px;background:var(--card);
+  font-size:15px;font-weight:500;letter-spacing:-.24px;color:var(--label);
+  transition:background-color .24s ease,color .24s ease,padding .28s
+    cubic-bezier(.32,.72,0,1)}
+.chip .tick{width:0;overflow:hidden;display:grid;place-items:center;
+  transition:width .28s cubic-bezier(.32,.72,0,1)}
+.chip .tick svg{width:15px;height:15px;fill:currentColor;flex:none}
+.chip[aria-pressed="true"]{background:var(--tint-fill);color:#fff;padding-left:12px}
+.chip[aria-pressed="true"] .tick{width:15px}
+.chip[disabled]{opacity:.45;pointer-events:none}
+
+/* ------------------------------------------------------------ toolbar ---
+   Floating glass bar. It clears the safe area and never touches the edges,
+   which is what makes it read as floating rather than docked. */
+.toolbar{position:absolute;left:12px;right:12px;z-index:22;
+  bottom:calc(12px + var(--homebar,0px) + env(safe-area-inset-bottom));
+  border-radius:26px;padding:9px;box-shadow:var(--glass-shadow);
+  animation:tbin .42s cubic-bezier(.2,.9,.3,1.15) both}
+@keyframes tbin{from{opacity:0;transform:translateY(26px)}}
+.tbhint{position:relative;z-index:1;text-align:center;font-size:13px;
+  line-height:18px;color:var(--label-2);padding:2px 0 8px}
+.tbrow{position:relative;z-index:1;display:flex;align-items:center;gap:9px}
+.tbrow .btn.filled{flex:1}
+
+/* the primary entry point, a floating glass capsule with a tinted core */
+.start{position:absolute;right:14px;z-index:22;
+  bottom:calc(16px + var(--homebar,0px) + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:9px;height:56px;padding:0 22px;
+  border-radius:28px;background:var(--tint-fill);color:#fff;font-size:17px;
+  font-weight:600;letter-spacing:-.41px;
+  box-shadow:0 8px 26px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.28),
+    inset 0 .5px 0 rgba(255,255,255,.34);
+  animation:tbin .46s cubic-bezier(.2,.9,.3,1.15) both}
+.start svg{width:20px;height:20px;fill:currentColor}
+
+/* --------------------------------------------------------- step header --- */
+.steps{display:flex;gap:5px;padding:0 var(--gutter) 12px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--fill);
+  overflow:hidden;position:relative}
+.steps i::after{content:"";position:absolute;inset:0;border-radius:2px;
+  background:var(--tint);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s cubic-bezier(.32,.72,0,1)}
+.steps i.done::after{transform:scaleX(1);opacity:.42}
+.steps i.now::after{transform:scaleX(1)}
+
+/* --------------------------------------------------------------- voice --- */
+.mic{display:flex;align-items:center;gap:15px;width:100%;text-align:left;
+  padding:16px;border-radius:var(--r-card);background:var(--card)}
+.orb{flex:none;width:54px;height:54px;border-radius:50%;display:grid;
+  place-items:center;background:var(--tint-fill);color:#fff;
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2)}
+.mic.live .orb{animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--tint-soft)}
+  70%{box-shadow:0 0 0 16px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.orb svg{width:24px;height:24px;fill:currentColor}
+.wave{display:flex;align-items:center;gap:3px;height:22px}
+.wave i{display:block;width:3px;height:5px;border-radius:2px;background:#fff}
+.mic.live .wave i{animation:bob .8s ease-in-out infinite}
+@keyframes bob{0%,100%{height:5px}50%{height:20px}}
+.mic .tx{flex:1;min-width:0}
+.mic .tx b{display:block;font-size:17px;line-height:22px;font-weight:600;
+  letter-spacing:-.41px}
+.mic .tx span{display:block;font-size:13px;line-height:18px;color:var(--label-2);
+  margin-top:1px}
+
+/* a speech bubble, which is what a transcript is */
+.said{background:var(--card);border-radius:var(--r-card);
+  border-top-left-radius:7px;padding:15px 17px;margin-top:11px}
+.said .who{display:block;font-size:13px;line-height:18px;font-weight:600;
+  color:var(--tint);margin-bottom:6px}
+.said .tt{font-size:17px;line-height:24px;letter-spacing:-.41px}
+.cur{display:inline-block;width:2px;height:18px;background:var(--tint);
+  vertical-align:-3px;margin-left:2px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* generation trace */
+.trace{background:var(--card);border-radius:var(--r-card);overflow:hidden}
+.tr{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;
+  position:relative;font-size:15px;line-height:21px;letter-spacing:-.24px;
+  animation:trin .34s cubic-bezier(.2,.9,.3,1.1) both}
+@keyframes trin{from{opacity:0;transform:translateY(7px)}}
+.tr+.tr::before{content:"";position:absolute;left:52px;right:0;top:0;height:.5px;
+  background:var(--separator)}
+.tr .ic{flex:none;width:24px;height:24px;border-radius:7px;display:grid;
+  place-items:center;background:var(--tint-soft);color:var(--tint);margin-top:1px}
+.tr .ic svg{width:15px;height:15px;fill:currentColor}
+.tr.src .ic{background:var(--fill);color:var(--label-2)}
+.tr.chk .ic{background:rgba(255,214,10,.18);color:var(--amber)}
+.tr .gt{flex:1;min-width:0}
+.tr .gd{display:block;font-size:13px;line-height:18px;color:var(--label-2);
+  margin-top:1px;overflow-wrap:anywhere}
+.tr.done{color:var(--green)}
+
+.spinner{width:22px;height:22px;margin:16px auto 4px;border-radius:50%;
+  border:2.5px solid var(--fill);border-top-color:var(--tint);
+  animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skip{display:block;margin:10px auto 0;font-size:15px;color:var(--tint);
+  padding:10px 16px;font-weight:500}
+
+/* progress for publishing */
+.prog{height:4px;border-radius:2px;background:var(--fill);overflow:hidden;
+  margin-bottom:14px}
+.prog i{display:block;height:100%;width:0;background:var(--tint);border-radius:2px;
+  transition:width .5s cubic-bezier(.32,.72,0,1)}
+
+/* ----------------------------------------------------------- creative --- */
+.art{position:relative;display:grid;place-items:center;border-radius:14px;
+  height:196px;overflow:hidden;margin-bottom:14px}
+.art.vid{height:214px}
+.over{font-size:22px;font-weight:700;line-height:1.24;text-align:center;
+  color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);padding:0 22px;
+  letter-spacing:-.4px}
+.over.sm{font-size:18px;font-weight:600;max-width:88%}
+.mark{position:absolute;left:15px;bottom:13px;font-size:12px;font-weight:600;
+  color:rgba(255,255,255,.8)}
+.play{position:absolute;right:13px;bottom:12px;width:46px;height:46px;
+  border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:grid;
+  place-items:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.play svg{width:20px;height:20px;fill:currentColor;margin-left:2px}
+.vbar{position:absolute;left:0;right:0;bottom:0;height:3px;
+  background:rgba(255,255,255,.22)}
+.vbar i{display:block;height:100%;width:0;background:#fff;transition:width .5s linear}
+.beats{display:flex;flex-direction:column;gap:7px;margin:-2px 0 14px}
+.beat{display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:21px;
+  color:var(--label-2);padding:10px 12px;border-radius:11px;background:var(--card-2);
+  letter-spacing:-.24px;transition:all .28s ease}
+.beat .bn{flex:none;width:20px;height:20px;border-radius:50%;background:var(--fill);
+  color:var(--label-2);font-size:11px;display:grid;place-items:center;
+  font-weight:700;margin-top:1px}
+.beat.on{color:var(--label);background:var(--tint-soft)}
+.beat.on .bn{background:var(--tint-fill);color:#fff}
+.beat.done .bn{background:var(--tint-soft);color:var(--tint)}
+
+.brw{border-radius:14px;overflow:hidden;margin-bottom:14px;background:#fff}
+.brwbar{display:flex;align-items:center;gap:6px;background:#E8E8ED;padding:9px 11px}
+.brwbar i{width:8px;height:8px;border-radius:50%;background:#C7C7CC;display:block}
+.brwbar .url{flex:1;margin-left:6px;background:#fff;border-radius:7px;
+  padding:4px 10px;font-size:12px;color:#6D6D72;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.brwpage{background:#fff;color:#1C1C1E;max-height:330px;overflow:auto;
+  scrollbar-width:none}
+.brwpage::-webkit-scrollbar{display:none}
+.pnav{display:flex;align-items:center;gap:8px;padding:13px 15px;
+  border-bottom:.5px solid #E5E5EA;font-size:13px}
+.pnav b{font-size:14px;margin-right:auto}
+.pnav span{width:24px;height:5px;border-radius:3px;background:#E5E5EA;display:block}
+.phero{display:grid;place-items:center;padding:34px 18px;text-align:center}
+.phero b{font-size:21px;font-weight:700;color:#fff;line-height:1.24;
+  text-shadow:0 2px 16px rgba(0,0,0,.45);letter-spacing:-.4px}
+.pbody{margin:0;padding:15px 15px 10px;font-size:13px;line-height:1.65;color:#48484A}
+.psec{display:flex;align-items:center;padding:12px 15px;
+  border-top:.5px solid #E5E5EA;font-size:13px;font-weight:500;color:#1C1C1E}
+.psec i{margin-left:auto;font-style:normal;color:#C7C7CC}
+.pcta{margin:14px 15px;padding:12px;border-radius:11px;background:#1C1C1E;color:#fff;
+  text-align:center;font-size:13px;font-weight:600}
+.pfoot{padding:10px 15px 16px;font-size:12px;color:#6D6D72;text-align:center}
+
+.gpost{border-radius:14px;overflow:hidden;margin-bottom:14px;background:var(--card-2)}
+.ghead{display:flex;align-items:center;gap:10px;padding:12px 13px}
+.gav{flex:none;width:36px;height:36px;border-radius:50%;background:var(--tint);
+  color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.gwho b{display:block;font-size:14px;font-weight:600}
+.gwho em{display:block;font-style:normal;font-size:12px;color:var(--label-2);
+  margin-top:1px}
+.gart{height:120px}
+.gtext{margin:0;padding:12px 13px 0;font-size:15px;line-height:21px;
+  color:var(--label-2);letter-spacing:-.24px}
+.gcta{margin:12px 13px 13px;padding:11px;border-radius:11px;text-align:center;
+  font-size:15px;font-weight:600;color:var(--tint);background:var(--fill)}
+
+/* ------------------------------------------------------ rank and cells --- */
+.rank{display:block;position:relative;height:18px;margin-top:9px}
+.rank::before{content:"";position:absolute;left:0;right:0;top:8px;height:2px;
+  border-radius:1px;background:var(--fill)}
+.rank i{position:absolute;top:4px;width:10px;height:10px;border-radius:50%;
+  margin-left:-5px}
+.rank .now{background:var(--tint);box-shadow:0 0 0 4px var(--tint-soft)}
+.rank .was{background:transparent;box-shadow:inset 0 0 0 2px var(--label-3)}
+.rank .move{top:8px;height:2px;border-radius:1px;margin-left:0;
+  background:var(--tint);opacity:.45}
+.rank .miss{left:100%;margin-left:-11px;background:transparent;
+  box-shadow:inset 0 0 0 2px var(--red)}
+.scale{display:flex;justify-content:space-between;font-size:12px;
+  color:var(--label-2);margin-top:6px}
+.cells{display:flex;gap:5px;margin-top:4px}
+.cells i{flex:1;height:26px;border-radius:6px;background:var(--fill);
+  transform-origin:bottom;animation:col .42s cubic-bezier(.2,.9,.3,1.1) both}
+.cells i.on{background:var(--tint)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;
+  box-shadow:inset 0 0 0 2px var(--red);margin-right:8px;vertical-align:middle}
+.dot.on{background:var(--tint);box-shadow:none}
+.pair{display:grid;grid-template-columns:46px 1fr 38px;gap:9px;align-items:center;
+  margin-top:7px}
+.pair em{font-style:normal;font-size:12px;color:var(--label-2)}
+.pair b{font-size:12px;text-align:right;font-weight:600;color:var(--label-2)}
+
+/* the closing brief, the last thing seen in a cycle */
+.brief{border-radius:var(--r-card);padding:19px;background:var(--tint-fill);color:#fff;
+  animation:briefin .6s cubic-bezier(.2,.9,.3,1.15) both;position:relative;
+  overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+@keyframes briefin{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.brief .h{font-size:13px;line-height:18px;font-weight:600;opacity:.85;
+  margin-bottom:8px}
+.brief .a{font-size:20px;line-height:27px;font-weight:600;letter-spacing:-.45px}
+.brief .w{font-size:15px;line-height:21px;opacity:.88;margin-top:11px;
+  letter-spacing:-.24px}
+
+/* ------------------------------------------------------ sheet, detents ---
+   Two detents like a UISheetPresentationController: a medium stop and a large
+   one. Dragging moves between them, dragging past the medium stop dismisses. */
+.dim{position:absolute;inset:0;z-index:28;background:rgba(0,0,0,.4);opacity:0;
+  animation:fade .3s ease forwards;-webkit-backdrop-filter:blur(2px);
+  backdrop-filter:blur(2px)}
+@keyframes fade{to{opacity:1}}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:29;height:56%;
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0;display:flex;
+  flex-direction:column;box-shadow:0 -12px 44px rgba(0,0,0,.5);
+  transform:translateY(100%);
+  transition:transform .46s cubic-bezier(.32,.72,0,1),
+             height .42s cubic-bezier(.32,.72,0,1)}
+.sheet.in{transform:translateY(0)}
+.sheet.full{transform:translateY(0);height:92%}
+/* sized to its content: every row reachable, nothing padded out to fill */
+.sheet.fit{transform:translateY(0);height:auto;max-height:86%}
+.sheet.out{transform:translateY(100%)}
+.grab{width:36px;height:5px;border-radius:3px;background:var(--label-3);
+  margin:8px auto 0;flex:none;position:relative;z-index:1}
+.shead{display:flex;align-items:flex-start;gap:10px;padding:12px 8px 10px 20px;
+  flex:none;position:relative;z-index:1}
+.shead .st{flex:1;min-width:0}
+.shead h2{margin:0;font-size:22px;line-height:28px;font-weight:700;
+  letter-spacing:.35px}
+.shead .sub{font-size:13px;line-height:18px;color:var(--label-2);margin-top:2px}
+.sclose{flex:none;width:30px;height:30px;border-radius:50%;background:var(--fill);
+  color:var(--label-2);display:grid;place-items:center}
+.sclose svg{width:15px;height:15px;fill:currentColor}
+.sbody{overflow-y:auto;
+  padding:0 20px calc(max(26px,env(safe-area-inset-bottom)) + var(--homebar,0px) + 12px);
+  scrollbar-width:none;position:relative;z-index:1;
+  -webkit-overflow-scrolling:touch}
+.sbody::-webkit-scrollbar{display:none}
+
+/* persona picker rows */
+.pick{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  padding:11px 12px;border-radius:14px;margin-bottom:2px}
+.pick .av{flex:none;width:42px;height:42px;border-radius:50%;display:grid;
+  place-items:center;font-size:14px;font-weight:700;background:var(--tint);
+  color:#fff;font-family:var(--f-round)}
+.pick .nm{flex:1;min-width:0}
+.pick .nm b{display:block;font-size:17px;line-height:22px;font-weight:500;
+  letter-spacing:-.41px}
+.pick .nm span{display:block;font-size:13px;line-height:18px;color:var(--label-2)}
+.pick .on{color:var(--tint);flex:none}
+.pick .on svg{width:19px;height:19px;fill:currentColor;display:block}
+
+/* toast */
+.toast{position:absolute;left:14px;right:14px;z-index:33;
+  bottom:calc(96px + var(--homebar,0px) + env(safe-area-inset-bottom));
+  border-radius:19px;
+  padding:13px 17px;display:flex;align-items:center;gap:14px;font-size:15px;
+  letter-spacing:-.24px;box-shadow:var(--glass-shadow);
+  animation:tbin .42s cubic-bezier(.2,.9,.3,1.15) both}
+.toast>*{position:relative;z-index:1}
+.toast button{color:var(--tint);font-size:15px;font-weight:600;flex:none}
+
+/* persona transition: a tinted disc from the tapped point, then a re-entry */
+.wipe{position:absolute;inset:0;z-index:40;pointer-events:none;
+  clip-path:circle(0% at var(--wx,50%) var(--wy,50%))}
+.wipe i{position:absolute;inset:0;display:block;background:var(--wipe-c)}
+.wipe.go{animation:win .42s cubic-bezier(.32,.72,0,1) forwards}
+.wipe.out{animation:wout .5s ease forwards}
+@keyframes win{to{clip-path:circle(145% at var(--wx,50%) var(--wy,50%))}}
+@keyframes wout{from{clip-path:circle(145% at var(--wx,50%) var(--wy,50%));opacity:1}
+  to{clip-path:circle(145% at var(--wx,50%) var(--wy,50%));opacity:0}}
+.wipe .bd{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+  text-align:center;color:#fff}
+.wipe .bd b{display:block;font-size:28px;font-weight:700;letter-spacing:.36px}
+.wipe .bd span{display:block;font-size:15px;opacity:.8;margin-top:5px}
+.enter>*{animation:rise .44s cubic-bezier(.2,.9,.3,1.1) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+
+/* onboarding */
+.splash{position:absolute;inset:0;z-index:30;background:var(--bg);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  padding:38px 32px;text-align:center}
+.splash .sym{width:76px;height:76px;border-radius:22px;background:var(--tint-fill);
+  display:grid;place-items:center;color:#fff;margin-bottom:6px;
+  box-shadow:0 12px 34px rgba(0,0,0,.4),inset 0 .5px 0 rgba(255,255,255,.4)}
+.splash .sym svg{width:38px;height:38px;fill:currentColor}
+.splash h1{margin:0;font-size:32px;line-height:38px;font-weight:700;
+  letter-spacing:.36px}
+.splash h1 i{font-style:normal;color:var(--tint)}
+.splash p{margin:0;font-size:17px;line-height:24px;color:var(--label-2);
+  max-width:31ch;letter-spacing:-.41px}
+
+@media (min-width:600px){
+  body{display:grid;place-items:center;min-height:100vh;min-height:100dvh;
+    padding:24px;background:#111114}
+  .light body{background:#DCDCE2}
+  .phone{min-height:520px;height:min(880px,calc(100vh - 48px));
+    height:clamp(520px,calc(100dvh - 48px),880px);border-radius:46px;
+    box-shadow:0 0 0 11px #1B1B1F,0 0 0 12px #313136,0 30px 70px rgba(0,0,0,.6)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important}
+}
+</style>
+
+<style>
+/* disclosure rows live in separate wrappers, so the list separator needs its
+   own rule rather than the sibling one used between plain items */
+.disc+.disc>.item::before{content:"";position:absolute;left:58px;right:0;top:0;
+  height:.5px;background:var(--separator)}
+.list>.disc.open+.disc>.item::before{left:0}
+</style>
+<div class="phone t-gym" id="phone">
+
+  <div class="statusbar" id="statusbar" aria-hidden="true">
+    <span class="sb-time" id="sbtime">9:41</span>
+    <span class="island"></span>
+    <span class="sb-right" id="sbright"></span>
+  </div>
+
+  <div class="splash" id="splash">
+    <div class="sym" id="splashsym"></div>
+    <h1>Say it once.<br>Let the <i>results</i><br>write the next one.</h1>
+    <p>VIC makes the work, publishes it, then reads what happened.
+       You just say what is going on in the business.</p>
+    <button class="btn filled tap" onclick="begin()" style="margin-top:8px">
+      Get Started</button>
+  </div>
+
+  <header class="nav glass" id="nav"></header>
+  <main class="scroll" id="scroll" role="main"></main>
+
+  <button class="start tap" id="start" hidden onclick="openFlow()"></button>
+  <div class="toolbar glass" id="toolbar" hidden></div>
+
+  <div class="dim" id="dim" hidden onclick="shut()"></div>
+  <div class="sheet glass-thick" id="sheet" hidden role="dialog" aria-modal="true"
+       aria-labelledby="sheetTitle"></div>
+  <div id="toasthost"></div>
+  <div class="wipe" id="wipe" hidden aria-hidden="true"><i></i><div class="bd"></div></div>
+  <div class="homebar" id="homebar" role="button" tabindex="0"
+       aria-label="Home indicator, swipe up or press to go back"><i></i></div>
+</div>
+
+<script>
+const BIZ = {
+
+gym: {
+  name:"Northside Fitness", cat:"Gym", ini:"NF", at:"@northside.fitness",
+  theme:"t-gym", unit:"enquiries", unitOne:"enquiry",
+  chans:["video","photo","seo","gmb"],
+  money:{gen:"2,40,000", total:"8,40,000"}, vs:"+18% on last month",
+  rev12:[112,124,131,148,142,163,171,186,194,208,221,240],
+  stats:[["Reach","41.2k","+22%",1],["Engagement","4.6%","+0.8pt",1],
+         ["Enquiries","8","+3",1],["Cost per enquiry","Rs 310","-24%",1]],
+  mix:[["Feed",46],["Search",28],["Profile",19],["AI answers",7]],
+  best:["Deadlift form check","Reel, 18 Feb","22,400 reach, 5 enquiries"],
+  watch:["Price list posts","Four published, zero enquiries in six weeks"],
+  recur:{label:"Members", series:[318,332,347,359,371,384,398,412,431,449,467,486]},
+  perf:{dir:1, pct:"+18%",
+    why:"Tutorials carried the month. Saves are up 44% and every enquiry traced back to one.",
+    plan:"Film one form-check tutorial and schedule it for 11:15 am."},
+  stock:{items:24, profiles:5, credits:1840},
+  say:"We are starting a new morning yoga batch this Sunday, 7 am. It is for beginners, no experience needed. Make something for it.",
+  sayHi:"Bhai, is Sunday se nayi morning yoga batch shuru kar rahe hain, subah 7 baje. Beginners ke liye hai, koi experience nahi chahiye. Iske liye kuch bana do.",
+  sayDev:"भाई, इस संडे से नई मॉर्निंग योगा बैच शुरू कर रहे हैं, सुबह सात बजे। बिगिनर्स के लिए है, कोई एक्सपीरियंस नहीं चाहिए। इसके लिए कुछ बना दो।",
+  next:"Make a 45-second form-check tutorial and schedule it for 11:15 am.",
+  nextHi:"Ek form-check tutorial banao, 45 second ka, aur subah 11:15 pe schedule kar dena. Price list wala post ab mat banana.",
+  nextDev:"एक फॉर्म चेक ट्यूटोरियल बनाओ, पैंतालीस सेकंड का, और सुबह सवा ग्यारह बजे शेड्यूल कर देना। प्राइस लिस्ट वाला पोस्ट अब मत बनाना।",
+  because:"Tutorials are the only format here producing enquiries, and the ones posted before noon reach 2.4x further.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/northside.fitness"],
+       ["think","Checking which formats produced enquiries","Kaunse format se enquiries aayi, check kar raha hoon"],
+       ["src","Class schedule page","northsidefitness.in/classes"],
+       ["src","Business profile","Google Business Profile"]],
+  made:{
+    video:{t:"Sunday Morning Yoga, 7 am start", spec:"0:24 vertical",
+      hook:"Never done yoga? Start here.",
+      beats:["0:00  Empty studio, mats going down, sunrise through the window",
+             "0:08  Three beginner poses, held and named on screen",
+             "0:18  Sunday 7 am, all levels, first session free"],
+      caption:"New Sunday morning batch. 7 am, all levels, no experience needed. Link in bio to hold a spot.",
+      tags:"#sundayyoga #beginneryoga #northsidefitness #morningroutine"},
+    photo:{t:"All levels welcome", spec:"1080 x 1350", overlay:"Sunday / 7 am / All levels",
+      caption:"Sunday mornings just got slower. New yoga batch starts this week, and the first session is on us.",
+      tags:"#sundayyoga #yogaforbeginners #northsidefitness"},
+    seo:{t:"/classes/sunday-yoga", spec:"Landing page", h1:"Sunday Morning Yoga, 7 am",
+      title:"Sunday Morning Yoga Class, 7 am | Northside Fitness",
+      meta:"Beginner-friendly Sunday yoga at 7 am. All levels welcome, Rs 1,299 a month, first session free. Book online.",
+      body:"A slow, beginner-friendly hour to open the week. No experience needed and no equipment to bring, mats are provided. The batch caps at fourteen so everyone gets corrected.",
+      sections:["What to expect","Who it suits","Timings and fees","Book a free first session"]},
+    gmb:{t:"New batch: Sunday 7 am", spec:"Business post",
+      text:"New batch: Sunday Morning Yoga, 7 am. All levels, no experience needed. Rs 1,299 a month and the first session is free.",
+      cta:"Book"}},
+  live:{feed:"Reel scheduled for 11:15 am Tuesday",
+    site:["Batch added to the schedule page","New page indexed: /classes/sunday-yoga",
+          "Schedule marked up so answer engines can quote it"],
+    gmb:"Posted to the Google Business Profile"},
+  posts:[
+    {t:"Deadlift form check", m:"Reel, 48s, posted 18 Feb",
+     r:[["Reach","22,400",""],["Eng","6.1%",""],["Saves","402",""],["Leads","5","up"]],
+     why:[["Why it travelled","Saved 402 times. The feed keeps serving a post that gets saved, so it was still reaching people on day nine."],
+          ["What it produced","<b>5 membership enquiries</b>, all through the profile link within 48 hours."],
+          ["What that means","This is the format. It teaches something in under a minute and people keep it."]]},
+    {t:"6 am class promo", m:"Reel, 22s, posted 02 Mar",
+     r:[["Reach","13,800",""],["Eng","2.8%",""],["Saves","121",""],["Leads","3",""]],
+     why:[["Why it travelled","Decent reach, but it stopped moving after day three. Almost nobody saved it."],
+          ["What it produced","<b>3 enquiries</b>, two from people already following."],
+          ["What that means","Works, does not compound. Good filler, not the anchor."]]},
+    {t:"New price list", m:"Image, posted 09 Mar",
+     r:[["Reach","3,100","dn"],["Eng","0.7%","dn"],["Saves","9","dn"],["Leads","0","dn"]],
+     why:[["Why it stalled","A static price grid gives nobody a reason to stop scrolling, and it went out at 9 pm."],
+          ["What it produced","<b>Nothing.</b> Six weeks, no enquiries traced to it."],
+          ["What that means","Stop making these. Pricing belongs on the site, not the feed."]]}],
+  surf:{
+    site:{rows:[["/classes/sunday-yoga",412,6,1.46,1.9,"Built by this loop. The only page converting above 1%."],
+      ["/timetable",980,2,0.2,3.4,"The most visited page on the site, and the slowest on mobile."],
+      ["/pricing",210,0,0.0,2.1,"Fed by the price post. Nobody has ever enquired from it."]],
+      note:"The page this loop built converts seven times better than the one the feed was pushing.",
+      flag:"The timetable takes 3.4s on mobile. Every second past two costs roughly 7% of visits."},
+    seo:{rows:[["sunday yoga class near me",4,11,58,"The page the reel created. Into the top ten in nine days."],
+      ["gym near me",18,18,61,"Highest volume term locally, and no page targets it."],
+      ["beginner yoga classes",0,0,0,"890 searches a month here, and nothing answers it."]],
+      note:"Every one of the 1,240 impressions came from the page, not the post.",
+      flag:"Fourth to third on the yoga query is worth roughly 40 more clicks a month."},
+    geo:{rows:[["best yoga class near [area]",1,"/classes/sunday-yoga","Schedule markup gives a clean fact to quote."],
+      ["beginner friendly gym [area]",0,"Competitor quoted","No page states class levels in readable text."],
+      ["yoga class timings [area]",1,"/classes/sunday-yoga","Quoted with the 7 am start, from the markup."]],
+      cited:3, total:8, note:"Both citations point at the page this loop created.",
+      flag:"Answer engines quote structured facts. Two pages carry that markup, four do not."},
+    crt:{rows:[["Local trainer",18000,61,"61 visits","Reshared the form check. Best partner this quarter."],
+      ["Nutrition page",42000,9,"9 visits","Large audience, wrong audience. No enquiries."]],
+      note:"The smaller account produced seven times the return of one twice its size.",
+      flag:"Partner choice is following follower counts. It should follow enquiries."}},
+  gmb:{rows:[["Profile views","3,140","+22%","Up since the class page went live. The profile and the page reinforce each other."],
+    ["Call clicks","84","+31%","Most calls land within an hour of a post going out."],
+    ["Direction requests","212","+14%","The strongest intent signal here. Someone asking for directions is coming in."],
+    ["Reviews","47","4.6 avg","Twelve arrived this quarter. Answer engines quote review text when they quote you."]],
+    note:"Direction requests are the intent signal that matters here. They move with posting, not with follower count.",
+    flag:"Only one of the four channels posts to the business profile. It is the cheapest reach on this list."},
+  fmts:[["Tutorial",6.1,100,"3 posts, 402 saves, 5 enquiries"],
+        ["Member story",3.1,51,"2 posts, 74 saves, 1 enquiry"],
+        ["Class promo",2.8,46,"5 posts, 121 saves, 3 enquiries"],
+        ["Price list",0.7,11,"4 posts, 9 saves, no enquiries"]],
+  found:"<b>Tutorials are saved three times more than anything else</b>, and every enquiry this month came from one. The price list has not booked a single person in six weeks."
+},
+
+salon: {
+  name:"Cedar and Co", cat:"Salon", ini:"CC", at:"@cedarandco",
+  theme:"t-salon", unit:"bookings", unitOne:"booking",
+  chans:["video","photo","seo","gmb"],
+  money:{gen:"1,15,000", total:"4,20,000"}, vs:"-9% on last month",
+  rev12:[128,131,127,134,130,126,124,121,119,122,118,115],
+  stats:[["Reach","18.3k","-31%",-1],["Engagement","2.4%","-1.1pt",-1],
+         ["Bookings","4","-5",-1],["Cost per booking","Rs 2,180","+61%",-1]],
+  mix:[["Feed",58],["Profile",24],["Search",14],["AI answers",4]],
+  best:["Balayage before and after","Reel, 28 Feb","12,900 reach, 3 bookings"],
+  watch:["Static images","Four of the last five posts, reach down 31%"],
+  recur:{label:"Repeat clients", series:[104,108,112,115,118,120,119,116,112,108,103,96]},
+  perf:{dir:-1, pct:"-9%",
+    why:"Reach fell 31%. Four of the last five posts were static images and none of them booked anyone.",
+    plan:"Shoot two before-and-after reels and publish Thursday evening."},
+  stock:{items:18, profiles:4, credits:920},
+  say:"That colour correction we finished yesterday came out really well, and Thursday evening slots are open this week. Make something for it.",
+  sayHi:"Kal jo balayage colour correction kiya tha na, wo bahut achha aaya hai. Thursday evening ke slots bhi khaali hain is week. Iske liye kuch bana do.",
+  sayDev:"कल जो बालायाज कलर करेक्शन किया था ना, वो बहुत अच्छा आया है। थर्सडे इवनिंग के स्लॉट्स भी खाली हैं इस वीक। इसके लिए कुछ बना दो।",
+  next:"Make two before-and-after reels, the colour correction and Thursday's gloss.",
+  nextHi:"Do before-and-after reel banao, colour correction wala aur Thursday ka gloss. Static image ab band karo, usse reach gir rahi hai.",
+  nextDev:"दो बिफोर आफ्टर रील बनाओ, कलर करेक्शन वाला और थर्सडे का ग्लॉस। स्टैटिक इमेज अब बंद करो, उससे रीच गिर रही है।",
+  because:"Every booking this quarter came from a transformation reel, and no reel has gone out in eleven days.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/cedarandco"],
+       ["think","Reach is down 31%, finding out why","Reach 31% gir gaya hai, wajah dhoondh raha hoon"],
+       ["src","Service pages","cedarandco.in/services"],
+       ["src","Business profile","Google Business Profile"]],
+  made:{
+    video:{t:"Before and after, full colour correction", spec:"0:18 vertical",
+      hook:"Four hours, one colour correction.",
+      beats:["0:00  The before, straight to camera, no filter",
+             "0:06  Three fast cuts through the process",
+             "0:13  The reveal, turning in daylight by the window"],
+      caption:"Thursday's colour correction, start to finish. Four hours and worth every one of them.",
+      tags:"#balayage #colourcorrection #hairtransformation #cedarandco"},
+    photo:{t:"Thursday gloss, three tones", spec:"1080 x 1350", overlay:"Before / After",
+      caption:"Three tones blended through the mid-lengths. Thursday evening slots are open this week.",
+      tags:"#balayage #hairgloss #cedarandco"},
+    seo:{t:"/services/balayage", spec:"Service page", h1:"Balayage and Colour Correction",
+      title:"Balayage and Colour Correction in [area] | Cedar and Co",
+      meta:"Hand-painted balayage and full colour correction. From Rs 4,500, three to four hours. See recent work and book Thursday evenings.",
+      body:"Colour correction is not a single service, it is however many sessions your hair needs to get back to a tone that grows out cleanly. Most clients need one long session, some need two.",
+      sections:["What balayage is","Correction, and when you need it","How long it takes","Prices","Recent work"]},
+    gmb:{t:"Thursday evening slots open", spec:"Business post",
+      text:"Thursday evening colour slots are open this week. Balayage and correction from Rs 4,500. Book online or call.",
+      cta:"Book"}},
+  live:{feed:"Reel scheduled for 7:30 pm Thursday",
+    site:["Service page published with pricing","New page indexed: /services/balayage",
+          "Prices marked up so answer engines can quote them"],
+    gmb:"Posted to the Google Business Profile"},
+  posts:[
+    {t:"Balayage before and after", m:"Reel, 28s, posted 28 Feb",
+     r:[["Reach","12,900",""],["Eng","5.2%",""],["Saves","286",""],["Leads","3","up"]],
+     why:[["Why it travelled","The reveal cut landed in the first four seconds, so almost nobody scrolled past it."],
+          ["What it produced","<b>3 bookings</b>, two of them new clients."],
+          ["What that means","Transformations are the only thing on this account that books people."]]},
+    {t:"Product restock", m:"Image, posted 06 Mar",
+     r:[["Reach","2,900","dn"],["Eng","0.9%","dn"],["Saves","12","dn"],["Leads","0","dn"]],
+     why:[["Why it stalled","A shelf of bottles. Nothing on screen changes, so there is nothing to watch."],
+          ["What it produced","<b>Nothing.</b> No bookings, no product enquiries."],
+          ["What that means","Retail belongs in stories, not in the grid."]]},
+    {t:"Team introduction", m:"Carousel, 4 slides, posted 11 Mar",
+     r:[["Reach","4,100","dn"],["Eng","1.6%","dn"],["Saves","23","dn"],["Leads","1",""]],
+     why:[["Why it stalled","Four static portraits. People stopped at slide two."],
+          ["What it produced","<b>1 booking</b>, from an existing client who asked for a specific stylist."],
+          ["What that means","Worth doing once a quarter, not once a fortnight."]]}],
+  surf:{
+    site:{rows:[["/services/balayage",286,4,1.40,2.2,"Built by this loop. Every booking from the site came through it."],
+      ["/services",640,1,0.16,2.6,"The index. Lists everything, explains nothing."],
+      ["/team",190,0,0.0,2.4,"Fed by the team carousel. No booking has ever started here."]],
+      note:"One service page out-converts the whole services index nine times over.",
+      flag:"Every other service is a line on an index page. None of them has a page of its own."},
+    seo:{rows:[["balayage [area]",6,14,42,"The service page moved it eight places in a fortnight."],
+      ["hair salon near me",24,24,18,"Highest volume term locally, and the homepage is the only thing competing."],
+      ["colour correction cost",0,0,0,"620 searches a month, and no page states a price."]],
+      note:"The one page built this quarter carries 71% of all search impressions.",
+      flag:"Price queries are the highest intent search here, and nothing on the site answers them."},
+    geo:{rows:[["best balayage in [area]",1,"/services/balayage","Prices and duration are marked up."],
+      ["hair salon open late [area]",0,"No source","Opening hours are not marked up anywhere."],
+      ["how much does colour correction cost",0,"Competitor quoted","The price is on the page as an image, not as text."]],
+      cited:1, total:7, note:"The weakest of the four surfaces, and the one with most headroom.",
+      flag:"112 reviews at 4.8 is the best asset this business has, and none of it appears on the website."},
+    crt:{rows:[["Bridal page",31000,7,"7 visits","Reshared the balayage reel. One booking traced back."],
+      ["Lifestyle creator",64000,2,"2 visits","Large following, no local audience."]],
+      note:"Neither partnership has paid for itself this quarter.",
+      flag:"Both partners were chosen on reach. Neither was chosen on location."}},
+  gmb:{rows:[["Profile views","1,890","+6%","Flat, because nothing new has been posted to the profile in a month."],
+    ["Call clicks","61","-8%","Down with reach. The profile is the only place hours are current."],
+    ["Direction requests","96","+3%","Steady walk-ins, almost none of it attributable to content."],
+    ["Reviews","112","4.8 avg","The strongest asset on the account, and it is doing nothing for search."]],
+    note:"112 reviews at 4.8 is the best signal this business has, and nothing on the site or in the feed uses it.",
+    flag:"Review text is quotable by answer engines. None of it appears on the website."},
+  fmts:[["Transformation",5.2,100,"2 posts, 286 saves, 3 bookings"],
+        ["Stylist story",2.4,46,"3 posts, 61 saves, 1 booking"],
+        ["Team carousel",1.6,31,"2 posts, 23 saves, 1 booking"],
+        ["Product image",0.9,17,"5 posts, 12 saves, no bookings"]],
+  found:"<b>Static images have taken four of the last five slots and booked nobody.</b> Reach fell 31% in the same period. The one transformation reel out-performed all of them combined."
+},
+
+restaurant: {
+  name:"The Copper Room", cat:"Restaurant", ini:"CR", at:"@thecopperroom",
+  theme:"t-restaurant", unit:"covers booked", unitOne:"booking",
+  chans:["video","photo","seo","gmb"],
+  money:{gen:"3,60,000", total:"14,20,000"}, vs:"+4% on last month",
+  rev12:[286,304,291,318,342,310,335,352,338,361,349,366],
+  stats:[["Reach","33.6k","+9%",1],["Engagement","5.1%","+0.6pt",1],
+         ["Covers booked","14","+2",1],["Cost per booking","Rs 640","-11%",1]],
+  mix:[["Feed",44],["Search",31],["Profile",21],["AI answers",4]],
+  best:["Friday specials board","Reel, 15 Mar","19,600 reach, 9 bookings"],
+  watch:["Evening posts","Three published after 7 pm, a fifth of the usual reach"],
+  recur:{label:"Regulars", series:[142,148,151,147,155,149,158,162,157,166,161,172]},
+  perf:{dir:1, pct:"+4%",
+    why:"Every booking last month came from a post published before noon. The three evening posts averaged a fifth of the reach.",
+    plan:"Film the daily specials reel and schedule it for 11:15 am."},
+  stock:{items:31, profiles:5, credits:1120},
+  say:"Friday specials are set, the pepper crab is back on and we have tables from seven. Make something for it.",
+  sayHi:"Friday specials set ho gaye hain, pepper crab wapas aa gaya hai aur saat baje se tables khaali hain. Iske liye kuch bana do.",
+  sayDev:"फ्राइडे स्पेशल्स सेट हो गए हैं, पेपर क्रैब वापस आ गया है और सात बजे से टेबल्स खाली हैं। इसके लिए कुछ बना दो।",
+  next:"Make the daily specials reel and schedule it for 11:15 am.",
+  nextHi:"Daily specials wala reel banao aur subah 11:15 pe schedule kar do. Shaam ke post band karo, unse kuch nahi aata.",
+  nextDev:"डेली स्पेशल्स वाला रील बनाओ और सुबह सवा ग्यारह बजे शेड्यूल कर दो। शाम के पोस्ट बंद करो, उनसे कुछ नहीं आता।",
+  because:"The midday slot is the only one producing bookings. It reaches 2.9x further than the evening one.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/thecopperroom"],
+       ["think","Midday posts reach 2.9x further here","Dopahar ke post 2.9 guna zyada log tak jaate hain"],
+       ["src","Menu and specials page","coppperroom.in/menu"],
+       ["src","Business profile","Google Business Profile"]],
+  made:{
+    video:{t:"Friday specials, pepper crab is back", spec:"0:21 vertical",
+      hook:"The pepper crab is back on.",
+      beats:["0:00  Pan going down, crab hitting the heat, sound on",
+             "0:08  The board being chalked, dish by dish",
+             "0:16  Tables from 7 pm, book on the link"],
+      caption:"Friday specials are up. Pepper crab is back, and tables open from 7 pm.",
+      tags:"#fridayspecials #peppercrab #thecopperroom #dinner"},
+    photo:{t:"This week's board", spec:"1080 x 1350", overlay:"Friday / Specials / From 7 pm",
+      caption:"Four specials, one night. Pepper crab, burnt butter sole, and two more on the board.",
+      tags:"#fridayspecials #thecopperroom #seafood"},
+    seo:{t:"/menu/friday-specials", spec:"Menu page", h1:"Friday Specials",
+      title:"Friday Specials and Tonight's Menu | The Copper Room",
+      meta:"This Friday: pepper crab, burnt butter sole and two more. Tables from 7 pm. See tonight's board and book online.",
+      body:"The specials board changes every Friday and goes up here the same morning. Four dishes, priced, with what is in them, so you know before you sit down.",
+      sections:["Tonight's board","Prices","Timings","Book a table"]},
+    gmb:{t:"Friday specials, tables from 7 pm", spec:"Business post",
+      text:"Friday specials are up. Pepper crab is back on the board, alongside burnt butter sole. Tables from 7 pm, book online or walk in.",
+      cta:"Reserve"}},
+  live:{feed:"Reel scheduled for 11:15 am Friday",
+    site:["Specials board rebuilt for this week","New page indexed: /menu/friday-specials",
+          "Prices and hours marked up for answer engines"],
+    gmb:"Posted to the Google Business Profile"},
+  posts:[
+    {t:"Friday specials board", m:"Reel, 19s, posted 15 Mar, 11:15 am",
+     r:[["Reach","19,600",""],["Eng","6.4%",""],["Saves","176",""],["Leads","9","up"]],
+     why:[["Why it travelled","Sound on, food in the first frame, and it went out at the hour people decide where to eat."],
+          ["What it produced","<b>9 bookings</b>, six of them on the same day."],
+          ["What that means","Same-day food posted before noon is the entire engine here."]]},
+    {t:"New chef introduction", m:"Reel, 34s, posted 08 Mar, 8 pm",
+     r:[["Reach","6,200","dn"],["Eng","2.1%","dn"],["Saves","37","dn"],["Leads","1",""]],
+     why:[["Why it stalled","Good film, wrong hour. It went out after people had already eaten."],
+          ["What it produced","<b>1 booking.</b>"],
+          ["What that means","The content was not the problem. The clock was."]]},
+    {t:"Closed for maintenance", m:"Image, posted 02 Mar",
+     r:[["Reach","1,400","dn"],["Eng","0.4%","dn"],["Saves","3","dn"],["Leads","0","dn"]],
+     why:[["Why it stalled","A notice is not content. It only needs to reach people already looking for you."],
+          ["What it produced","<b>Nothing</b>, which is correct for a notice."],
+          ["What that means","This belongs on the business profile, not in the feed."]]}],
+  surf:{
+    site:{rows:[["/menu/friday-specials",1620,11,0.68,2.0,"Rebuilt every Friday by this loop. Carries most of the site's bookings."],
+      ["/menu",2100,3,0.14,2.9,"The full menu. High traffic, and nothing on it changes."],
+      ["/contact",380,0,0.0,1.8,"Hours and a map. It should be the profile's job, not a page."]],
+      note:"The page that is rebuilt weekly converts nearly five times better than the one that never changes.",
+      flag:"Only one page on the site is refreshed. Everything else has been static for a year."},
+    seo:{rows:[["friday specials [area]",2,14,186,"The weekly rebuild is why it moved. Fresh pages win this."],
+      ["restaurants near me",31,31,24,"Highest volume term locally, and nothing competes for it."],
+      ["late dinner [area]",0,0,0,"1,400 searches a month, and no page mentions hours."]],
+      note:"The specials page carries 84% of all search impressions.",
+      flag:"Weekly refresh is proven here. Nothing else on the site is refreshed."},
+    geo:{rows:[["what is on at [venue] tonight",1,"/menu/friday-specials","The weekly markup is the quoted source."],
+      ["best friday specials [area]",1,"/menu/friday-specials","Quoted with prices, straight off the page."],
+      ["restaurants open late [area]",0,"No source","Opening hours are not marked up anywhere."]],
+      cited:6, total:9, note:"The strongest of the four, and every citation is the same page.",
+      flag:"One page earns all of it. Nothing else on the site is built that way."},
+    crt:{rows:[["Food account",27000,140,"140 saves","Covered the specials board. Three bookings traced to it."],
+      ["Local guide",9000,38,"38 saves","Small, steady, converts every time."]],
+      note:"Creator coverage produced 3 of the 14 bookings this month.",
+      flag:"Both partners cover the food. Nobody is covering the room."}},
+  gmb:{rows:[["Profile views","5,420","+12%","Spikes every Friday morning, within an hour of the post."],
+    ["Call clicks","318","+19%","Most bookings here still arrive by phone, not by form."],
+    ["Direction requests","890","+8%","The highest of any account on this list. People decide and drive."],
+    ["Reviews","206","4.5 avg","Volume is good. The average has slipped a tenth since December."]],
+    note:"890 direction requests is the real booking number. The website form sees a fraction of it.",
+    flag:"The average review score is drifting down and nothing in the loop is watching it."},
+  fmts:[["Food close-up",5.8,100,"4 posts, 176 saves, 9 bookings"],
+        ["Menu",3.2,55,"3 posts, 74 saves, 4 bookings"],
+        ["Behind the scenes",2.9,50,"5 posts, 37 saves, 1 booking"],
+        ["Notices",1.3,22,"4 posts, 6 saves, no bookings"]],
+  found:"<b>Every booking last month came from a post published before noon.</b> The three evening posts averaged a fifth of the reach, and one of them was the best film you have made."
+},
+
+realestate: {
+  name:"Harbour View", cat:"Real estate", ini:"HV", at:"@harbourview.homes",
+  theme:"t-realestate", unit:"enquiries", unitOne:"enquiry",
+  chans:["video","photo","seo","gmb"],
+  money:{gen:"8,50,000", total:"31,00,000"}, vs:"+11% on last month",
+  rev12:[420,465,510,545,590,610,655,700,735,780,815,850],
+  stats:[["Reach","79.0k","+17%",1],["Engagement","3.1%","+0.4pt",1],
+         ["Enquiries","11","+4",1],["Cost per enquiry","Rs 1,940","-12%",1]],
+  mix:[["Feed",52],["Search",26],["Profile",15],["AI answers",7]],
+  best:["Waterfront walkthrough","Reel, 12 Mar","41,200 reach, 7 enquiries"],
+  watch:["Stat card carousels","Five published, not one enquiry in five weeks"],
+  recur:{label:"Active mandates", series:[9,10,10,11,12,12,13,14,15,17,18,19]},
+  perf:{dir:1, pct:"+11%",
+    why:"Walkthroughs. All eleven enquiries this month came from a face on camera, none from stat cards.",
+    plan:"Film the Alder Street relist walkthrough and the harbour-front flat."},
+  stock:{items:27, profiles:5, credits:1360},
+  say:"I have just seen the waterfront two-bed, the balcony looks over the whole harbour. Viewings are this weekend. Make something for it.",
+  sayHi:"Waterfront wala two-bed apartment abhi dekh kar aaya hoon, balcony se pura harbour dikhta hai. Weekend pe viewings rakhni hain. Iske liye kuch bana do.",
+  sayDev:"वॉटरफ्रंट वाला टू बेड अपार्टमेंट अभी देख कर आया हूँ, बालकनी से पूरा हार्बर दिखता है। वीकेंड पे व्यूइंग्स रखनी हैं। इसके लिए कुछ बना दो।",
+  next:"Make two walkthrough reels, the Alder Street relist and the harbour-front flat.",
+  nextHi:"Do walkthrough reel banao, Alder Street ka relist aur harbour-front flat. Stat card wale post band karo.",
+  nextDev:"दो वॉकथ्रू रील बनाओ, एल्डर स्ट्रीट का रीलिस्ट और हार्बर फ्रंट फ्लैट। स्टैट कार्ड वाले पोस्ट बंद करो।",
+  because:"Every enquiry this month came from a face on camera, and no walkthrough has gone out since 12 March.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/harbourview.homes"],
+       ["think","Video out-performs stat cards four to one here","Video stat cards se chaar guna aage hai"],
+       ["src","Listing pages","harbourview.in/listings"],
+       ["src","Business profile","Google Business Profile"]],
+  made:{
+    video:{t:"Waterfront apartment, full walkthrough", spec:"0:42 vertical",
+      hook:"Two bed, harbour-front, walk it with me.",
+      beats:["0:00  Front door open, straight down the hall to the light",
+             "0:12  Living room, then the balcony and the water",
+             "0:28  Both bedrooms, then price and viewing times to camera"],
+      caption:"Two bed on the harbour front. Walked it this morning, viewings this weekend.",
+      tags:"#harbourview #waterfrontliving #propertytour #twobed"},
+    photo:{t:"Harbour-front, two bed", spec:"1080 x 1350", overlay:"Two bed / Harbour front",
+      caption:"Morning light off the water, straight through the living room. Viewings open this weekend.",
+      tags:"#harbourview #waterfrontapartment #propertyforsale"},
+    seo:{t:"/listings/waterfront-apartment", spec:"Listing page", h1:"Two Bed Waterfront Apartment",
+      title:"Two Bed Waterfront Apartment, Harbour Front | Harbour View",
+      meta:"Two bedroom harbour-front apartment with balcony and water views. Floor plan, price and weekend viewing times.",
+      body:"Two bedrooms, one bath and a balcony running the width of the living room, facing the water. Third floor with a lift, and parking for one.",
+      sections:["The apartment","Floor plan","Price and terms","Book a viewing"]},
+    gmb:{t:"New listing: harbour-front, two bed", spec:"Business post",
+      text:"New listing: two bed harbour-front apartment with a full-width balcony over the water. Viewings this weekend, book a slot online.",
+      cta:"Learn more"}},
+  live:{feed:"Reel scheduled for 9:30 am Wednesday",
+    site:["Listing published with floor plan","New page indexed: /listings/waterfront-apartment",
+          "Listing marked up for answer engines"],
+    gmb:"Posted to the Google Business Profile"},
+  posts:[
+    {t:"Waterfront walkthrough", m:"Reel, 42s, posted 12 Mar",
+     r:[["Reach","41,200",""],["Eng","4.1%",""],["Saves","318",""],["Leads","7","up"]],
+     why:[["Why it travelled","Forty-two seconds of one room after another. People watched it twice."],
+          ["What it produced","<b>7 enquiries</b>, three of which booked a viewing that week."],
+          ["What that means","Long-form walkthroughs are the only thing here that scales past 30,000."]]},
+    {t:"Three-bed on Alder St", m:"Reel, 31s, posted 09 Mar",
+     r:[["Reach","28,700",""],["Eng","3.6%",""],["Saves","204",""],["Leads","4","up"]],
+     why:[["Why it travelled","Same format, smaller property. It tracked the first one almost exactly."],
+          ["What it produced","<b>4 enquiries</b>, two of them on price."],
+          ["What that means","Consistent. This is repeatable, not a fluke."]]},
+    {t:"March market update", m:"Carousel, 5 slides, posted 06 Mar",
+     r:[["Reach","9,140","dn"],["Eng","0.9%","dn"],["Saves","31","dn"],["Leads","0","dn"]],
+     why:[["Why it stalled","Five slides of statistics. Nobody reached slide three."],
+          ["What it produced","<b>Nothing.</b> Not one enquiry in five weeks."],
+          ["What that means","Market data is a newsletter, not a feed post."]]}],
+  surf:{
+    site:{rows:[["/listings/waterfront-apartment",1860,7,0.38,2.3,"Built by this loop. Three viewings booked from it."],
+      ["/listings",3400,4,0.12,2.8,"The index. High traffic, weak conversion, no filtering."],
+      ["/market-report",420,0,0.0,3.1,"The carousel drove people here. Not one enquiry followed."]],
+      note:"Listing pages convert three times better than the index that holds them.",
+      flag:"The index has no filters, so most visitors leave without opening a listing."},
+    seo:{rows:[["waterfront apartments [area]",3,9,124,"Volume up 22% locally, and the listing page now ranks."],
+      ["flats for sale [area]",27,27,31,"High volume, and the index is too thin to compete."],
+      ["harbour view apartments",0,0,0,"410 searches a month, and no page carries the phrase."]],
+      note:"78% of all impressions went to the single listing page this loop created.",
+      flag:"Every listing gets a page. The index that holds them ranks for nothing."},
+    geo:{rows:[["apartments for sale near the harbour",1,"/listings/waterfront-apartment","Price, size and floor are marked up."],
+      ["is [area] a good place to buy",0,"Competitor quoted","The market report is five images. No readable page."],
+      ["two bed flats [area] under [price]",1,"/listings/waterfront-apartment","Quoted with the asking price."]],
+      cited:2, total:7, note:"Both citations come from the same listing page.",
+      flag:"The market data would be quotable as a page instead of five slides."},
+    crt:{rows:[["Relocation account",15000,4,"4 enquiries","Linked the walkthrough. Four of seven enquiries came through it."],
+      ["Design page",88000,0,"0 enquiries","Huge reach, no local audience, nothing to show."]],
+      note:"The smallest partner produced every attributable enquiry.",
+      flag:"Audience size predicted nothing. Locality predicted everything."}},
+  gmb:{rows:[["Profile views","2,260","+17%","Rises with each listing published, then decays over about ten days."],
+    ["Call clicks","148","+21%","Half of all enquiries arrive by phone and none of them are tracked elsewhere."],
+    ["Direction requests","74","+4%","Low, and that is correct. Nobody drives to an estate agent unannounced."],
+    ["Reviews","31","4.7 avg","Thin for the sector. Volume here would move local ranking more than anything else."]],
+    note:"Half of all enquiries arrive by phone through the profile, and none of them appear in feed analytics.",
+    flag:"31 reviews is thin. Review volume moves local ranking more than any post on this list."},
+  fmts:[["Talking head",4.1,100,"3 posts, 318 saves, 7 enquiries"],
+        ["Walkthrough",3.2,78,"4 posts, 204 saves, 4 enquiries"],
+        ["Listing photos",1.4,34,"6 posts, 44 saves, no enquiries"],
+        ["Stat cards",0.9,22,"5 posts, 31 saves, no enquiries"]],
+  found:"<b>A face on camera out-performs stat cards four to one here.</b> All eleven enquiries this month came from video."
+}
+
+};
+
+
+Object.assign(BIZ, {
+
+doctor: {
+  name:"Dr Meera Rao", cat:"Family practice", ini:"MR", at:"@drmeerarao",
+  theme:"t-doctor", unit:"appointments", unitOne:"appointment",
+  chans:["video","photo","seo","gmb","list"], medical:true,
+  money:{gen:"1,95,000", total:"6,10,000"}, vs:"+13% on last month",
+  rev12:[142,148,151,159,163,158,171,178,184,190,196,208],
+  stats:[["Reach","9.8k","+14%",1],["Profile views","2.1k","+26%",1],
+         ["Appointments","36","+9",1],["No-show rate","11%","-4pt",1]],
+  mix:[["Listings",39],["Search",29],["Profile",22],["Feed",10]],
+  best:["What a fever actually needs","Reel, 04 Mar","7,300 reach, 6 appointments"],
+  watch:["Awareness day posts","Six published, no appointments in two months"],
+  recur:{label:"Returning patients", series:[86,88,91,94,97,99,103,108,112,117,121,128]},
+  perf:{dir:1, pct:"+13%",
+    why:"Plain explanations of common symptoms brought people in. The awareness day graphics brought nobody.",
+    plan:"Record one 40-second explainer on the Saturday evening OPD and post it Wednesday morning."},
+  stock:{items:16, profiles:6, credits:1240},
+  say:"I am starting a Saturday evening OPD from next month, five to eight. Walk-ins are fine. Make something for it.",
+  sayHi:"Agle mahine se Saturday evening OPD shuru kar raha hoon, shaam 5 se 8. Walk-in bhi le lenge. Iske liye kuch bana do.",
+  sayDev:"अगले महीने से सैटरडे इवनिंग ओपीडी शुरू कर रहा हूँ, शाम पाँच से आठ। वॉक-इन भी ले लेंगे। इसके लिए कुछ बना दो।",
+  next:"Record a 40-second explainer on the Saturday OPD and post it Wednesday morning.",
+  nextHi:"Ek 40 second ka explainer banao Saturday OPD ke timings ka, aur Wednesday subah post karo. Awareness day wale post band karo.",
+  nextDev:"एक चालीस सेकंड का एक्सप्लेनर बनाओ सैटरडे ओपीडी की टाइमिंग का, और वेडनेसडे सुबह पोस्ट करो। अवेयरनेस डे वाले पोस्ट बंद करो।",
+  because:"Every appointment traced to content came from a plain symptom explainer, and the listings profile is where 39% of them started.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/drmeerarao"],
+       ["think","Symptom explainers convert, awareness graphics do not","Symptom explainer chalte hain, awareness graphics nahi"],
+       ["src","Practice website","raofamilypractice.in"],
+       ["src","Practo and Justdial listings","Listing profiles"],
+       ["chk","Removed a phrase that implied a cure. Timings and availability only","Cure imply karne wala phrase hata diya, sirf timings rakhi hain"],
+       ["chk","Held back a patient quote. No written consent on file","Patient ka quote roka hai, likhit consent file mein nahi hai"]],
+  made:{
+    video:{t:"Saturday evening OPD, 5 to 8", spec:"0:40 vertical",
+      hook:"Cannot get away on a weekday? Saturdays are open now.",
+      beats:["0:00  To camera, in the consulting room, no music",
+             "0:14  What the Saturday slot is for, and what it is not for",
+             "0:30  Timings, walk-in rules, and how to book ahead"],
+      caption:"A Saturday evening OPD from next month, 5 to 8 pm. Walk-ins welcome, appointments get seen first.",
+      tags:"#familydoctor #saturdayclinic #generalphysician"},
+    photo:{t:"Saturday OPD timings", spec:"1080 x 1350",
+      overlay:"Saturday / 5 to 8 pm / Walk-ins welcome",
+      caption:"New Saturday evening OPD from next month. Book ahead on the site or walk in.",
+      tags:"#familydoctor #clinictimings #saturdayopd"},
+    seo:{t:"/opd-timings", spec:"Information page", h1:"OPD Timings and How to Book",
+      title:"OPD Timings, Including Saturday Evenings | Dr Meera Rao",
+      meta:"Consulting hours for the practice, including the new Saturday evening OPD from 5 to 8 pm. Walk-in rules, fees and online booking.",
+      body:"Weekday consulting runs from 9 am to 1 pm and 4 to 7 pm. From next month a Saturday evening OPD runs 5 to 8 pm for people who cannot take a weekday off. Walk-ins are seen after booked appointments.",
+      sections:["Weekday hours","Saturday evening OPD","Walk-in rules","Consultation fee","Book online"]},
+    gmb:{t:"Saturday evening OPD from next month", spec:"Business post",
+      text:"A Saturday evening OPD starts next month, 5 to 8 pm. Walk-ins are welcome and booked appointments are seen first.",
+      cta:"Book"},
+    list:{t:"Practo and Justdial", spec:"Listing update",
+      text:"Saturday 5 to 8 pm added to consulting hours across both listing profiles, with the walk-in policy stated in the about section.",
+      cta:"Updated on 2 profiles"}},
+  live:{feed:"Reel scheduled for 8:30 am Wednesday",
+    site:["Timings page updated with the Saturday slot","New page indexed: /opd-timings",
+          "Hours marked up so answer engines can quote them"],
+    gmb:"Posted to the Google Business Profile",
+    list:"Consulting hours updated on Practo and Justdial"},
+  posts:[
+    {t:"What a fever actually needs", m:"Reel, 44s, posted 04 Mar",
+     r:[["Reach","7,300",""],["Saves","512",""],["Profile","286",""],["Appts","6","up"]],
+     why:[["Why it travelled","It answered a question people search at 2 am, in the words they would use."],
+          ["What it produced","<b>6 appointments</b>, four of them first-time patients."],
+          ["What that means","Explaining a common symptom plainly is the only content on this account that fills a slot."]]},
+    {t:"Clinic renovation update", m:"Carousel, 3 slides, posted 18 Feb",
+     r:[["Reach","2,100",""],["Saves","31",""],["Profile","44",""],["Appts","1",""]],
+     why:[["Why it stalled","Interesting to you, not to a patient deciding where to go."],
+          ["What it produced","<b>1 appointment</b>, from an existing patient."],
+          ["What that means","Fine as a one-off. Not a format."]]},
+    {t:"World Health Day graphic", m:"Image, posted 07 Apr",
+     r:[["Reach","890","dn"],["Saves","4","dn"],["Profile","9","dn"],["Appts","0","dn"]],
+     why:[["Why it stalled","A stock graphic with a date on it. It says nothing only this practice could say."],
+          ["What it produced","<b>Nothing.</b> Six of these have gone out in two months."],
+          ["What that means","Stop. The slot is better spent on one symptom people actually search."]]}],
+  surf:{
+    site:{rows:[["/opd-timings",640,14,2.19,1.7,"Built by this loop. The highest converting page on the site."],
+      ["/about",410,2,0.49,2.0,"Qualifications and registration. People read it before booking, rarely book from it."],
+      ["/blog/fever-in-children",1240,3,0.24,3.6,"Most read page on the site, and the slowest. No booking link above the fold."]],
+      note:"The timings page converts nine times better than the most-read page on the site.",
+      flag:"The busiest page has no way to book from it without scrolling past the whole article."},
+    seo:{rows:[["family doctor near me",7,16,94,"The timings page moved it nine places in three weeks."],
+      ["general physician [area]",12,12,61,"Steady. The listings profiles outrank the site for this."],
+      ["doctor open on saturday [area]",0,0,0,"1,100 searches a month, and the new slot is not on the site yet."]],
+      note:"Two thirds of search clicks land on listing profiles, not on the practice website.",
+      flag:"Saturday availability is the highest intent query in this set and nothing answers it yet."},
+    geo:{rows:[["family doctor open on saturday [area]",0,"No source","Hours are not marked up in a readable format."],
+      ["general physician consultation fee [area]",1,"/opd-timings","Fee is stated as text, so it can be quoted."],
+      ["is [practice] accepting new patients",0,"No source","Nothing on the site states this either way."]],
+      cited:1, total:6, note:"Answer engines quote fees and hours. Everything else here is prose they skip.",
+      flag:"Two of six prompts fail because a plain fact is missing, not because the content is weak."},
+    crt:{rows:[["Parenting page",22000,54,"54 visits","Shared the fever explainer. Two appointments traced to it."],
+      ["Wellness influencer",71000,3,"3 visits","Large audience, and none of it is local."]],
+      note:"The local parenting page produced every attributable appointment.",
+      flag:"Medical content shared by a non-medical account carries a claim risk. Review before repeating."}},
+  gmb:{rows:[["Profile views","2,140","+26%","Rises sharply whenever hours change. The Saturday slot will move this again."],
+    ["Call clicks","412","+18%","Most appointments still start with a phone call, not a form."],
+    ["Direction requests","268","+11%","Steady. Patients look up the route the morning of the visit."],
+    ["Reviews","38","4.9 avg","High score, low volume. Ten more would move local ranking."]],
+    note:"412 call clicks is the real appointment funnel. The website form sees a tenth of it.",
+    flag:"Review volume is the single cheapest ranking lever here and nothing in the loop asks for reviews."},
+  fmts:[["Symptom explainer",6.8,100,"3 posts, 512 saves, 6 appointments"],
+        ["Timings and access",4.2,62,"2 posts, 96 saves, 3 appointments"],
+        ["Practice update",1.9,28,"3 posts, 31 saves, 1 appointment"],
+        ["Awareness day",0.5,7,"6 posts, 4 saves, no appointments"]],
+  found:"<b>Six awareness day graphics have produced nothing in two months.</b> One plain explanation of a fever produced six appointments."
+},
+
+clinic: {
+  name:"Northline Diagnostics", cat:"Diagnostics", ini:"ND", at:"@northlinediagnostics",
+  theme:"t-clinic", unit:"tests booked", unitOne:"booking",
+  chans:["video","photo","seo","gmb","list"], medical:true,
+  money:{gen:"4,10,000", total:"18,60,000"}, vs:"-14% on last month",
+  rev12:[512,528,545,561,540,556,533,519,502,486,470,410],
+  stats:[["Reach","24.1k","-19%",-1],["Profile views","3.4k","-22%",-1],
+         ["Tests booked","61","-23",-1],["Cost per booking","Rs 720","+38%",-1]],
+  mix:[["Search",41],["Listings",27],["Profile",19],["Feed",13]],
+  best:["How to prep for a lipid test","Reel, 22 Feb","11,400 reach, 18 bookings"],
+  watch:["Aggregator listings","Two aggregators now outrank the site on every package query"],
+  recur:{label:"Repeat patients", series:[220,228,236,241,238,244,239,231,224,216,207,196]},
+  perf:{dir:-1, pct:"-14%",
+    why:"Two aggregators moved above the site on every package query. Bookings fell with the rankings, not with reach.",
+    plan:"Build one page per package with the price and the report time stated as text."},
+  stock:{items:22, profiles:7, credits:760},
+  say:"We are launching a full body health checkup package at three thousand, and the report comes back in twenty four hours. Make something for it.",
+  sayHi:"Full body health checkup ka package launch kar rahe hain, teen hazaar mein. Report chobbis ghante mein mil jaayegi. Iske liye kuch bana do.",
+  sayDev:"फुल बॉडी हेल्थ चेकअप का पैकेज लॉन्च कर रहे हैं, तीन हज़ार में। रिपोर्ट चौबीस घंटे में मिल जाएगी। इसके लिए कुछ बना दो।",
+  next:"Build a page per package with the price and report time in plain text.",
+  nextHi:"Har package ka alag page banao, price aur report time text mein likha ho. Awareness post band karo.",
+  nextDev:"हर पैकेज का अलग पेज बनाओ, प्राइस और रिपोर्ट टाइम टेक्स्ट में लिखा हो। अवेयरनेस पोस्ट बंद करो।",
+  because:"Every query you are losing is a price or a turnaround question, and both facts currently sit inside images.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/northlinediagnostics"],
+       ["think","Rankings fell on every package query, checking who moved above","Package queries pe ranking giri hai, dekh raha hoon kaun upar aaya"],
+       ["src","Package and pricing pages","northlinediagnostics.in/packages"],
+       ["src","Practo and Justdial listings","Listing profiles"],
+       ["chk","Kept the claim to what the package includes. No outcome promised","Sirf package mein kya hai wo likha hai, koi result promise nahi"],
+       ["chk","Fasting instruction added. A prep step cannot be left out","Fasting instruction daal di hai, prep step chhod nahi sakte"]],
+  made:{
+    video:{t:"Full body checkup, report in 24 hours", spec:"0:28 vertical",
+      hook:"Eighty tests, one sitting, report tomorrow.",
+      beats:["0:00  Sample collection, gloved hands, no faces",
+             "0:10  The panel list scrolling, grouped by what it covers",
+             "0:20  Rs 3,000, fasting required, report in 24 hours"],
+      caption:"Full body health checkup, Rs 3,000. Eighty tests in one sitting, report in twenty four hours. Twelve hours fasting required.",
+      tags:"#healthcheckup #diagnostics #preventivehealth"},
+    photo:{t:"What the package covers", spec:"1080 x 1350",
+      overlay:"80 tests / Rs 3,000 / Report in 24 hrs",
+      caption:"One sitting, eighty tests, report the next day. Twelve hours fasting required before the sample.",
+      tags:"#healthcheckup #fullbodycheckup #northlinediagnostics"},
+    seo:{t:"/packages/full-body-checkup", spec:"Package page", h1:"Full Body Health Checkup",
+      title:"Full Body Health Checkup, Rs 3,000, Report in 24 Hours | Northline",
+      meta:"Eighty tests in one sitting for Rs 3,000. Twelve hours fasting required, report in 24 hours. See the full panel list and book a slot.",
+      body:"Eighty tests across blood count, liver, kidney, thyroid, lipids and sugar, taken in a single sitting. Twelve hours of fasting is required before the sample. Reports are released within twenty four hours to the app and by email.",
+      sections:["What is included","How to prepare","Price","Report turnaround","Book a slot"]},
+    gmb:{t:"Full body checkup, Rs 3,000", spec:"Business post",
+      text:"Full body health checkup, eighty tests for Rs 3,000. Twelve hours fasting required. Reports in twenty four hours.",
+      cta:"Book"},
+    list:{t:"Practo and Justdial", spec:"Listing update",
+      text:"Package added to both listing profiles with the price, the fasting requirement and the report turnaround stated in the description.",
+      cta:"Updated on 2 profiles"}},
+  live:{feed:"Reel scheduled for 10:00 am Monday",
+    site:["Package page published with the full panel list","New page indexed: /packages/full-body-checkup",
+          "Price and turnaround marked up for answer engines"],
+    gmb:"Posted to the Google Business Profile",
+    list:"Package published to Practo and Justdial"},
+  posts:[
+    {t:"How to prep for a lipid test", m:"Reel, 26s, posted 22 Feb",
+     r:[["Reach","11,400",""],["Saves","640",""],["Profile","410",""],["Books","18","up"]],
+     why:[["Why it travelled","It answered the one question every person asks the night before a test."],
+          ["What it produced","<b>18 bookings</b>, most of them within three days."],
+          ["What that means","Prep instructions are the highest converting content this account has ever posted."]]},
+    {t:"New machine installed", m:"Image, posted 01 Mar",
+     r:[["Reach","3,200","dn"],["Saves","18","dn"],["Profile","36","dn"],["Books","1","dn"]],
+     why:[["Why it stalled","A photo of equipment means nothing to somebody choosing where to get a test."],
+          ["What it produced","<b>1 booking.</b>"],
+          ["What that means","Translate the machine into what it changes for the patient, or skip it."]]},
+    {t:"Health awareness week", m:"Carousel, 6 slides, posted 12 Mar",
+     r:[["Reach","1,900","dn"],["Saves","7","dn"],["Profile","11","dn"],["Books","0","dn"]],
+     why:[["Why it stalled","Six slides of general advice available on a thousand other accounts."],
+          ["What it produced","<b>Nothing.</b>"],
+          ["What that means","Generic health content competes with the entire internet. Prep instructions compete with nobody."]]}],
+  surf:{
+    site:{rows:[["/packages/full-body-checkup",0,0,0.0,0,"Published by this loop today. No data yet."],
+      ["/packages",2400,9,0.38,3.2,"One page listing eleven packages. Prices sit inside a JPEG."],
+      ["/book",1100,42,3.82,2.1,"The booking form. Works well, and almost nothing links to it."]],
+      note:"The booking page converts at 3.8%, and only one page on the site links to it.",
+      flag:"Every package price on this site is inside an image. Search cannot read a single one."},
+    seo:{rows:[["full body checkup price [area]",19,6,22,"Dropped thirteen places. Two aggregators moved above."],
+      ["blood test near me",28,21,14,"Falling. Listing profiles are carrying this, not the site."],
+      ["thyroid test cost",0,0,0,"2,300 searches a month. The price exists, as an image."]],
+      note:"Every lost position this quarter was on a query containing the word price or cost.",
+      flag:"Prices inside images are invisible to both search and answer engines. This is the whole decline."},
+    geo:{rows:[["how much is a full body checkup in [area]",0,"Aggregator quoted","Our price is an image. Theirs is text."],
+      ["do i need to fast before a lipid test",1,"/blog/lipid-prep","The prep post is quoted almost verbatim."],
+      ["fastest blood test report [area]",0,"No source","Turnaround time is stated nowhere on the site."]],
+      cited:1, total:8, note:"The one citation came from the only page that states a fact in plain text.",
+      flag:"Two aggregators are being quoted for prices this clinic actually charges less than."},
+    crt:{rows:[["Local health page",13000,88,"88 visits","Shared the prep reel. Six bookings traced to it."],
+      ["Fitness creator",96000,11,"11 visits","Large reach, wrong intent. Nobody was looking for a test."]],
+      note:"The smaller local page produced six times the bookings of one seven times its size.",
+      flag:"Any partner sharing medical content needs the claim checked before it goes out."}},
+  gmb:{rows:[["Profile views","3,420","-22%","Falling with search. The profile mirrors the site's decline."],
+    ["Call clicks","286","-16%","Down, and this is where price questions arrive."],
+    ["Direction requests","540","-9%","Still the largest single intent signal on the account."],
+    ["Reviews","94","4.4 avg","Volume is fine. Three recent reviews mention report delays."]],
+    note:"Direction requests are falling more slowly than everything else, so walk-in demand is holding while search demand drops.",
+    flag:"Three recent reviews mention report delays and none of them has a reply."},
+  fmts:[["Prep instructions",7.4,100,"2 posts, 640 saves, 18 bookings"],
+        ["Package explainer",3.6,49,"3 posts, 121 saves, 7 bookings"],
+        ["Facility update",1.1,15,"4 posts, 18 saves, 1 booking"],
+        ["Awareness carousel",0.4,5,"5 posts, 7 saves, no bookings"]],
+  found:"<b>Every position lost this quarter was on a query with the word price or cost in it.</b> Your prices are real and competitive, and every one of them is locked inside a JPEG."
+},
+
+wedding: {
+  name:"Marigold Weddings", cat:"Wedding planning", ini:"MW", at:"@marigoldweddings",
+  theme:"t-wedding", unit:"enquiries", unitOne:"enquiry",
+  chans:["video","photo","seo","pin"],
+  money:{gen:"12,40,000", total:"46,00,000"}, vs:"+61% on last month",
+  rev12:[180,210,240,190,160,140,120,180,340,620,980,1240],
+  stats:[["Reach","128k","+58%",1],["Saves","4.1k","+92%",1],
+         ["Enquiries","23","+14",1],["Consults booked","9","+6",1]],
+  mix:[["Feed",38],["Pinterest",27],["Search",24],["Referral",11]],
+  best:["Udaipur wedding film","Reel, 21 Mar","74,000 reach, 11 enquiries"],
+  watch:["Quote cards","Nine published this season, one enquiry between them"],
+  recur:{label:"Signed weddings", series:[3,4,4,2,2,1,1,3,6,9,13,17]},
+  perf:{dir:1, pct:"+61%",
+    why:"Booking season opened and the Udaipur film carried it. Eleven of twenty three enquiries came from that one post.",
+    plan:"Cut two more real wedding films while the season is open, Udaipur and Goa."},
+  stock:{items:34, profiles:4, credits:2160},
+  say:"The Udaipur shoot from last week has come back and it looks beautiful. We are opening bookings for next season. Make something for it.",
+  sayHi:"Pichhle hafte ka Udaipur wala wedding shoot mil gaya hai, bahut sundar aaya hai. Next season ki bookings khol rahe hain. Iske liye kuch bana do.",
+  sayDev:"पिछले हफ़्ते का उदयपुर वाला वेडिंग शूट मिल गया है, बहुत सुंदर आया है। नेक्स्ट सीज़न की बुकिंग्स खोल रहे हैं। इसके लिए कुछ बना दो।",
+  next:"Cut two more real wedding films, the Udaipur one and Goa, while the season is open.",
+  nextHi:"Do aur real wedding film banao, Udaipur aur Goa wali, jab tak season khula hai. Quote card wale post band karo.",
+  nextDev:"दो और रियल वेडिंग फिल्म बनाओ, उदयपुर और गोवा वाली, जब तक सीज़न खुला है। कोट कार्ड वाले पोस्ट बंद करो।",
+  because:"You have eleven weeks of booking season left and real wedding films are the only format here that has ever produced a consultation.",
+  gen:[["think","Reading the last 90 days on this account","Is account ka pichhla teen mahina padh raha hoon"],
+       ["src","Last 90 days of posts","instagram.com/marigoldweddings"],
+       ["think","Booking season is open for eleven more weeks","Booking season gyarah hafte aur khula hai"],
+       ["src","Portfolio pages","marigoldweddings.in/real-weddings"],
+       ["src","Pinterest board performance","Pinterest business"]],
+  made:{
+    video:{t:"Udaipur, three days by the lake", spec:"0:58 vertical",
+      hook:"Three days, one lake, four hundred people.",
+      beats:["0:00  Boats crossing at first light, no music yet",
+             "0:16  Mehendi under the arches, the music comes in",
+             "0:34  The pheras at dusk, lake behind, full sound",
+             "0:48  Bookings open for next season, link in bio"],
+      caption:"Three days in Udaipur for Aditi and Rohan. Bookings for next season are open from today.",
+      tags:"#udaipurwedding #destinationwedding #marigoldweddings #realwedding"},
+    photo:{t:"Aditi and Rohan, Udaipur", spec:"1080 x 1350",
+      overlay:"Udaipur / Three days / Next season open",
+      caption:"Lake Pichola at dusk, four hundred guests, and one very calm couple. Next season's dates are open.",
+      tags:"#udaipurwedding #realwedding #marigoldweddings"},
+    seo:{t:"/real-weddings/aditi-rohan-udaipur", spec:"Portfolio page",
+      h1:"Aditi and Rohan, Udaipur",
+      title:"A Three Day Udaipur Wedding for Aditi and Rohan | Marigold Weddings",
+      meta:"A three day lakeside wedding in Udaipur for four hundred guests. Venues, timeline, costs and how it was planned. Next season's dates are open.",
+      body:"Three days at Lake Pichola for four hundred guests, planned over nine months. Two venues, one boat transfer for the baraat, and a mehendi that ran four hours past schedule because nobody wanted to stop.",
+      sections:["The brief","Venues and timeline","What it cost","Suppliers we used","Enquire about your dates"]},
+    pin:{t:"Udaipur lakeside board", spec:"Pinterest, 8 pins",
+      text:"Eight pins from the Udaipur wedding, each linked back to the portfolio page. Mandap, mehendi arches, table settings, boat transfer and the dusk pheras.",
+      cta:"Board published"}},
+  live:{feed:"Reel scheduled for 6:00 pm Sunday",
+    site:["Portfolio page published with the full timeline",
+          "New page indexed: /real-weddings/aditi-rohan-udaipur",
+          "Venue and supplier names marked up for answer engines"],
+    pin:"Eight pins published and linked to the portfolio page"},
+  posts:[
+    {t:"Udaipur wedding film", m:"Reel, 58s, posted 21 Mar",
+     r:[["Reach","74,000",""],["Saves","2,940",""],["Shares","611",""],["Leads","11","up"]],
+     why:[["Why it travelled","Almost three thousand saves. People are building a folder for their own wedding and this went into it."],
+          ["What it produced","<b>11 enquiries</b>, four of which booked a consultation."],
+          ["What that means","A real wedding film is the only thing on this account that both travels and converts."]]},
+    {t:"Mandap detail shots", m:"Carousel, 6 slides, posted 14 Mar",
+     r:[["Reach","28,400",""],["Saves","880",""],["Shares","94",""],["Leads","4","up"]],
+     why:[["Why it travelled","Detail shots are what people save. Fewer shares, but a very high save rate."],
+          ["What it produced","<b>4 enquiries</b>, two asking specifically about the florist."],
+          ["What that means","Strong support format. It should sit two days behind every film, not stand alone."]]},
+    {t:"Planning quote card", m:"Image, posted 09 Mar",
+     r:[["Reach","2,600","dn"],["Saves","19","dn"],["Shares","2","dn"],["Leads","0","dn"]],
+     why:[["Why it stalled","A sentence on a beige background. Nine of these have gone out this season."],
+          ["What it produced","<b>Nothing.</b> One enquiry across all nine."],
+          ["What that means","Nine slots in the busiest season of the year, spent on nothing."]]}],
+  surf:{
+    site:{rows:[["/real-weddings/aditi-rohan-udaipur",0,0,0.0,0,"Published by this loop today. No data yet."],
+      ["/real-weddings",4900,12,0.24,2.4,"The portfolio index. Beautiful, and it takes four taps to reach an enquiry form."],
+      ["/pricing",1800,31,1.72,1.9,"The highest converting page, and it is linked from nowhere in the feed."]],
+      note:"The pricing page converts seven times better than the portfolio and the feed never points at it.",
+      flag:"Four taps from a portfolio page to an enquiry form. Every tap loses roughly a third of them."},
+    seo:{rows:[["udaipur wedding planner",5,13,240,"The portfolio pages moved it eight places this season."],
+      ["destination wedding cost india",0,0,0,"8,900 searches a month. The pricing page does not target it."],
+      ["wedding planner [area]",9,9,88,"Steady, and the highest intent term in this set."]],
+      note:"Portfolio pages rank. The pricing page, which converts seven times better, ranks for nothing.",
+      flag:"The one query about cost has 8,900 searches a month and your best page ignores it."},
+    geo:{rows:[["how much does a destination wedding cost",0,"Competitor quoted","Costs are on the pricing page as a range, not as a stated figure."],
+      ["best wedding planners in udaipur",1,"/real-weddings","Quoted with two venue names."],
+      ["how long does wedding planning take",0,"No source","Nothing on the site states a timeline."]],
+      cited:1, total:6, note:"Answer engines want a number. Every cost on this site is a range.",
+      flag:"Three of six prompts are cost and timeline questions. Both facts exist internally and neither is published."},
+    crt:{rows:[["Bridal magazine",210000,190,"190 visits","Featured the Udaipur wedding. Three enquiries traced to it."],
+      ["Photographer",44000,340,"340 visits","Tagged in the film. Highest referral traffic of any partner."]],
+      note:"The photographer, at a fifth of the reach, sent nearly twice the traffic.",
+      flag:"Suppliers on each wedding are the strongest referral channel and none of it is arranged in advance."}},
+  gmb:{rows:[["Profile views","1,120","+34%","Rises with the season. Most of the enquiry volume is not here."],
+    ["Call clicks","96","+41%","Serious enquiries call. Nine of them became consultations."],
+    ["Direction requests","18","+2%","Correctly low. Nobody visits a planner unannounced."],
+    ["Reviews","22","5.0 avg","Perfect score, thin volume. Every past couple would write one if asked."]],
+    note:"Direction requests do not matter here. Call clicks do, and they are up 41% with the season.",
+    flag:"Twenty two reviews across four years of weddings. Nobody is being asked."},
+  fmts:[["Real wedding film",7.9,100,"3 posts, 2,940 saves, 11 enquiries"],
+        ["Detail carousel",5.4,68,"4 posts, 880 saves, 4 enquiries"],
+        ["Supplier feature",2.6,33,"3 posts, 210 saves, 1 enquiry"],
+        ["Quote card",0.6,8,"9 posts, 19 saves, 1 enquiry"]],
+  found:"<b>Nine quote cards this season produced one enquiry between them.</b> One Udaipur film produced eleven. You have eleven weeks of season left."
+}
+
+});
+
+
+/* ---------------------------------------------------------------- config */
+const ORDER = ["gym","salon","restaurant","realestate","doctor","clinic","wedding"];
+
+const CHAN = {
+  video:{n:"Video", verb:"Writing the script and shot list", hi:"Script aur shot list likh raha hoon"},
+  photo:{n:"Photo", verb:"Writing the caption and picking the frame", hi:"Caption likh raha hoon, frame choose kar raha hoon"},
+  seo:{n:"Website", verb:"Writing the page, title and meta description", hi:"Page, title aur meta description likh raha hoon"},
+  gmb:{n:"Profile", verb:"Writing the business profile post", hi:"Business profile ka post likh raha hoon"},
+  list:{n:"Listings", verb:"Updating the listing profiles", hi:"Listing profiles update kar raha hoon"},
+  pin:{n:"Pinterest", verb:"Building the pin set and linking each one back", hi:"Pin set bana raha hoon aur link kar raha hoon"}
+};
+
+const STEPS = [
+  {t:"Speak",       p:"Say it the way you would say it to a person."},
+  {t:"Review",      p:"One confirmation sends it to every channel you picked."},
+  {t:"Results",     p:"Every surface it reached, attributed back."},
+  {t:"What\u2019s Next", p:"What worked chooses what gets made."}
+];
+
+const TABS = [{n:"Posts"},{n:"Website"},{n:"Profile"}];
+
+/* SF Symbols equivalents, drawn to the same 24pt optical box */
+const ICON = {
+  mic:'<path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 0 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a6 6 0 0 1-5 5.92V21h-2v-3.58a6 6 0 0 1-5-5.92h2a4 4 0 0 0 8 0Z"/>',
+  chevR:'<path d="M8.6 4.6 7.2 6l6 6-6 6 1.4 1.4L16 12 8.6 4.6Z"/>',
+  chevD:'<path d="M6 8.6 4.6 10l7.4 7.4L19.4 10 18 8.6l-6 6-6-6Z"/>',
+  close:'<path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z" transform="translate(1.6 0)"/>',
+  check:'<path d="M9.6 17.3 4.3 12l1.4-1.4 3.9 3.9 8.7-8.7L19.7 7.2 9.6 17.3Z"/>',
+  sun:'<path d="M12 7.5A4.5 4.5 0 1 0 12 16.5 4.5 4.5 0 0 0 12 7.5Zm0-6 1.6 3.2h-3.2L12 1.5Zm0 21-1.6-3.2h3.2L12 22.5Zm10.5-10.5-3.2 1.6v-3.2l3.2 1.6Zm-21 0 3.2-1.6v3.2L1.5 12ZM19.4 4.6l-.9 3.5-2.6-2.6 3.5-.9ZM4.6 19.4l.9-3.5 2.6 2.6-3.5.9ZM4.6 4.6l3.5.9-2.6 2.6-.9-3.5Zm14.8 14.8-3.5-.9 2.6-2.6.9 3.5Z"/>',
+  moon:'<path d="M12.4 2.6A7.9 7.9 0 0 0 21 15.3 9.2 9.2 0 1 1 12.4 2.6Z"/>',
+  spark:'<path d="M12 2.5 13.6 8 19 9.5 13.6 11 12 16.5 10.4 11 5 9.5 10.4 8 12 2.5ZM18 15l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8L18 15Z"/>',
+  doc:'<path d="M6 2h7l5 5v15H6V2Zm7 1.8V7.6h3.7L13 3.8ZM8.5 12h7v1.6h-7V12Zm0 3.4h7V17h-7v-1.6Z"/>',
+  shield:'<path d="M12 2 4 5v6.2c0 4.9 3.4 9.2 8 10.8 4.6-1.6 8-5.9 8-10.8V5l-8-3Zm-1 14-3.7-3.7 1.4-1.4L11 13.2l4.8-4.8 1.4 1.4L11 16Z"/>',
+  play:'<path d="M7 4.5v15l13-7.5L7 4.5Z"/>',
+  up:'<path d="M12 4.5 19 11.5l-1.5 1.5-4.4-4.4V20h-2.2V8.6L6.5 13 5 11.5 12 4.5Z"/>',
+  down:'<path d="M12 19.5 5 12.5 6.5 11l4.4 4.4V4h2.2v11.4L17.5 11 19 12.5 12 19.5Z"/>',
+  bolt:'<path d="M13.5 2 5 13.4h5.2L9.4 22 19 10.3h-5.4L13.5 2Z"/>',
+  wave:'<path d="M3 11h2v2H3v-2Zm4-3h2v8H7V8Zm4-4h2v16h-2V4Zm4 3h2v10h-2V7Zm4 4h2v2h-2v-2Z"/>'
+};
+const svg = p => `<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+
+/* ----------------------------------------------------------------- state */
+let biz = "gym", view = "home", i = 0, cyc = 1, tab = 0;
+let heard = false, working = false, built = false;
+let confirmed = false, published = false, publishing = false;
+let picked = {}, hin = true, sound = true;
+let lightMode = matchMedia("(prefers-color-scheme: light)").matches;
+let stdOpen = -1, sheetMode = "in";
+let shown = "", said = "", talking = false;
+let timers = [], vtimers = [], voices = [], lastFocus = null, wired = false;
+
+const el = id => document.getElementById(id);
+const B = () => BIZ[biz];
+const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+const chans = () => B().chans;
+const on = () => chans().filter(k => picked[k]);
+const reduced = () => matchMedia("(prefers-color-scheme: reduce)").matches
+  || matchMedia("(prefers-reduced-motion: reduce)").matches;
+function resetPicked(){ picked = {}; chans().forEach(k => picked[k] = 1); }
+
+/* A short pulse on state changes that matter. Silent where unsupported, which
+   is most desktops, and never used for anything merely decorative. */
+function haptic(ms) { try { navigator.vibrate && navigator.vibrate(ms || 8); } catch (e) {} }
+
+const THEMES = ORDER.map(k => BIZ[k].theme);
+function applyTheme() {
+  const want = B().theme;
+  [document.documentElement, el("phone")].forEach(n => {
+    if (!n) return;
+    THEMES.forEach(t => n.classList.remove(t));
+    n.classList.add(want);
+    n.classList.toggle("light", lightMode);
+  });
+}
+
+/* ------------------------------------------------------------- rendering */
+function render(keep) {
+  timers.forEach(clearTimeout); timers = [];
+  const home = view === "home", sc = el("scroll");
+  const y = keep ? sc.scrollTop : 0;
+
+  el("nav").innerHTML = home ? navHome() : navFlow();
+  el("start").hidden = !home;
+  el("toolbar").hidden = home;
+  if (home) el("start").innerHTML = svg(ICON.mic) + "Speak to VIC";
+  else el("toolbar").innerHTML = toolbar();
+
+  sc.innerHTML = home ? homeScreen() : flowScreen();
+  sc.scrollTop = y;
+  el("nav").classList.toggle("compact", y > 26);
+
+  later(() => {
+    document.querySelectorAll(".fill[data-w]").forEach(f => f.style.width = f.dataset.w + "%");
+    moveKnob();
+  }, 60);
+  wire();
+}
+
+function navHome() {
+  const b = B();
+  return `<div class="navbar">
+    <button class="navbtn avatar glass tap" id="idbtn" onclick="openPicker(event)"
+      aria-haspopup="dialog" aria-label="Switch account, currently ${b.name}">
+      <span class="ini">${b.ini}</span></button>
+    <span class="navttl">${b.name}</span>
+    ${themeBtn()}
+  </div>
+  <div class="navlarge"><h1>${b.name}</h1>
+    <p>${b.cat} &middot; ${b.perf.dir > 0 ? "growing" : "declining"}</p></div>`;
+}
+
+function navFlow() {
+  return `<div class="navbar">
+    <button class="navbtn glass tap" onclick="exitFlow()" aria-label="Close">
+      ${svg(ICON.close)}</button>
+    <span class="navttl">${STEPS[i].t}</span>
+    ${themeBtn()}
+  </div>
+  <div class="navlarge"><h1>${STEPS[i].t}</h1>
+    <p>Step ${i + 1} of 4 &middot; cycle ${cyc}</p></div>
+  <div class="steps">${STEPS.map((s, n) =>
+    `<i class="${n < i ? "done" : n === i ? "now" : ""}"></i>`).join("")}</div>`;
+}
+
+function themeBtn() {
+  return `<button class="navbtn glass tap themebtn" onclick="toggleTheme()"
+    aria-pressed="${lightMode}"
+    aria-label="${lightMode ? "Switch to dark appearance" : "Switch to light appearance"}">
+    ${svg(lightMode ? ICON.moon : ICON.sun)}</button>`;
+}
+
+function toggleTheme() {
+  lightMode = !lightMode; haptic(6);
+  applyTheme();
+  document.querySelectorAll(".themebtn").forEach(b => {
+    b.innerHTML = svg(lightMode ? ICON.moon : ICON.sun);
+    b.setAttribute("aria-pressed", lightMode);
+  });
+}
+
+/* one-time listeners: scroll drives the navigation bar, swipe drives the loop */
+function wire() {
+  if (wired) return; wired = true;
+  const sc = el("scroll");
+  sc.addEventListener("scroll", () => {
+    el("nav").classList.toggle("compact", sc.scrollTop > 26);
+  }, {passive:true});
+
+  let x0 = null, y0 = null;
+  sc.addEventListener("touchstart", e => {
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, {passive:true});
+  sc.addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (view !== "flow" || Math.abs(dx) < 64 || Math.abs(dy) > 46) return;
+    if (dx < 0 && canAdvance()) { haptic(8); step(i + 1); }
+    else if (dx > 0) back();
+  }, {passive:true});
+}
+function canAdvance() {
+  if (i === 0) return built;
+  if (i === 1) return published && !publishing;
+  return i < 3;
+}
+
+/* --------------------------------------------------------------- home --- */
+function homeScreen() {
+  const b = B(), p = b.perf, up = p.dir > 0, mx = Math.max(...b.rev12);
+  return `<section class="widget">
+    <span class="glow"></span>
+    <span class="kicker">Revenue generated by this loop</span>
+    <div class="money"><span class="v num">Rs ${b.money.gen}</span>
+      <span class="d ${up ? "" : "dn"}">${b.vs}</span></div>
+    <div class="sub">of Rs ${b.money.total} across the business</div>
+    <div class="cols">${b.rev12.map((v, n) =>
+      `<i class="${n === b.rev12.length - 1 ? "on" : ""}"
+          style="height:${Math.max(5, v / mx * 52)}px;animation-delay:${n * 26}ms"></i>`).join("")}</div>
+    <div class="axis"><span>12 months ago</span><span>this month</span></div>
+  </section>
+
+  <div class="grouphead">Last 30 days</div>
+  <div class="duo">${b.stats.map(([k, v, d, dir]) =>
+    `<div class="metric"><span class="k">${k}</span><span class="v num">${v}</span>
+      <span class="d ${dir > 0 ? "" : "dn"}">${d}</span></div>`).join("")}</div>
+
+  <div class="grouphead">The read</div>
+  <div class="read">
+    <div class="readtop">
+      <span class="badge ${up ? "good" : "bad"} lg">${svg(up ? ICON.up : ICON.down)}</span>
+      <span class="lbl"><b>${p.pct}</b><span>${b.recur.label.toLowerCase()}</span></span>
+      <span class="growth ${up ? "" : "dn"}" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i></span>
+    </div>
+    <div class="readbody">${p.why}</div>
+    <div class="readnext"><span class="badge">${svg(ICON.bolt)}</span>
+      <span class="tx"><b>Do next</b>${p.plan}</span></div>
+  </div>
+
+  <div class="grouphead">Where the business came from</div>
+  <div class="list">${b.mix.map(([k, v], n) =>
+    `<div class="barrow"><div class="barhead"><span class="k">${k}</span>
+      <span class="v num">${v}%</span></div>
+      <span class="track"><span class="fill ${n ? "ghost" : ""}" data-w="${v}"></span></span>
+    </div>`).join("")}</div>
+
+  <div class="grouphead">Standouts</div>
+  <div class="list disclist">
+    ${disc(0, "good", ICON.up, b.best[0], `${b.best[1]} &middot; ${b.best[2]}`, [
+      ["Result", b.best[2]], ["Why it worked", p.why], ["What follows", p.plan]])}
+    ${disc(1, "bad", ICON.down, b.watch[0], b.watch[1], [
+      ["What is happening", b.watch[1]],
+      ["What it costs", "Each of these takes a publishing slot a converting format could have had."],
+      ["What follows", p.plan]])}
+  </div>
+
+  <div class="grouphead">Account</div>
+  <div class="list">
+    ${item("Content made", b.stock.items, "openStock('items')")}
+    ${item("Connected profiles", b.stock.profiles, "openStock('profiles')")}
+    ${item("Credits remaining", b.stock.credits.toLocaleString(), "openStock('credits')")}
+  </div>
+  <div class="groupfoot">Every figure here is attributed back to work this
+    loop produced.</div>
+  <div style="height:84px"></div>`;
+}
+
+const item = (t, v, fn) =>
+  `<button class="item row-tap" onclick="${fn}">
+     <span class="txt"><span class="t">${t}</span></span>
+     <span class="trail"><span class="num">${v}</span>
+       <span class="chev">${svg(ICON.chevR)}</span></span></button>`;
+
+/* Status reads as a leading badge with the title and subtitle in their own
+   stack. The old layout put a tag on the title's line, which forced one of
+   the two to truncate on any narrow screen. */
+function disc(n, tone, ico, title, sub, rows) {
+  const open = stdOpen === n, id = "d" + n, h = "dh" + n;
+  return `<div class="disc ${open ? "open" : ""}">
+    <button class="item row-tap" id="${h}" aria-expanded="${open}" aria-controls="${id}"
+      onclick="toggleDisc(${n})">
+      <span class="badge ${tone}">${svg(ico)}</span>
+      <span class="txt"><span class="t">${title}</span><span class="s">${sub}</span></span>
+      <span class="chev">${svg(ICON.chevR)}</span>
+    </button>
+    <div class="panel"><div class="inner" id="${id}" role="region"
+        aria-labelledby="${h}" ${open ? "" : "inert"}>
+      <div class="pad">${rows.map(([k, v]) =>
+        `<div class="prow"><span class="k">${k}</span><span class="v">${v}</span></div>`).join("")}</div>
+    </div></div></div>`;
+}
+
+function toggleDisc(n) {
+  stdOpen = stdOpen === n ? -1 : n; haptic(6);
+  document.querySelectorAll(".disclist .disc").forEach((d, x) => {
+    const open = x === stdOpen;
+    d.classList.toggle("open", open);
+    const btn = d.querySelector(".item"), inner = d.querySelector(".inner");
+    if (btn) btn.setAttribute("aria-expanded", open);
+    if (inner) try { inner.inert = !open; } catch (e) {}
+  });
+}
+
+
+
+/* =========================================================== the loop === */
+function flowScreen() {
+  if (i === 0) return stepSay();
+  if (i === 1) return stepPublish();
+  if (i === 2) return stepRead();
+  return stepNext();
+}
+const bars = n => Array.from({length:n}, (_, x) =>
+  `<i style="animation-delay:${x * .1}s"></i>`).join("");
+
+/* 1 -- say it ------------------------------------------------------------ */
+function stepSay() {
+  const b = B();
+  let out = `<p class="body sec" style="margin:2px 0 16px">${STEPS[0].p}</p>`;
+
+  out += `<div class="seg" id="langseg" role="radiogroup" aria-label="Language">
+      <span class="knob" id="langknob"></span>
+      <button role="radio" aria-selected="${hin}" aria-checked="${hin}"
+        onclick="setLang(1)">Hinglish</button>
+      <button role="radio" aria-selected="${!hin}" aria-checked="${!hin}"
+        onclick="setLang(0)">English</button>
+    </div>
+    <div class="list" style="margin-top:12px">
+      <button class="item row-tap" role="switch" aria-checked="${sound}"
+        onclick="toggleSound()">
+        <span class="badge">${svg(ICON.wave)}</span>
+        <span class="txt"><span class="t">Speak the line aloud</span>
+          <span class="s">Transcript fills in as it is spoken</span></span>
+        <span class="sw"><i></i></span></button>
+    </div>`;
+
+  if (!heard) {
+    out += `<button class="mic tap" style="margin-top:14px" onclick="listen()">
+      <span class="orb">${svg(ICON.mic)}</span>
+      <span class="tx"><b>Tap and speak</b>
+        <span>However you would say it out loud</span></span>
+      <span class="chev">${svg(ICON.chevR)}</span></button>`;
+    if (cyc > 1) out += `<div class="groupfoot" style="padding-top:12px">
+      Cycle ${cyc} opens with the line the last cycle wrote for you.</div>`;
+    return out;
+  }
+
+  out += `<button class="mic tap ${talking ? "live" : ""}" id="micbox"
+      style="margin-top:14px" onclick="replay()" aria-label="Play it again">
+      <span class="orb">${talking ? `<span class="wave">${bars(5)}</span>` : svg(ICON.mic)}</span>
+      <span class="tx"><b id="micst">${talking ? "Listening" : "Transcribed"}</b>
+        <span>${b.at}</span></span></button>
+    <div class="said"><span class="who">${cyc === 1 ? "You said"
+        : "Written by cycle " + (cyc - 1)}</span>
+      <div class="tt"><span id="tt">${shown}</span>${talking
+        ? '<i class="cur" id="cur"></i>' : ""}</div></div>
+
+    <div class="grouphead">${cyc === 1 ? "What should it make"
+      : "Chosen from what worked, change any of it"}</div>
+    <div class="chips">` + chans().map(k =>
+      `<button class="chip tap" aria-pressed="${!!picked[k]}" ${working ? "disabled" : ""}
+        onclick="toggleChan('${k}')">
+        <span class="tick">${svg(ICON.check)}</span>${CHAN[k].n}</button>`).join("") + `</div>`;
+
+  if (working) {
+    out += `<div class="grouphead">Working</div>
+      <div class="trace" id="tr"></div>
+      ${built ? "" : `<div class="spinner" id="spin"></div>
+        <button class="skip tap" id="skip" onclick="skipGen()">Skip</button>`}
+      <div id="made"></div>`;
+  }
+  return out + `<div style="height:110px"></div>`;
+}
+
+function toggleChan(k) {
+  if (working) return;
+  picked[k] = picked[k] ? 0 : 1;
+  if (!on().length) picked[k] = 1;
+  haptic(5);
+  render(true);
+}
+function setLang(v) {
+  if (hin === !!v) return;
+  hin = !!v; haptic(5); stopVoice();
+  if (view === "flow" && i === 0 && heard) { render(true); listen(); } else render(true);
+}
+function toggleSound() {
+  sound = !sound; haptic(5);
+  if (!sound) { stopVoice(); show(said); endSpeech(); }
+  render(true);
+}
+function moveKnob() {
+  const seg = el("langseg"); if (!seg) return;
+  const k = el("langknob"), n = seg.querySelectorAll("button").length;
+  k.style.width = `calc(${100 / n}% - ${4 / n}px)`;
+  k.style.transform = `translateX(${(hin ? 0 : 1) * 100}%)`;
+}
+
+function genTrace() {
+  const b = B(), g = b.gen, out = [g[0], g[1], g[2]];
+  if (picked.seo) out.push(g[3]);
+  if (picked.gmb || picked.list) out.push(g[4]);
+  chans().forEach(k => { if (picked[k]) out.push(["think", CHAN[k].verb, CHAN[k].hi]); });
+  if (b.medical) g.filter(r => r[0] === "chk").forEach(r => out.push(r));
+  out.push(["think", "Finalising", "Final kar raha hoon"]);
+  return out;
+}
+
+function generate() {
+  working = true; built = false; render(true);
+  const steps = genTrace();
+  steps.forEach(([kind, one, two], n) => later(() => {
+    const box = el("tr"); if (!box) return;
+    const ic = kind === "src" ? ICON.doc : kind === "chk" ? ICON.shield : ICON.spark;
+    box.insertAdjacentHTML("beforeend",
+      `<div class="tr ${kind}"><span class="ic">${svg(ic)}</span>
+        <span class="gt">${kind === "src" ? one : (hin ? two : one)}
+          ${kind === "src" ? `<span class="gd">${two}</span>` : ""}</span></div>`);
+    el("scroll").scrollTop = 9e5;
+  }, 500 * n + 180));
+  later(showMade, 500 * steps.length + 300);
+}
+
+/* Doherty threshold: a narrative sequence still has to be escapable. */
+function skipGen() {
+  timers.forEach(clearTimeout); timers = [];
+  const box = el("tr");
+  if (box) {
+    box.innerHTML = "";
+    genTrace().forEach(([kind, one, two]) => {
+      const ic = kind === "src" ? ICON.doc : kind === "chk" ? ICON.shield : ICON.spark;
+      box.insertAdjacentHTML("beforeend",
+        `<div class="tr ${kind}" style="animation:none"><span class="ic">${svg(ic)}</span>
+          <span class="gt">${kind === "src" ? one : (hin ? two : one)}
+            ${kind === "src" ? `<span class="gd">${two}</span>` : ""}</span></div>`);
+    });
+  }
+  showMade();
+}
+
+function showMade() {
+  const box = el("made"); if (!box) return;
+  built = true; haptic(10);
+  ["spin","skip"].forEach(id => { const n = el(id); if (n) n.remove(); });
+  const b = B();
+  box.innerHTML = `<div class="grouphead">What it made</div>
+    <div class="list">` + on().map(k => {
+      const m = b.made[k];
+      return `<button class="item row-tap inset" onclick="openMade('${k}')">
+        <span class="badge">${svg(k === "seo" ? ICON.doc : k === "video" ? ICON.play : ICON.spark)}</span>
+        <span class="txt"><span class="t">${CHAN[k].n}</span>
+          <span class="s">${m.t}</span></span>
+        <span class="chev">${svg(ICON.chevR)}</span></button>`;
+    }).join("") + `</div>`;
+  el("scroll").scrollTop = 9e5;
+  refreshBar();
+}
+
+/* 2 -- review and publish ------------------------------------------------ */
+function stepPublish() {
+  const b = B();
+  if (!published) {
+    return `<p class="body sec" style="margin:2px 0 16px">${STEPS[1].p}</p>
+      <div class="grouphead">Destinations</div>
+      <div class="list">` + on().map(k =>
+        `<div class="item"><span class="badge">${svg(ICON.check)}</span>
+          <span class="txt"><span class="t">${CHAN[k].n}</span>
+            <span class="s">${b.made[k].t}</span></span></div>`).join("") + `</div>
+      <div class="grouphead">Confirm</div>
+      <div class="list">
+        <button class="item row-tap" role="switch" aria-checked="${confirmed}"
+          onclick="toggleConfirm()">
+          <span class="txt"><span class="t">I have reviewed these</span>
+            <span class="s">All ${on().length} pieces, ready to publish</span></span>
+          <span class="sw"><i></i></span></button>
+      </div>
+      <div class="groupfoot">A person reviews every piece 24 hours before it
+        publishes. Nothing goes out unreviewed.</div>
+      ${b.medical ? `<div class="grouphead">Medical review</div>
+        <div class="list"><div class="item">
+          <span class="badge warn">${svg(ICON.shield)}</span>
+          <span class="txt"><span class="t">Medical claims removed</span>
+            <span class="s">Treatment claims, outcome promises and unconsented
+              patient quotes are removed before review, not flagged after it.</span>
+          </span></div></div>` : ""}
+      <div style="height:120px"></div>`;
+  }
+  return `<div class="prog"><i id="pfill"></i></div>
+    <div class="grouphead" style="padding-top:4px">Publishing</div>
+    <div class="trace" id="live"></div><div style="height:120px"></div>`;
+}
+
+function toggleConfirm() {
+  confirmed = !confirmed; haptic(6);
+  const r = document.querySelector('[role="switch"][aria-checked]');
+  document.querySelectorAll('.list [role="switch"]').forEach(n => {
+    if (n.querySelector(".t").textContent.indexOf("ready to publish") > -1)
+      n.setAttribute("aria-checked", confirmed);
+  });
+  refreshBar();
+}
+
+function liveTrace() {
+  const b = B(), out = [], where = [];
+  if (picked.video || picked.photo) { out.push(["Feed", b.live.feed, ""]); where.push("the feed"); }
+  if (picked.seo) { b.live.site.forEach(t => out.push(["Website", t, ""]));
+    where.push("your site", "search", "answer engines"); }
+  if (picked.gmb) { out.push(["Profile", b.live.gmb, ""]); where.push("your profile"); }
+  if (picked.list) { out.push(["Listings", b.live.list, ""]); where.push("your listings"); }
+  if (picked.pin) { out.push(["Pinterest", b.live.pin, ""]); where.push("Pinterest"); }
+  out.push(["Live", "Live across " + joinList(where), "done"]);
+  return out;
+}
+const joinList = a => a.length < 2 ? (a[0] || "")
+  : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
+
+function publish() {
+  published = true; publishing = true; haptic(12); render();
+  const steps = liveTrace();
+  steps.forEach(([src, txt, cls], n) => later(() => {
+    const box = el("live"); if (!box) return;
+    box.insertAdjacentHTML("beforeend",
+      `<div class="tr ${cls}"><span class="ic">${svg(cls ? ICON.check : ICON.bolt)}</span>
+        <span class="gt">${txt}<span class="gd">${src}</span></span></div>`);
+    const f = el("pfill"); if (f) f.style.width = ((n + 1) / steps.length * 100) + "%";
+    el("scroll").scrollTop = 9e5;
+    if (n === steps.length - 1) {
+      publishing = false; haptic(16); refreshBar();
+      toast(`Published to ${on().length} channels`, "See Results", () => step(2));
+    }
+  }, 460 * n + 180));
+}
+
+/* 3 -- what it did ------------------------------------------------------- */
+function stepRead() {
+  const b = B();
+  let out = `<div class="seg" id="tabseg" role="tablist"><span class="knob" id="tabknob"></span>`
+    + TABS.map((t, n) => `<button role="tab" aria-selected="${n === tab}"
+        onclick="pickTab(${n})">${t.n}</button>`).join("") + `</div>`;
+
+  if (tab === 0) {
+    out += `<div class="grouphead">What the posts did</div><div class="list">` +
+      b.posts.map((p, n) => {
+        const lead = p.r[3], good = lead[2] === "up", none = lead[1] === "0";
+        return `<button class="item row-tap inset" onclick="openPost(${n})">
+          <span class="badge ${none ? "bad" : good ? "good" : "warn"}">
+            ${svg(none ? ICON.down : good ? ICON.up : ICON.bolt)}</span>
+          <span class="txt"><span class="t">${p.t}</span>
+            <span class="s">${p.m}</span></span>
+          <span class="trail"><span class="num">${lead[1]}</span>
+            <span class="chev">${svg(ICON.chevR)}</span></span></button>`;
+      }).join("") + `</div>
+      <div class="groupfoot">Numbers are ${b.unit} attributed to
+        each post.</div>`;
+  } else if (tab === 1) {
+    out += group("Pages this built", "site") + group("Queries these pages answer", "seo")
+         + group("Prompts answer engines quote", "geo");
+  } else {
+    out += group("Business profile", "gmb") + group("Who carried it", "crt");
+  }
+  return out + recurCard() + `<div style="height:120px"></div>`;
+}
+
+function pickTab(n) { tab = n; haptic(5); render(); }
+
+function group(label, k) {
+  const b = B(), d = k === "gmb" ? b.gmb : b.surf[k];
+  return `<div class="grouphead">${label}</div><div class="list">${DRAW[k](d)}</div>
+    <div class="groupfoot"><b>The read.</b> ${d.note}<br><br>
+      <b>The gap.</b> ${d.flag}</div>`;
+}
+
+const rowOpen = (k, n, inner) =>
+  `<button class="item row-tap" onclick="openRow('${k}',${n})"
+     style="display:block;padding:13px 16px">${inner}</button>`;
+
+const DRAW = {
+  site: d => {
+    const top = Math.max(...d.rows.map(r => r[3])) || 1;
+    return d.rows.map(([path, sess, conv, rate, secs], n) => rowOpen("site", n, `
+      <span class="barhead"><span class="k">${path}</span>
+        <span class="v num">${conv} ${conv === 1 ? "conv" : "convs"}</span></span>
+      <span class="track"><span class="fill ${rate ? "" : "zero"}"
+        style="width:${Math.max(rate / top * 100, rate ? 4 : 0)}%"></span></span>
+      <span class="axis" style="margin-top:7px"><span>${sess
+        ? sess.toLocaleString() + " sessions" : "No data yet"}</span>
+        <span>${rate.toFixed(2)}%${secs ? ` &middot; ${secs}s` : ""}</span></span>`)).join("");
+  },
+  seo: d => d.rows.map(([q, pos, prev, clicks], n) => {
+    const at = p => Math.min((p - 1) / 29 * 100, 100), miss = pos === 0;
+    return rowOpen("seo", n, `
+      <span class="barhead"><span class="k">${q}</span>
+        <span class="v num">${miss ? "&mdash;" : ordinal(pos)}</span></span>
+      <span class="rank">${miss ? '<i class="miss"></i>'
+        : `${prev > pos ? `<i class="was" style="left:${at(prev)}%"></i>
+            <i class="move" style="left:${at(pos)}%;width:${at(prev) - at(pos)}%"></i>` : ""}
+           <i class="now" style="left:${at(pos)}%"></i>`}</span>
+      <span class="axis"><span>${miss ? "Not ranking" : prev > pos
+        ? "up from " + ordinal(prev) : prev < pos ? "down from " + ordinal(prev)
+        : "unchanged"}</span><span>${clicks} clicks</span></span>`);
+  }).join("") ,
+  geo: d => `<div class="barrow"><div class="barhead">
+      <span class="k">Quoted in ${d.cited} of ${d.total} prompts tracked</span></div>
+      <div class="cells">${Array.from({length:d.total}, (_, x) =>
+        `<i class="${x < d.cited ? "on" : ""}" style="animation-delay:${x * 40}ms"></i>`
+      ).join("")}</div></div>` +
+    d.rows.map(([prompt, cited, src], n) => rowOpen("geo", n, `
+      <span class="barhead"><span class="k">${prompt}</span>
+        <span class="v">${cited ? "Quoted" : "Missed"}</span></span>
+      <span class="axis" style="margin-top:2px"><span><span class="dot ${cited ? "on" : ""}"></span>${src}</span></span>`)).join(""),
+  gmb: d => d.rows.map(([k, v, delta], n) =>
+    `<button class="item row-tap" onclick="openRow('gmb',${n})">
+      <span class="txt"><span class="t">${k}</span>
+        <span class="s">${delta} on the quarter</span></span>
+      <span class="trail"><span class="num">${v}</span>
+        <span class="chev">${svg(ICON.chevR)}</span></span></button>`).join(""),
+  crt: d => {
+    const mr = Math.max(...d.rows.map(r => r[1])), mv = Math.max(...d.rows.map(r => r[2])) || 1;
+    return d.rows.map(([who, reach, ret, label], n) => rowOpen("crt", n, `
+      <span class="barhead"><span class="k">${who}</span>
+        <span class="v">${label}</span></span>
+      <span class="pair"><em>reach</em><span class="track"><span class="fill ghost"
+        style="width:${reach / mr * 100}%"></span></span><b>${reach / 1000}k</b></span>
+      <span class="pair"><em>return</em><span class="track"><span class="fill ${ret ? "" : "zero"}"
+        style="width:${Math.max(ret / mv * 100, ret ? 4 : 0)}%"></span></span><b>${ret}</b></span>`)).join("");
+  }
+};
+
+function recurCard() {
+  const b = B(), v = b.recur.series, hi = Math.max(...v);
+  const first = v[0], last = v[v.length - 1], up = last >= first;
+  return `<div class="grouphead">${b.recur.label}, month on month</div>
+    <div class="widget"><span class="glow"></span>
+      <div class="money"><span class="v num">${last}</span>
+        <span class="d ${up ? "" : "dn"}">${up ? "+" : ""}${last - first} in 12 months</span></div>
+      <div class="cols" style="height:44px">${v.map((n, x) =>
+        `<i class="${x === v.length - 1 ? "on" : ""}"
+            style="height:${Math.max(5, n / hi * 44)}px;animation-delay:${x * 22}ms"></i>`).join("")}</div>
+      <div class="axis"><span>12 months ago</span><span>this month</span></div></div>`;
+}
+
+function ordinal(n) {
+  const t = n % 100;
+  return n + (t > 3 && t < 21 ? "th" : ["th","st","nd","rd"][n % 10] || "th");
+}
+
+/* 4 -- the brief --------------------------------------------------------- */
+function stepNext() {
+  const b = B(), p = b.perf, up = p.dir > 0;
+  return `<div class="grouphead">Engagement by format</div>
+    <div class="list">` + b.fmts.map(([n, v, w], x) =>
+      `<button class="item row-tap" onclick="openFmt(${x})" style="display:block;padding:13px 16px">
+        <span class="barhead"><span class="k">${n}</span>
+          <span class="v num">${v}%</span></span>
+        <span class="track"><span class="fill ${x === b.fmts.length - 1 ? "zero" : ""}"
+          data-w="${w}"></span></span></button>`).join("") + `</div>
+    <div class="grouphead">The finding</div>
+    <div class="list"><div class="item" style="display:block;padding:15px 16px">
+      <span class="body">${b.found}</span></div></div>
+    <div class="grouphead">Next cycle, written for you</div>
+    <div class="brief">
+      <div class="h">${hin ? "Aage kya banega" : "The brief"}</div>
+      <div class="a">${hin ? b.nextHi : b.next}</div>
+      <div class="w">${b.because}</div>
+    </div><div style="height:120px"></div>`;
+}
+
+/* ------------------------------------------------------------- toolbar --- */
+function toolbar() {
+  let label, action, dis = false, hint = "";
+  if (i === 0 && !heard)          { label = "Say It";             action = "listen()"; }
+  else if (i === 0 && !working)   { label = "Generate";           action = "generate()"; }
+  else if (i === 0 && !built)     { label = "Working\u2026";          action = ""; dis = true;
+                                    hint = "Reading the account before it writes anything"; }
+  else if (i === 0)               { label = "Review";             action = "step(1)"; }
+  else if (i === 1 && !published) { label = "Publish";            action = "publish()";
+                                    dis = !confirmed;
+                                    hint = confirmed ? ""
+                                      : "Confirm you have reviewed these"; }
+  else if (i === 1 && publishing) { label = "Publishing\u2026";       action = ""; dis = true; }
+  else if (i === 1)               { label = "See Results";        action = "step(2)"; }
+  else if (i === 2)               { label = "See What\u2019s Next";   action = "step(3)"; }
+  else                            { label = `Start Cycle ${cyc + 1}`; action = "nextCycle()"; }
+
+  return (hint ? `<div class="tbhint">${hint}</div>` : "") +
+    `<div class="tbrow">
+      <button class="btn plain tap" onclick="back()">${i === 0 ? "Home" : "Back"}</button>
+      <button class="btn filled tap" id="fwd" ${dis ? "disabled" : ""}
+        onclick="${action}">${label}</button></div>`;
+}
+function refreshBar() { if (view === "flow") el("toolbar").innerHTML = toolbar(); }
+function step(n) { stopVoice(); i = n; tab = 0; render(); }
+function back() { stopVoice(); if (i === 0) return exitFlow(); i--; render(); }
+function nextCycle() {
+  stopVoice(); cyc++; i = 0; tab = 0; haptic(10);
+  heard = working = built = confirmed = published = publishing = false;
+  shown = ""; render();
+}
+function openFlow() { stopVoice(); haptic(8); view = "flow"; i = 0; render(); }
+function exitFlow() { stopVoice(); view = "home"; render(); }
+function begin() {
+  el("splash").hidden = true;
+  ["nav","scroll","start","toolbar"].forEach(id => {
+    const n = el(id); if (n) try { n.inert = false; } catch (e) {}
+  });
+  safeRender();
+}
+function safeRender() {
+  try { render(); }
+  catch (err) {
+    el("scroll").innerHTML = `<div class="grouphead">Something went wrong</div>
+      <div class="list"><div class="item"><span class="txt"><span class="t">${
+        String((err && err.message) || err)}</span></span></div></div>`;
+    throw err;
+  }
+}
+
+
+/* ---------------------------------------------------------------- creative
+   Image hosts are unreachable, so artwork is composed from gradients built on
+   the live tint. Each persona therefore gets its own art with no hardcoded
+   colour, and the seed shifts the composition between video beats. */
+function artStyle(seed) {
+  const cs = getComputedStyle(el("phone"));
+  const tint = cs.getPropertyValue("--tint").trim();
+  const s = seed || 0;
+  const x1 = 26 + s * 17, y1 = 26 + s * 13, x2 = 82 - s * 15;
+  return `background:`
+    + `radial-gradient(58% 44% at ${x1}% ${y1}%, ${tint}, transparent 66%),`
+    + `radial-gradient(46% 36% at ${x2}% 78%, ${tint}88, transparent 72%),`
+    + `linear-gradient(158deg, #0B0B0E, ${tint}55)`;
+}
+const host = () => B().name.toLowerCase().replace(/[^a-z]/g, "") + ".in";
+
+const photoArt = m => `<div class="art" style="${artStyle(0)}">
+  <span class="over">${m.overlay.replace(/ \/ /g, "<br>")}</span>
+  <span class="mark">${B().name}</span></div>`;
+
+function videoArt(m) {
+  return `<div class="art vid" id="vart" style="${artStyle(0)}">
+      <span class="over sm" id="vcap">&ldquo;${m.hook}&rdquo;</span>
+      <span class="mark">${m.spec}</span>
+      <button class="play tap" id="vplay" onclick="playBeats()"
+        aria-label="Play the shot list">${svg(ICON.play)}</button>
+      <span class="vbar"><i id="vfill"></i></span></div>
+    <div class="beats">${m.beats.map((x, n) =>
+      `<div class="beat" id="bt${n}"><span class="bn">${n + 1}</span>${x}</div>`).join("")}</div>`;
+}
+
+function playBeats() {
+  const m = B().made.video; if (!el("vart")) return;
+  el("vplay").style.display = "none"; haptic(6);
+  m.beats.forEach((txt, n) => later(() => {
+    if (!el("vart")) return;
+    el("vart").setAttribute("style", artStyle(n));
+    el("vcap").innerHTML = txt.replace(/^\S+\s+/, "");
+    el("vfill").style.width = ((n + 1) / m.beats.length * 100) + "%";
+    m.beats.forEach((_, k) => {
+      const b = el("bt" + k);
+      if (b) b.className = "beat" + (k === n ? " on" : k < n ? " done" : "");
+    });
+  }, 1500 * n + 100));
+  later(() => {
+    if (!el("vplay")) return;
+    el("vplay").style.display = "";
+    el("vcap").innerHTML = `&ldquo;${m.hook}&rdquo;`;
+    el("vfill").style.width = "0%";
+    m.beats.forEach((_, k) => { const b = el("bt" + k); if (b) b.className = "beat"; });
+  }, 1500 * m.beats.length + 900);
+}
+
+const pageArt = m => `<div class="brw">
+  <div class="brwbar"><i></i><i></i><i></i><span class="url">${host()}${m.t}</span></div>
+  <div class="brwpage">
+    <div class="pnav"><b>${B().name}</b><span></span><span></span><span></span></div>
+    <div class="phero" style="${artStyle(1)}"><b>${m.h1}</b></div>
+    <p class="pbody">${m.body}</p>
+    ${m.sections.map(x => `<div class="psec">${x}<i>&rsaquo;</i></div>`).join("")}
+    <div class="pcta">${m.sections[m.sections.length - 1]}</div>
+    <div class="pfoot">${host()}</div></div></div>`;
+
+const postArt = (m, seed, sub) => `<div class="gpost">
+  <div class="ghead"><span class="gav">${B().ini}</span>
+    <span class="gwho"><b>${B().name}</b><em>${sub}</em></span></div>
+  <div class="gart" style="${artStyle(seed)}"></div>
+  <p class="gtext">${m.text}</p><div class="gcta">${m.cta}</div></div>`;
+
+function creative(k, m) {
+  if (k === "video") return videoArt(m);
+  if (k === "photo") return photoArt(m);
+  if (k === "seo")   return pageArt(m);
+  if (k === "list")  return postArt(m, 3, "Listing profiles, just now");
+  if (k === "pin")   return postArt(m, 1, "Pinterest, just now");
+  return postArt(m, 2, "Business Profile, just now");
+}
+
+/* ------------------------------------------------------ sheet, detents ---
+   Opens at the medium detent. Drag up to go large, drag down to step back and
+   then dismiss, which is how a UISheetPresentationController behaves. */
+function sheet(title, sub, rows, hero) {
+  lastFocus = document.activeElement;
+  el("dim").hidden = false;
+  const s = el("sheet");
+  s.hidden = false; sheetMode = hero ? "full" : "in";
+  s.className = "sheet glass-thick";
+  s.style.transform = "";
+  s.innerHTML = `<div class="grab"></div>
+    <div class="shead"><span class="st"><h2 id="sheetTitle">${title}</h2>
+      <div class="sub">${sub}</div></span>
+      <button class="sclose tap" onclick="shut()" aria-label="Close">
+        ${svg(ICON.close)}</button></div>
+    <div class="sbody">${hero || ""}
+      <div class="list" style="margin-top:${hero ? "4px" : "0"}">${rows.map(([k, v]) =>
+        `<div class="item" style="display:block;padding:12px 16px">
+          <span class="k foot sec" style="display:block">${k}</span>
+          <span class="body" style="display:block;margin-top:2px">${v}</span></div>`
+      ).join("")}</div><div style="height:20px"></div></div>`;
+  requestAnimationFrame(() => s.classList.add(sheetMode === "full" ? "full" : "in"));
+  dragSheet(s);
+  later(() => { const f = s.querySelector("button"); if (f) f.focus(); }, 80);
+}
+
+function shut() {
+  const s = el("sheet"); if (s.hidden) return;
+  s.className = "sheet glass-thick out"; s.style.transform = "";
+  el("dim").hidden = true;
+  setTimeout(() => { s.hidden = true; s.innerHTML = ""; }, 420);
+  if (lastFocus && lastFocus.isConnected) lastFocus.focus();
+}
+
+let sheetBound = null;
+function dragSheet(s) {
+  const grab = s.querySelector(".grab"), head = s.querySelector(".shead");
+  let y0 = null, dy = 0;
+  const start = e => { y0 = (e.touches ? e.touches[0] : e).clientY; dy = 0;
+    s.style.transition = "none"; };
+  const move = e => {
+    if (y0 === null) return;
+    dy = (e.touches ? e.touches[0] : e).clientY - y0;
+    /* downward drags track the finger; upward ones only hint, because the
+       sheet cannot grow past the large detent */
+    const shift = dy > 0 ? dy
+      : (sheetMode === "full" || sheetMode === "fit" ? 0 : dy * 0.16);
+    s.style.transform = `translateY(${shift}px)`;
+  };
+  const end = () => {
+    if (y0 === null) return;
+    y0 = null; s.style.transition = ""; s.style.transform = "";
+    if (sheetMode === "fit") { if (dy > 90) shut(); return; }
+    if (dy < -60 && sheetMode !== "full") {
+      sheetMode = "full"; s.className = "sheet glass-thick full"; haptic(6);
+    } else if (dy > 90) {
+      if (sheetMode === "full") {
+        sheetMode = "in"; s.className = "sheet glass-thick in"; haptic(6);
+      } else shut();
+    }
+  };
+  [grab, head].forEach(n => {
+    if (!n) return;
+    n.addEventListener("touchstart", start, {passive:true});
+    n.addEventListener("touchmove", move, {passive:true});
+    n.addEventListener("touchend", end);
+    n.addEventListener("mousedown", start);
+  });
+  if (sheetBound) {
+    document.removeEventListener("mousemove", sheetBound.m);
+    document.removeEventListener("mouseup", sheetBound.u);
+  }
+  sheetBound = {m:move, u:end};
+  document.addEventListener("mousemove", move);
+  document.addEventListener("mouseup", end);
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") return shut();
+  const s = el("sheet");
+  if (e.key !== "Tab" || s.hidden) return;
+  const f = s.querySelectorAll("button, [href], input, [tabindex]:not([tabindex='-1'])");
+  if (!f.length) return;
+  const a = f[0], z = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+  else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+});
+
+function toast(text, action, fn) {
+  const h = el("toasthost");
+  h.innerHTML = `<div class="toast glass" role="status"><span style="flex:1">${text}</span>
+    ${action ? `<button id="tact">${action}</button>` : ""}</div>`;
+  if (action) el("tact").onclick = () => { h.innerHTML = ""; fn(); };
+  setTimeout(() => { if (h.firstChild) h.innerHTML = ""; }, 5200);
+}
+
+/* ---------------------------------------------------------- detail views */
+function openMade(k) {
+  const m = B().made[k];
+  const rows = {
+    video: () => [["Hook", `<b>&ldquo;${m.hook}&rdquo;</b>`], ["Shot list", m.beats.join("<br>")],
+                  ["Caption", m.caption], ["Tags", m.tags]],
+    photo: () => [["On the image", `<b>${m.overlay}</b>`], ["Caption", m.caption], ["Tags", m.tags]],
+    seo:   () => [["Page heading", `<b>${m.h1}</b>`], ["Title tag", m.title],
+                  ["Meta description", m.meta], ["Opening copy", m.body],
+                  ["Sections", m.sections.join("<br>")], ["URL", m.t]],
+    gmb:   () => [["Post", `<b>${m.text}</b>`], ["Button", m.cta],
+                  ["Why it matters", "The profile is where calls and direction requests come from, and where answer engines read your hours and prices."]],
+    list:  () => [["What changed", `<b>${m.text}</b>`], ["Profiles", m.cta],
+                  ["Why it matters", "Listing profiles outrank most practice websites on local searches. They are the first thing a new patient sees."]],
+    pin:   () => [["What was published", `<b>${m.text}</b>`], ["Status", m.cta],
+                  ["Why it matters", "Pinterest is where people plan a wedding months ahead. A pin found in June becomes an enquiry in October."]]
+  }[k]();
+  sheet(m.t, `${CHAN[k].n} &middot; ${m.spec}`, rows, creative(k, m));
+}
+
+function openPost(n) { const p = B().posts[n]; sheet(p.t, p.m, p.why); }
+
+function openFmt(n) {
+  const b = B(), [nm, v, , detail] = b.fmts[n];
+  sheet(nm, `${v}% average engagement over 90 days`, [
+    ["What is in it", detail],
+    ["Against the rest", n === 0 ? "The best format on this account. Everything else is measured against it."
+      : `About ${(b.fmts[0][1] / v).toFixed(1)}x behind ${b.fmts[0][0].toLowerCase()}.`],
+    ["What happens next", n === 0 ? "The next cycle opens by asking for more of these."
+      : v < 2 ? "Dropped from the next cycle. It is taking a slot that could earn."
+              : "Kept as filler, but it will not lead the week."]]);
+}
+
+function openStock(kind) {
+  const b = B();
+  if (kind === "items") return sheet("Content made", `${b.stock.items} pieces so far`, [
+    ["What is counted", `Every video, photo, page and profile post this loop has produced for ${b.name}.`],
+    ["Where they went", "Feed, website, search and the business profile. Each piece usually lands on more than one."]]);
+  if (kind === "profiles") return sheet("Connected profiles", `${b.stock.profiles} connected`, [
+    ["Social", `Instagram ${b.at}<br>Facebook page`], ["Website", host()],
+    ["Business", "Google Business Profile"],
+    ["What connecting does", "Publishing reaches them all in one action, and everything they report comes back into analytics."]]);
+  sheet("Credits", `${b.stock.credits.toLocaleString()} remaining`, [
+    ["What they are", "Your balance on the plan. Making and publishing a piece draws from it."],
+    ["This account", `${b.stock.credits.toLocaleString()} left on the current plan.`]]);
+}
+
+function openRow(k, n) {
+  const b = B(), d = k === "gmb" ? b.gmb : b.surf[k], r = d.rows[n];
+  if (k === "gmb") return sheet(r[0], `${r[1]} &middot; ${r[2]} on the quarter`, [
+    ["What happened", r[3]],
+    ["Why it counts", "The business profile is the only surface where somebody can call you, ask for directions or leave a review. None of that shows up in feed analytics."],
+    ["Feeds the next brief", d.flag]]);
+  const spec = {
+    site: () => [r[0], r[1] ? `${r[1].toLocaleString()} sessions &middot; ${r[3].toFixed(2)}% convert` : "Published today",
+      [["What happened", r[5]],
+       ["Speed", !r[4] ? "No data yet. It went live in this cycle."
+         : r[4] > 3 ? `Loads in ${r[4]}s on mobile. Past two seconds, roughly 7% of visits are lost for every extra second.`
+         : `Loads in ${r[4]}s on mobile. Healthy.`],
+       ["Feeds the next brief", d.flag]]],
+    seo: () => [r[0], r[1] ? `${ordinal(r[1])} &middot; ${r[3]} clicks` : "Not ranking",
+      [["What happened", r[4]],
+       ["Movement", r[1] === 0 ? "No page on the site targets this query yet."
+         : r[2] > r[1] ? `Up ${r[2] - r[1]} places, from ${ordinal(r[2])} to ${ordinal(r[1])}.`
+         : r[2] < r[1] ? `Down ${r[1] - r[2]} places, from ${ordinal(r[2])} to ${ordinal(r[1])}.`
+         : `Held at ${ordinal(r[1])} across the quarter.`],
+       ["Feeds the next brief", d.flag]]],
+    geo: () => [r[0], r[1] ? "Quoted by answer engines" : "Not quoted",
+      [["What happened", r[3]],
+       ["Source", r[1] ? `Answer engines quote <b>${r[2]}</b>.`
+         : `Nothing here is quotable, so ${r[2].toLowerCase()}.`],
+       ["Feeds the next brief", d.flag]]],
+    crt: () => [r[0], `${r[1] / 1000}k reach &middot; ${r[3]}`,
+      [["What happened", r[4]],
+       ["Reach against return", r[2]
+         ? `${r[1] / 1000}k reach turned into ${r[3]}. That ratio, not the follower count, is what to book on.`
+         : `${r[1] / 1000}k reach returned nothing. The audience is large and in the wrong place.`],
+       ["Feeds the next brief", d.flag]]]
+  }[k]();
+  sheet(spec[0], spec[1], spec[2]);
+}
+
+/* ---------------------------------------------------------- account picker */
+function openPicker() {
+  lastFocus = document.activeElement;
+  el("dim").hidden = false;
+  const s = el("sheet");
+  s.hidden = false; sheetMode = "fit"; s.className = "sheet glass-thick";
+  s.style.transform = "";
+  s.innerHTML = `<div class="grab"></div>
+    <div class="shead"><span class="st"><h2 id="sheetTitle">Accounts</h2>
+      <div class="sub">The same loop, seven different businesses</div></span>
+      <button class="sclose tap" onclick="shut()" aria-label="Close">
+        ${svg(ICON.close)}</button></div>
+    <div class="sbody">` + ORDER.map(k => {
+      const p = BIZ[k], cur = k === biz;
+      return `<button class="pick row-tap ${p.theme}${lightMode ? " light" : ""}"
+        onclick="switchPersona('${k}',event)" ${cur ? 'aria-current="true"' : ""}>
+        <span class="av">${p.ini}</span>
+        <span class="nm"><b style="color:var(--label)">${p.name}</b>
+          <span>${p.cat} &middot; ${p.perf.dir > 0 ? "growing" : "declining"}</span></span>
+        ${cur ? `<span class="on">${svg(ICON.check)}</span>` : ""}</button>`;
+    }).join("") + `<div style="height:8px"></div></div>`;
+  requestAnimationFrame(() => s.classList.add("fit"));
+  dragSheet(s);
+  later(() => { const f = s.querySelector(".pick"); if (f) f.focus(); }, 80);
+}
+
+function switchPersona(key, ev) {
+  if (key === biz) return shut();
+  const phone = el("phone"), wipe = el("wipe"), p = BIZ[key];
+  const apply = () => {
+    biz = key; view = "home"; i = 0; cyc = 1; tab = 0; stdOpen = -1;
+    heard = working = built = confirmed = published = publishing = false;
+    shown = ""; resetPicked(); applyTheme(); render();
+    el("scroll").classList.add("enter");
+    setTimeout(() => el("scroll").classList.remove("enter"), 700);
+  };
+  shut(); haptic(12);
+  if (reduced()) return apply();
+
+  const r = phone.getBoundingClientRect();
+  let x = r.width / 2, y = r.height / 2;
+  if (ev && ev.currentTarget) {
+    const s = ev.currentTarget.getBoundingClientRect();
+    x = s.left - r.left + 32; y = s.top - r.top + s.height / 2;
+  }
+  const probe = document.createElement("div");
+  probe.className = p.theme + (lightMode ? " light" : "");
+  probe.style.cssText = "position:absolute;width:0;height:0;opacity:0";
+  phone.appendChild(probe);
+  const tint = getComputedStyle(probe).getPropertyValue("--tint").trim();
+  probe.remove();
+
+  wipe.style.setProperty("--wx", x + "px");
+  wipe.style.setProperty("--wy", y + "px");
+  wipe.style.setProperty("--wipe-c", tint);
+  wipe.querySelector(".bd").innerHTML = `<b>${p.name}</b><span>${p.cat}</span>`;
+  wipe.hidden = false; wipe.className = "wipe go";
+  setTimeout(apply, 360);
+  setTimeout(() => { wipe.className = "wipe out"; }, 600);
+  setTimeout(() => { wipe.hidden = true; wipe.className = "wipe"; }, 1120);
+}
+
+/* ------------------------------------------------------------------ voice */
+function loadVoices() {
+  voices = (window.speechSynthesis || {}).getVoices ? speechSynthesis.getVoices() : [];
+}
+if (window.speechSynthesis) {
+  loadVoices();
+  speechSynthesis.addEventListener("voiceschanged", loadVoices);
+}
+const VOICE_RANK = [/natural|neural|premium|enhanced/i, /siri/i,
+  /samantha|aria|jenny|sonia|libby|ava|nicky|moira/i, /google (uk|us)/i, /google/i];
+
+function pickVoice() {
+  const want = hin ? /^hi(-|$)/i : /^en(-|$)/i;
+  let pool = voices.filter(v => want.test(v.lang));
+  if (!pool.length && hin) pool = voices.filter(v => /^en-IN/i.test(v.lang));
+  if (!pool.length) pool = voices.filter(v => /^en(-|$)/i.test(v.lang));
+  if (!pool.length) return null;
+  for (const r of VOICE_RANK) { const hit = pool.find(v => r.test(v.name)); if (hit) return hit; }
+  return pool.find(v => !/david|mark|zira/i.test(v.name)) || pool[0];
+}
+
+function show(txt) {
+  shown = txt;
+  const t = el("tt"); if (t) t.textContent = txt;
+  const s = el("scroll"); if (s) s.scrollTop = 9e5;
+}
+function endSpeech() {
+  talking = false;
+  const c = el("cur"), m = el("micbox"), st = el("micst");
+  if (c) c.remove();
+  if (m) m.classList.remove("live");
+  if (st) st.textContent = "Transcribed";
+  refreshBar();
+}
+function reveal(text, done) {
+  const words = text.split(" "); let n = 0;
+  const go = () => {
+    n++; show(words.slice(0, n).join(" "));
+    if (n < words.length) vtimers.push(setTimeout(go, 90 + words[n - 1].length * 34));
+    else done();
+  };
+  go();
+}
+
+function transcribe(display, spoken) {
+  said = display; spoken = spoken || display;
+  if (!sound || !window.speechSynthesis) return reveal(display, endSpeech);
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(spoken);
+  const v = pickVoice(); if (v) u.voice = v;
+  u.rate = 0.97; u.pitch = 1.02;
+  /* Hinglish is displayed romanised and spoken in Devanagari, so character
+     offsets do not map. Sync on progress through the spoken words instead. */
+  const words = display.split(" "), total = spoken.split(" ").length;
+  let boundaries = 0;
+  u.onboundary = e => {
+    if (e.charIndex == null) return;
+    boundaries++;
+    const done = spoken.slice(0, e.charIndex).split(" ").length;
+    const upto = Math.min(Math.max(Math.round(done / total * words.length), 1), words.length);
+    show(words.slice(0, upto).join(" "));
+  };
+  u.onend = () => { show(display); endSpeech(); };
+  u.onerror = () => { show(display); endSpeech(); };
+  speechSynthesis.speak(u);
+  vtimers.push(setTimeout(() => { if (!boundaries) reveal(display, () => {}); }, 700));
+}
+
+function stopVoice() {
+  vtimers.forEach(clearTimeout); vtimers = [];
+  if (window.speechSynthesis) speechSynthesis.cancel();
+}
+function replay() { stopVoice(); listen(); }
+
+function listen() {
+  stopVoice(); haptic(8);
+  view = "flow"; i = 0; heard = true; talking = true; shown = "";
+  render();
+  const b = B();
+  const line = cyc === 1 ? (hin ? b.sayHi : b.say) : (hin ? b.nextHi : b.next);
+  transcribe(line, hin ? (cyc === 1 ? b.sayDev : b.nextDev) : line);
+}
+
+
+/* ==============================================  DEVICE CHROME  =========
+   The status bar reads real values where the browser exposes them: the clock
+   is the actual time and the battery is the actual battery. Signal and Wi-Fi
+   have no web API, so they are drawn full and left alone. */
+function statusIcons(level, charging) {
+  const bars = [4, 6.5, 9, 11.5];
+  const cell = bars.map((h, n) =>
+    `<rect x="${n * 4.6}" y="${12 - h}" width="3.2" height="${h}" rx="1.1"
+      ${n > 3 ? 'opacity=".35"' : ""}/>`).join("");
+  const pct = Math.round(level * 100);
+  return `<svg viewBox="0 0 17 12" width="17" height="12">${cell}</svg>
+    <svg viewBox="0 0 16 12" width="16" height="12">
+      <path d="M8 10.6 6.1 8.5a2.9 2.9 0 0 1 3.8 0L8 10.6Z"/>
+      <path d="M8 6.2c1.3 0 2.5.5 3.4 1.3l1.3-1.4A6.9 6.9 0 0 0 8 4.3a6.9 6.9 0 0 0-4.7 1.8l1.3 1.4A5 5 0 0 1 8 6.2Z" opacity=".95"/>
+      <path d="M8 2.1c2.3 0 4.5.9 6.1 2.3l1.2-1.4A10.9 10.9 0 0 0 8 .2 10.9 10.9 0 0 0 .7 3l1.2 1.4A9 9 0 0 1 8 2.1Z" opacity=".95"/>
+    </svg>
+    <span class="sb-batt-pct" style="font-size:12px;opacity:.85;margin-right:1px">${pct}</span>
+    <span class="batt ${charging ? "charging" : ""} ${pct <= 20 && !charging ? "low" : ""}">
+      <i style="width:calc(${Math.max(pct, 3)}% - ${3.6 * (1 - Math.max(pct, 3) / 100)}px)"></i>
+    </span>`;
+}
+
+let battLevel = 0.82, battCharging = false;
+function paintStatus() {
+  const t = el("sbtime"), r = el("sbright");
+  if (t) {
+    const d = new Date(), h = d.getHours() % 12 || 12;
+    t.textContent = h + ":" + String(d.getMinutes()).padStart(2, "0");
+  }
+  if (r) r.innerHTML = statusIcons(battLevel, battCharging);
+}
+function startStatus() {
+  paintStatus();
+  /* tick on the minute boundary rather than every 60s from load, so the
+     displayed minute is never up to 59 seconds stale */
+  const toMinute = 60000 - (Date.now() % 60000);
+  setTimeout(function tick() { paintStatus(); setTimeout(tick, 60000); }, toMinute + 40);
+  if (navigator.getBattery) navigator.getBattery().then(b => {
+    const sync = () => { battLevel = b.level; battCharging = b.charging; paintStatus(); };
+    b.addEventListener("levelchange", sync);
+    b.addEventListener("chargingchange", sync);
+    sync();
+  }).catch(() => {});
+}
+
+/* The home indicator is the real gesture, not a painted stripe: swipe up or
+   press to dismiss a sheet, then to leave the loop, then nothing. */
+function wireHome() {
+  const bar = el("homebar"); if (!bar) return;
+  const go = () => {
+    if (!el("sheet").hidden) return shut();
+    if (view === "flow") { haptic(10); exitFlow(); }
+  };
+  let y0 = null;
+  bar.addEventListener("touchstart", e => { y0 = e.touches[0].clientY; }, {passive:true});
+  bar.addEventListener("touchend", e => {
+    if (y0 === null) return;
+    const dy = e.changedTouches[0].clientY - y0; y0 = null;
+    if (dy < -26) go();
+  }, {passive:true});
+  let my = null;
+  bar.addEventListener("mousedown", e => { my = e.clientY; });
+  document.addEventListener("mouseup", e => {
+    if (my === null) return;
+    const dy = e.clientY - my; my = null;
+    if (dy < -18) go();
+  });
+  bar.addEventListener("click", e => { if (e.detail) go(); });
+  bar.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+  });
+}
+
+/* -------------------------------------------------------------------- init */
+resetPicked();
+applyTheme();
+el("splashsym").innerHTML = svg(ICON.mic);
+startStatus();
+wireHome();
+["nav","scroll","start","toolbar"].forEach(id => {
+  const n = el(id); if (n) try { n.inert = true; } catch (e) {}
+});
+safeRender();
+</script>

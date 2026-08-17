@@ -42,6 +42,26 @@ const nextConfig = {
       { source: '/insights/:path*', destination: '/blog', permanent: true },
     ]
   },
+  // Unlisted prospect demo: a self-contained static page in public/, served at a
+  // clean URL that nothing on the site links to.
+  async rewrites() {
+    return [{ source: '/modalx/smb-offering', destination: '/modalx/smb-offering.html' }]
+  },
+  // The demo must stay out of search and AI training/answer sets. The header
+  // covers crawlers that fetch the URL directly and ignore in-page meta tags.
+  async headers() {
+    return [
+      {
+        source: '/modalx/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 export default withPayload(nextConfig, {
