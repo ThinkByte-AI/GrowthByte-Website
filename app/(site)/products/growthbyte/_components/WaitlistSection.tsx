@@ -1,10 +1,11 @@
-import WaitlistForm from './WaitlistForm'
+import Link from 'next/link'
+import { REFERRAL_REWARD_THRESHOLD } from '@/lib/waitlist/constants'
 
 const CHECKS = [
-  'Priority onboarding with a senior strategist',
-  'A direct line to the team building it',
-  'Early influence on the roadmap',
-  'No spam, no lock-in',
+  'Early access before public launch',
+  'Founding price for the founding 50',
+  'Onboarding with the team building it',
+  'No card, no password to join',
 ]
 
 const CheckMark = () => (
@@ -15,24 +16,25 @@ const CheckMark = () => (
 
 export default function WaitlistSection() {
   return (
-    <section id="waitlist" className="final">
+    <section id="rewards" className="final">
       <div className="wrap cta-in">
         <div>
-          <span className="eyebrow">Join the waitlist</span>
-          <h2>Get early access. <em>Shape what it becomes.</em></h2>
+          <span className="eyebrow">Bring other agency owners</span>
+          <h2>Know other agency owners? <em>Share your link.</em></h2>
           <p className="cta-body">
-            We are onboarding a first cohort of companies in the ₹5Cr–₹100Cr range. Add your email and
-            we will reach out when your spot opens.
+            After you join you get a personal link. When {REFERRAL_REWARD_THRESHOLD} agencies join from it, you get
+            3 months free on any paid plan — applied automatically at launch.
           </p>
           <ul className="cta-checks">
             {CHECKS.map((c) => <li key={c}><CheckMark />{c}</li>)}
           </ul>
-          <p className="cta-proof">Joining 20+ SaaS, D2C, FinTech, and Healthcare brands.</p>
         </div>
         <div className="cta-card">
-          <div className="cta-card-h">Join the GrowthByte waitlist</div>
-          <div className="cta-card-sub">One field. We email you when early access opens.</div>
-          <WaitlistForm product="GrowthByte" source="growthbyte-waitlist" />
+          <div className="cta-card-h">{REFERRAL_REWARD_THRESHOLD} agencies join from your link</div>
+          <div className="cta-card-sub">→ 3 months free on any paid plan</div>
+          <Link href="#waitlist" className="gb-btn gb-btn-teal" style={{ justifyContent: 'center', width: '100%' }}>
+            Join the waitlist
+          </Link>
         </div>
       </div>
     </section>

@@ -1,62 +1,74 @@
 'use client'
 
 import { useState } from 'react'
-
-type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
+import WaitlistField from './WaitlistField'
+import WaitlistFormStatus, { type SubmitState } from './WaitlistFormStatus'
 
 interface WaitlistFormProps {
-  product?: string
-  source?: string
+  isFull: boolean
 }
 
-const buttonLabel = (state: SubmitState): string => {
-  if (state === 'submitting') return 'Joining…'
-  if (state === 'success') return "You're on the list ✓"
-  return 'Join the waitlist'
+interface JoinResponse {
+  ok?: boolean
+  status?: string
+  error?: string
 }
 
-export default function WaitlistForm({ product = 'GrowthByte', source = 'growthbyte-waitlist' }: WaitlistFormProps) {
-  const [state, setState] = useState<SubmitState>('idle')
+const readField = (data: FormData, name: string): string => String(data.get(name) ?? '').trim()
+
+function toSubmitState(res: Response, data: JoinResponse | null): SubmitState {
+  if (data?.status === 'full' || data?.status === 'agency_taken') return data.status
+  if (!res.ok || !data?.ok) return 'error'
+  return data.status === 'already_in' ? 'already_in' : 'verify_sent'
+}
+
+export default function WaitlistForm({ isFull }: WaitlistFormProps) {
+  const [state, setState] = useState<SubmitState>(isFull ? 'full' : 'idle')
   const [error, setError] = useState<string | null>(null)
-  const locked = state === 'submitting' || state === 'success'
+  const isSubmitting = state === 'submitting'
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitJoin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const form = e.currentTarget
-    const email = String(new FormData(form).get('email') ?? '').trim()
+    const data = new FormData(e.currentTarget)
     setState('submitting')
     setError(null)
     try {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, product, source }),
+        body: JSON.stringify({
+          name: readField(data, 'name'),
+          email: readField(data, 'email'),
+          agencyName: readField(data, 'agencyName'),
+          website: readField(data, 'website'),
+          whatsapp: readField(data, 'whatsapp'),
+        }),
       })
-      const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
-      if (!res.ok || !data?.ok) {
-        setState('error')
-        setError(data?.error ?? 'Something went wrong. Please try again.')
-        return
-      }
-      setState('success')
-      form.reset()
+      const body = (await res.json().catch(() => null)) as JoinResponse | null
+      setState(toSubmitState(res, body))
+      setError(body?.error ?? null)
     } catch {
       setState('error')
       setError('Something went wrong. Please try again.')
     }
   }
 
+  if (state === 'full' || state === 'verify_sent' || state === 'already_in' || state === 'agency_taken') {
+    return <WaitlistFormStatus state={state} />
+  }
+
   return (
-    <form className="cf-row" onSubmit={onSubmit}>
-      <input className="cf-inp" name="email" type="email" required placeholder="you@company.com" disabled={locked} aria-label="Work email" />
-      <div className="cf-btns">
-        <button type="submit" className="gb-btn gb-btn-teal" disabled={locked} style={{ justifyContent: 'center' }}>
-          {buttonLabel(state)}
-        </button>
-      </div>
-      {state === 'error' && <div className="cf-status err">{error}</div>}
-      {state === 'success' && <div className="cf-status ok">Thanks — we&apos;ll email you when your spot opens.</div>}
-      <p className="cf-micro">No spam. We only email about early access.</p>
+    <form className="cf-row" onSubmit={submitJoin}>
+      <WaitlistField name="name" label="Your name" placeholder="Full name" isRequired isDisabled={isSubmitting} />
+      <WaitlistField name="email" label="Work email" placeholder="you@agency.com" type="email" isRequired isDisabled={isSubmitting} />
+      <WaitlistField name="agencyName" label="Agency name" placeholder="Your agency" isRequired isDisabled={isSubmitting} />
+      <WaitlistField name="website" label="Website" placeholder="agency.com" isDisabled={isSubmitting} />
+      <WaitlistField name="whatsapp" label="WhatsApp for updates" placeholder="+91 98765 43210" type="tel" isDisabled={isSubmitting} />
+      <button type="submit" className="gb-btn gb-btn-teal" disabled={isSubmitting} style={{ justifyContent: 'center' }}>
+        {isSubmitting ? 'Joining…' : 'Join the waitlist'}
+      </button>
+      {state === 'error' && <div className="cf-status err">{error ?? 'Something went wrong. Please try again.'}</div>}
+      <p className="cf-micro">We only message you about early access.</p>
     </form>
   )
 }

@@ -1,0 +1,60 @@
+/* Waitlist-only additions on top of gb-home.css; scoped under .gb-home like the rest. */
+
+.gb-home .wl-hero {
+  padding: 96px 0 84px;
+  background:
+    radial-gradient(ellipse 60% 70% at 18% 30%, rgba(0, 147, 137, .22), transparent 70%),
+    radial-gradient(ellipse 45% 60% at 85% 60%, rgba(0, 147, 137, .14), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--gb-ink);
+  border-bottom: 1px solid var(--ln-i);
+}
+.gb-home .wl-hero h1 { font-size: clamp(38px, 4.2vw, 56px); }
+.gb-home .wl-hero h1 em { display: block; margin-top: 6px; }
+
+.gb-home .wl-offers { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.gb-home .wl-offers li { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: #fff; background: rgba(0, 147, 137, .14); border: 1px solid rgba(0, 147, 137, .45); border-radius: 100px; padding: 8px 14px; }
+.gb-home .wl-offers li::before { content: "✓"; color: var(--T); font-weight: 800; }
+
+.gb-home .wl-meter { max-width: 420px; }
+.gb-home .wl-meter-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.gb-home .wl-meter-num { font-family: var(--disp); font-size: 34px; font-weight: 900; color: var(--T); line-height: 1; letter-spacing: -.02em; }
+.gb-home .wl-meter-lbl { font-family: var(--mono); font-size: 12px; color: var(--mut-i); letter-spacing: .04em; text-transform: uppercase; }
+.gb-home .wl-meter-grid { display: grid; grid-template-columns: repeat(25, 1fr); gap: 4px; }
+.gb-home .wl-meter-grid i { aspect-ratio: 1; border-radius: 2px; background: rgba(255, 255, 255, .09); border: 1px solid rgba(255, 255, 255, .06); }
+.gb-home .wl-meter-grid i.on { background: var(--T); border-color: var(--T); box-shadow: 0 0 8px rgba(0, 147, 137, .6); }
+
+.gb-home .wl-watch-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--T); margin-bottom: 26px; border-bottom: 1px solid rgba(0, 147, 137, .5); padding-bottom: 2px; }
+.gb-home .wl-watch-btn:hover { color: #fff; border-color: #fff; }
+.gb-home .wl-hero-watch { position: relative; z-index: 2; margin-top: 56px; }
+.gb-home .wl-watch-label { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--mut-i); margin-bottom: 14px; }
+.gb-home .wl-watch-dot { width: 8px; height: 8px; border-radius: 50%; background: #e5484d; box-shadow: 0 0 10px rgba(229, 72, 77, .8); animation: gb-pulse 2s infinite; }
+.gb-home .wl-hero-watch .wl-hero-video { margin-bottom: 0; box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 147, 137, .35); }
+
+.gb-home .wl-hero-card {position: relative; overflow: hidden; padding-top: 36px; box-shadow: 0 0 0 1px rgba(0, 147, 137, .5), 0 24px 70px rgba(0, 147, 137, .28); }
+.gb-home .wl-hero-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--T), #3fd3c6); }
+.gb-home .wl-hero-card .cta-card-h { font-size: 22px; }
+@media (max-width: 880px) { .gb-home .wl-hero { padding: 64px 0 56px; } }
+
+.gb-home .wl-field { display: flex; flex-direction: column; gap: 5px; }
+.gb-home .wl-field-lbl { font-size: 12.5px; font-weight: 600; color: #0B0B0B; }
+.gb-home .wl-req { color: #d92d20; font-weight: 700; }
+.gb-home .wl-opt { font-style: normal; font-weight: 400; color: #8a9692; }
+.gb-home .wl-status { padding: 8px 0; }
+.gb-home .wl-status-t { font-family: var(--disp); font-size: 17px; font-weight: 800; color: #0B0B0B; margin-bottom: 6px; }
+.gb-home .wl-status-b { font-size: 13.5px; color: #566460; }
+
+.gb-home .wl-hero-video { width: 100%; border-radius: var(--gb-r2); border: 1px solid var(--ln-i); margin-bottom: 18px; aspect-ratio: 16 / 9; background: var(--card-i); }
+.gb-home .wl-clip { width: 100%; border-radius: var(--gb-r); margin-bottom: 16px; aspect-ratio: 16 / 10; object-fit: cover; background: var(--gb-ink); }
+
+.gb-home .wl-member { max-width: 640px; }
+.gb-home .wl-member h1 { font-size: clamp(34px, 5vw, 52px); color: #fff; margin-bottom: 16px; }
+.gb-home .wl-member h1 em { font-style: normal; color: var(--T); }
+.gb-home .wl-member-card { margin-top: 8px; }
+.gb-home .wl-link-row { display: flex; gap: 8px; align-items: center; margin: 12px 0 14px; }
+.gb-home .wl-link { flex: 1; min-width: 0; overflow-wrap: anywhere; font-family: var(--mono); font-size: 13px; color: #0B0B0B; background: rgba(11, 11, 11, .05); border-radius: var(--gb-r); padding: 10px 12px; }
+.gb-home .wl-copy { color: #0B0B0B; border: 1px solid rgba(11, 11, 11, .14); padding: 10px 14px; flex-shrink: 0; }
+.gb-home .wl-share { display: flex; gap: 9px; flex-wrap: wrap; }
+.gb-home .wl-share .gb-btn { flex: 1; justify-content: center; }
+.gb-home .wl-progress { font-family: var(--mono); font-size: 13px; color: var(--Td); margin-top: 16px; }
