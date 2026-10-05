@@ -58,17 +58,24 @@ export default function WaitlistForm({ isFull }: WaitlistFormProps) {
   }
 
   return (
-    <form className="cf-row" onSubmit={submitJoin}>
-      <WaitlistField name="name" label="Your name" placeholder="Full name" isRequired isDisabled={isSubmitting} />
+    <form className="cf-row wl-form" onSubmit={submitJoin}>
+      <div className="wl-form-grid">
+        <WaitlistField name="name" label="Your name" placeholder="Full name" isRequired isDisabled={isSubmitting} />
+        <WaitlistField name="agencyName" label="Agency name" placeholder="Your agency" isRequired isDisabled={isSubmitting} />
+      </div>
       <WaitlistField name="email" label="Work email" placeholder="you@agency.com" type="email" isRequired isDisabled={isSubmitting} />
-      <WaitlistField name="agencyName" label="Agency name" placeholder="Your agency" isRequired isDisabled={isSubmitting} />
-      <WaitlistField name="website" label="Website" placeholder="agency.com" isDisabled={isSubmitting} />
-      <WaitlistField name="whatsapp" label="WhatsApp for updates" placeholder="+91 98765 43210" type="tel" isDisabled={isSubmitting} />
+      <details className="wl-optional">
+        <summary>+ Add website &amp; WhatsApp (optional)</summary>
+        <div className="wl-form-grid">
+          <WaitlistField name="website" label="Website" placeholder="agency.com" isDisabled={isSubmitting} />
+          <WaitlistField name="whatsapp" label="WhatsApp for updates" placeholder="+91 98765 43210" type="tel" isDisabled={isSubmitting} />
+        </div>
+      </details>
       <button type="submit" className="gb-btn gb-btn-teal" disabled={isSubmitting} style={{ justifyContent: 'center' }}>
-        {isSubmitting ? 'Joining…' : 'Join the waitlist'}
+        {isSubmitting ? 'Joining…' : 'Claim my founding slot'}
       </button>
       {state === 'error' && <div className="cf-status err">{error ?? 'Something went wrong. Please try again.'}</div>}
-      <p className="cf-micro">We only message you about early access.</p>
+      <p className="cf-micro"><b className="wl-req">*</b> required · No card, no password · We only message you about early access.</p>
     </form>
   )
 }

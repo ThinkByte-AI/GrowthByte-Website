@@ -33,7 +33,7 @@ export default function WaitlistSection() {
           <div className="cta-card-h">{REFERRAL_REWARD_THRESHOLD} agencies join from your link</div>
           <div className="cta-card-sub">→ 3 months free on any paid plan</div>
           <Link href="#waitlist" className="gb-btn gb-btn-teal" style={{ justifyContent: 'center', width: '100%' }}>
-            Join the waitlist
+            Claim my founding slot
           </Link>
         </div>
       </div>
