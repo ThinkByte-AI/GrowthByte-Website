@@ -38,7 +38,7 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
     imageSrc: '/waitlist/features/goals.png',
     badge: 'Goals & tasks',
     name: 'From goal to plan in minutes',
-    desc: 'Set a client goal and GrowthByte drafts the sub-goals and tasks. Track it all on a board, timeline and calendar.',
+    desc: 'Set a client goal and GrowthByte OS drafts the sub-goals and tasks. Track it all on a board, timeline and calendar.',
   },
   {
     key: 'runs',

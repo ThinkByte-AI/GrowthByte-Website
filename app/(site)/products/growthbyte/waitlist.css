@@ -118,3 +118,5 @@
 .gb-home .wl-sec-cta-dark { border-color: rgba(0, 147, 137, .45); background: rgba(0, 147, 137, .12); }
 .gb-home .wl-sec-cta-dark .sec-cta-t { color: #fff; }
 @media (max-width: 640px) { .gb-home .wl-sec-cta { flex-direction: column; align-items: stretch; text-align: center; } .gb-home .wl-sec-cta .gb-btn { justify-content: center; } }
+
+.gb-home .wl-rewards-in { align-items: center; }

@@ -8,7 +8,7 @@ export default function FeatureShowcase() {
       <div className="wrap">
         <div className="sec-head">
           <span className="eyebrow">See it in the product</span>
-          <h2>Real screens from GrowthByte.</h2>
+          <h2>Real screens from GrowthByte OS.</h2>
           <p className="lead">No mockups — this is the product founding agencies get. Tap any screen to enlarge it.</p>
         </div>
         <div className="wl-feature-grid">

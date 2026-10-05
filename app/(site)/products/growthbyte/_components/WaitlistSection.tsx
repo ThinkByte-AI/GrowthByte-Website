@@ -17,7 +17,7 @@ const CheckMark = () => (
 export default function WaitlistSection() {
   return (
     <section id="rewards" className="final">
-      <div className="wrap cta-in">
+      <div className="wrap cta-in wl-rewards-in">
         <div>
           <span className="eyebrow">Bring other agency owners</span>
           <h2>Know other agency owners? <em>Share your link.</em></h2>

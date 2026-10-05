@@ -4,7 +4,7 @@ const STAGES = [
   {
     step: '01',
     name: 'Plan',
-    desc: 'Set a goal for each client. GrowthByte turns it into a plan and tasks, grounded in that client’s brand and data.',
+    desc: 'Set a goal for each client. GrowthByte OS turns it into a plan and tasks, grounded in that client’s brand and data.',
   },
   {
     step: '02',
@@ -23,9 +23,9 @@ export default function WhatItDoes() {
     <section id="what-it-does" className="light wl-what">
       <div className="wrap">
         <div className="sec-head">
-          <span className="eyebrow">What GrowthByte does</span>
+          <span className="eyebrow">What GrowthByte OS does</span>
           <h2>Your agency’s client work, run by AI.</h2>
-          <p className="lead">Today your team does every audit, brief, post and report by hand, client by client. GrowthByte does that work — your team decides and approves.</p>
+          <p className="lead">Today your team does every audit, brief, post and report by hand, client by client. GrowthByte OS does that work — your team decides and approves.</p>
         </div>
         <div className="wl-what-grid">
           {STAGES.map((stage) => (

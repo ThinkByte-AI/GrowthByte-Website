@@ -34,7 +34,7 @@ function ScreenshotLightbox({ src, alt, onClose }: { src: string; alt: string; o
 
 export default function FeatureShot({ feature }: { feature: ProductFeature }) {
   const [isOpen, setIsOpen] = useState(false)
-  const alt = `${feature.badge} in GrowthByte`
+  const alt = `${feature.badge} in GrowthByte OS`
 
   if (!feature.imageSrc) {
     if (!isDevPreview) return null

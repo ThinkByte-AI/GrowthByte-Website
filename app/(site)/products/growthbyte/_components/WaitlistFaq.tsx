@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: `What happens once all ${WAITLIST_CAP} slots are taken?`,
-    a: 'The founding waitlist closes. Everyone else can sign up when GrowthByte opens to the public after launch.',
+    a: 'The founding waitlist closes. Everyone else can sign up when GrowthByte OS opens to the public after launch.',
   },
   {
     q: 'Do I need a card or a long setup?',

@@ -4,7 +4,7 @@ import '../waitlist.css'
 import WaitlistNotice from '../_components/WaitlistNotice'
 
 export const metadata: Metadata = {
-  title: { absolute: 'Verify your spot — GrowthByte waitlist' },
+  title: { absolute: 'Verify your spot — GrowthByte OS waitlist' },
   robots: { index: false, follow: false },
 }
 

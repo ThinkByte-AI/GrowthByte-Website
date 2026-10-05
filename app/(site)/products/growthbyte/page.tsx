@@ -13,13 +13,13 @@ import WaitlistFaq from './_components/WaitlistFaq'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: { absolute: 'GrowthByte for Agencies — Join the Founding Waitlist' },
+  title: { absolute: 'GrowthByte OS for Agencies — Join the Founding Waitlist' },
   description:
-    'The AI platform that runs your agency’s client work — plan, execute and report for every client, with your team approving what ships. Founding waitlist: 50 agencies.',
+    'GrowthByte OS runs your agency’s client work — plan, execute and report for every client, with your team approving what ships. Founding waitlist: 50 agencies.',
   alternates: { canonical: '/products/growthbyte' },
   openGraph: {
-    title: 'GrowthByte for Agencies',
-    description: 'Run every client on one AI platform. Founding cohort of 50 agencies.',
+    title: 'GrowthByte OS for Agencies',
+    description: 'GrowthByte OS runs your agency’s client work. Founding cohort of 50 agencies.',
     url: 'https://www.growthbyte.ai/products/growthbyte',
   },
 }

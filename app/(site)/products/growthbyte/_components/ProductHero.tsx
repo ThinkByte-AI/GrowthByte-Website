@@ -5,7 +5,7 @@ import WaitlistForm from './WaitlistForm'
 
 // Answers, in order: what the product is, what this page is, why join now.
 const SUB =
-  'GrowthByte plans, runs and reports SEO and marketing work for each of your clients — and nothing ships until your team approves it. We’re opening it to 50 founding agencies first.'
+  'GrowthByte OS plans, runs and reports SEO and marketing work for each of your clients — and nothing ships until your team approves it. We’re opening it to 50 founding agencies first.'
 
 const OFFERS = [
   `Founding price for the first ${WAITLIST_CAP}`,
@@ -18,8 +18,7 @@ export default function ProductHero({ memberCount }: { memberCount: number }) {
     <section className="hero wl-hero">
       <div className="wrap hero-in">
         <div>
-          <span className="badge"><span className="badge-dot" />Founding waitlist · {WAITLIST_CAP} agencies</span>
-          <h1>The AI platform that runs your agency’s client work. <em>Your team directs. The AI executes.</em></h1>
+          <h1>GrowthByte OS runs your agency’s client work. <em>Your team directs. The AI executes.</em></h1>
           <p className="hero-sub">{SUB}</p>
           <ul className="wl-offers">
             {OFFERS.map((offer) => <li key={offer}>{offer}</li>)}

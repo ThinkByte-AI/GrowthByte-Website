@@ -14,7 +14,7 @@ export const buildVerifyEmail = (to: string, name: string, verifyUrl: string): O
     heading: 'One click to lock your spot',
     paragraphs: [
       greeting(name),
-      'Thanks for joining the GrowthByte waitlist. Confirm your email and your place is saved in join order.',
+      'Thanks for joining the GrowthByte OS waitlist. Confirm your email and your place is saved in join order.',
       'This link expires in 48 hours.',
     ],
     button: { label: 'Verify my spot', href: verifyUrl },
