@@ -1,33 +1,11 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import {
-  lexicalEditor,
-  HorizontalRuleFeature,
-  HeadingFeature,
-  BoldFeature,
-  ItalicFeature,
-  UnderlineFeature,
-  StrikethroughFeature,
-  SubscriptFeature,
-  SuperscriptFeature,
-  InlineCodeFeature,
-  LinkFeature,
-  OrderedListFeature,
-  UnorderedListFeature,
-  ChecklistFeature,
-  BlockquoteFeature,
-  AlignFeature,
-  IndentFeature,
-  UploadFeature,
-  RelationshipFeature,
-  FixedToolbarFeature,
-  InlineToolbarFeature,
-} from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+import { richTextEditor } from './editor'
 
 import { Services } from './collections/Services'
 import { Industries } from './collections/Industries'
@@ -35,11 +13,13 @@ import { CaseStudies } from './collections/CaseStudies'
 import { BlogPosts } from './collections/BlogPosts'
 import { Categories } from './collections/Categories'
 import { Waitlist } from './collections/Waitlist'
+import { DocRequests } from './collections/DocRequests'
 import { Authors } from './collections/Authors'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import { PageTemplates } from './collections/PageTemplates'
 import { HomePage } from './globals/HomePage'
+import { GrowthByteOsLaunch } from './globals/GrowthByteOsLaunch'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -77,64 +57,13 @@ export default buildConfig({
     BlogPosts,
     Categories,
     Waitlist,
+    DocRequests,
     Authors,
     Media,
     PageTemplates,
   ],
-  globals: [HomePage],
-  editor: lexicalEditor({
-    features: () => [
-      HeadingFeature({
-        enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-      }),
-      BoldFeature(),
-      ItalicFeature(),
-      UnderlineFeature(),
-      StrikethroughFeature(),
-      SubscriptFeature(),
-      SuperscriptFeature(),
-      InlineCodeFeature(),
-      LinkFeature({
-        enabledCollections: [],
-        fields: [
-          {
-            name: 'rel',
-            type: 'select',
-            hasMany: true,
-            options: ['noopener', 'noreferrer', 'nofollow'],
-          },
-        ],
-      }),
-      OrderedListFeature(),
-      UnorderedListFeature(),
-      ChecklistFeature(),
-      BlockquoteFeature(),
-      HorizontalRuleFeature(),
-      AlignFeature(),
-      IndentFeature(),
-      UploadFeature({
-        collections: {
-          media: {
-            fields: [
-              {
-                name: 'caption',
-                type: 'text',
-              },
-              {
-                name: 'alt',
-                type: 'text',
-              },
-            ],
-          },
-        },
-      }),
-      RelationshipFeature({
-        enabledCollections: ['services', 'case-studies', 'blog-posts'],
-      }),
-      FixedToolbarFeature(),
-      InlineToolbarFeature(),
-    ],
-  }),
+  globals: [HomePage, GrowthByteOsLaunch],
+  editor: richTextEditor,
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),

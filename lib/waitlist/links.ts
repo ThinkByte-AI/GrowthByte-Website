@@ -7,8 +7,8 @@ export const buildMemberPageUrl = (origin: string, memberKey: string): string =>
 
 export function buildShareMessage(referralUrl: string): string {
   return (
-    'We are moving our clients onto GrowthByte OS — where the team directs and the AI executes. ' +
-    `Early access + founding pricing for the first 50 agencies: ${referralUrl}`
+    'GrowthByte OS runs an agency’s client work — the team directs, the AI executes. ' +
+    `Get a Growth Proposal for one of your clients in 24 hours: ${referralUrl}`
   )
 }
 

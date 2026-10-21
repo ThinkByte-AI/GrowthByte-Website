@@ -5,9 +5,9 @@ export const Waitlist: CollectionConfig = {
   labels: { singular: 'Waitlist signup', plural: 'Waitlist' },
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['position', 'name', 'email', 'agencyName', 'verified', 'possibleDuplicate', 'referralCount', 'reward'],
+    defaultColumns: ['position', 'name', 'email', 'door', 'agencyName', 'foundingClaimed', 'referralCount', 'reward'],
     group: 'Marketing',
-    description: 'Product waitlist signups captured from the /products landing pages.',
+    description: 'The GrowthByte OS list: everyone who confirmed a Growth Proposal / Growth Strategy request, in join order.',
     components: { beforeListTable: ['@/components/admin/WaitlistExportButton'] },
   },
   access: {
@@ -24,6 +24,15 @@ export const Waitlist: CollectionConfig = {
     { name: 'agencyName', type: 'text' },
     { name: 'website', type: 'text' },
     { name: 'whatsapp', type: 'text', admin: { description: 'Optional; given as consent to WhatsApp updates.' } },
+    { name: 'country', type: 'text' },
+    {
+      name: 'door',
+      type: 'select',
+      options: [
+        { label: 'Agency', value: 'agency' },
+        { label: 'Business', value: 'business' },
+      ],
+    },
     {
       name: 'product',
       type: 'text',
@@ -45,6 +54,13 @@ export const Waitlist: CollectionConfig = {
     { name: 'referralCode', type: 'text', index: true, admin: { readOnly: true } },
     { name: 'referredBy', type: 'relationship', relationTo: 'waitlist', admin: { readOnly: true } },
     { name: 'referralCount', type: 'number', defaultValue: 0 },
+    {
+      name: 'foundingClaimed',
+      type: 'checkbox',
+      defaultValue: false,
+      index: true,
+      admin: { description: 'Tick once this agency has claimed a founding slot. Drives the "founding slots left" counter.' },
+    },
     {
       name: 'possibleDuplicate',
       type: 'checkbox',
@@ -68,9 +84,7 @@ export const Waitlist: CollectionConfig = {
         { label: '12 months free (Agency)', value: '12_months' },
       ],
     },
-    // Secrets behind the verify link and member page: hidden in the admin UI, still readable server-side.
+    // Secret behind the member page link: hidden in the admin UI, still readable server-side.
     { name: 'memberKey', type: 'text', index: true, admin: { hidden: true } },
-    { name: 'verifyTokenHash', type: 'text', index: true, admin: { hidden: true } },
-    { name: 'verifyExpiresAt', type: 'date', admin: { hidden: true } },
   ],
 }

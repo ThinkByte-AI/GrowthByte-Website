@@ -1,43 +1,45 @@
-import {
-  FOUNDING_CLAIM_WINDOW_DAYS,
-  FOUNDING_OFFER_DATE,
-  REFERRAL_REWARD_THRESHOLD,
-  WAITLIST_CAP,
-} from '@/lib/waitlist/constants'
+import { REFERRAL_REWARD_THRESHOLD } from '@/lib/waitlist/constants'
+import { describeFoundingWindow, type LaunchSettings } from '@/lib/waitlist/launch-settings'
 import SectionCta from './SectionCta'
 
-const FAQS = [
-  {
-    q: `How do the ${WAITLIST_CAP} founding slots work?`,
-    a: `The first ${WAITLIST_CAP} agencies to join and verify their email get them, in the order they verify. There is no application or selection — your position is fixed the moment you click the verify link.`,
-  },
-  {
-    q: 'How will I know if I got a slot?',
-    a: `Straight away. After you verify, your page shows your number. #1 to #${WAITLIST_CAP} are founding agencies.`,
-  },
-  {
-    q: 'When is it announced?',
-    a: `Founding offers go out by email on ${FOUNDING_OFFER_DATE}. You then have ${FOUNDING_CLAIM_WINDOW_DAYS} days to claim yours; unclaimed slots pass to the next agency in line.`,
-  },
-  {
-    q: 'Can more than one person from my agency join?',
-    a: 'One slot per agency, matched by company email domain. Once your agency has a slot, add your team to the workspace at launch.',
-  },
-  {
-    q: 'How does the referral reward work?',
-    a: `Share your personal link. When ${REFERRAL_REWARD_THRESHOLD} other agencies join from it and verify, you get 3 months free on any paid plan, applied automatically when you subscribe.`,
-  },
-  {
-    q: `What happens once all ${WAITLIST_CAP} slots are taken?`,
-    a: 'The founding waitlist closes. Everyone else can sign up when GrowthByte OS opens to the public after launch.',
-  },
-  {
-    q: 'Do I need a card or a long setup?',
-    a: 'No card and no password to join. At launch, creating your workspace takes a couple of minutes, and we help you bring your first client on.',
-  },
-]
+function buildFaqs(settings: LaunchSettings) {
+  return [
+    {
+      q: 'Who is GrowthByte OS for?',
+      a: 'Agencies that run SEO, content, paid, social or AI-search work for clients — from a two-person shop to a large multi-team agency. Workspaces, pods and approvals scale with you. Businesses can get a Growth Strategy for themselves and send it to their agency.',
+    },
+    {
+      q: 'Is there a trial?',
+      a: 'There is no free tier. The Growth Proposal and Growth Strategy are how you see GrowthByte OS working on a real business before you commit. Founding agencies onboard directly with our team.',
+    },
+    {
+      q: 'What does it cost?',
+      a: 'Pricing is shared on the founding call and locked for founding agencies for as long as they stay.',
+    },
+    {
+      q: 'When do I get access?',
+      a: `Founding offers go out when workspaces open; list members hear first, in position order. Nothing is charged until your workspace is open. ${describeFoundingWindow(settings)}`,
+    },
+    {
+      q: 'Can I take my data out?',
+      a: 'Yes. Full export of your clients’ knowledge bases, workflows and reports at any time.',
+    },
+    {
+      q: 'Does the AI publish without us?',
+      a: 'No. Your team approves before anything ships to a client.',
+    },
+    {
+      q: 'How does the referral work?',
+      a: `After you join you get a personal link. When ${REFERRAL_REWARD_THRESHOLD} agencies join from it, you get 3 months free on any paid plan, applied automatically at launch.`,
+    },
+    {
+      q: 'Can more than one person from my agency join?',
+      a: 'One place on the list per company, matched by email domain. Colleagues can still request documents, and you add your team to the workspace when it opens.',
+    },
+  ]
+}
 
-export default function WaitlistFaq() {
+export default function WaitlistFaq({ settings }: { settings: LaunchSettings }) {
   return (
     <section id="faq" className="light">
       <div className="wrap">
@@ -46,7 +48,7 @@ export default function WaitlistFaq() {
           <h2>Questions agency owners ask.</h2>
         </div>
         <div className="faq-list">
-          {FAQS.map((item) => (
+          {buildFaqs(settings).map((item) => (
             <details key={item.q} className="fq">
               <summary className="fq-q">{item.q}</summary>
               <div className="fq-a"><p>{item.a}</p></div>
@@ -54,7 +56,7 @@ export default function WaitlistFaq() {
           ))}
         </div>
         <p className="faq-contact">Something else? <a href="mailto:agent@growthbyte.ai">agent@growthbyte.ai</a></p>
-        <SectionCta line={`Only ${WAITLIST_CAP} founding slots — and they go in the order agencies verify.`} />
+        <SectionCta line="See it work on a real business first — your client’s, or your own." />
       </div>
     </section>
   )

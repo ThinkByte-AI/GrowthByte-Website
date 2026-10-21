@@ -1,4 +1,4 @@
-import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE_S, WAITLIST_PAGE_PATH } from '@/lib/waitlist/constants'
+import { DOORS_ANCHOR, REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE_S, WAITLIST_PAGE_PATH } from '@/lib/waitlist/constants'
 
 export const runtime = 'nodejs'
 
@@ -6,7 +6,7 @@ export const runtime = 'nodejs'
 export async function GET(request: Request, { params }: { params: Promise<{ code: string }> }) {
   const { code } = await params
   const origin = new URL(request.url).origin
-  const headers = new Headers({ Location: `${origin}${WAITLIST_PAGE_PATH}#waitlist` })
+  const headers = new Headers({ Location: `${origin}${WAITLIST_PAGE_PATH}#${DOORS_ANCHOR}` })
   const safeCode = code.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20)
   if (safeCode) {
     headers.append(

@@ -1,5 +1,5 @@
 import type { Payload } from 'payload'
-import { WAITLIST_CAP, WAITLIST_PRODUCT, type WaitlistMember } from './constants'
+import { WAITLIST_PRODUCT, type WaitlistMember } from './constants'
 
 const COLLECTION = 'waitlist'
 const COUNTERS_COLLECTION = 'waitlist_counters'
@@ -20,7 +20,7 @@ export async function findMemberWhere(payload: Payload, where: MemberQuery): Pro
 export async function createMember(payload: Payload, data: Omit<WaitlistMember, 'id'>): Promise<WaitlistMember> {
   const doc = await payload.create({
     collection: COLLECTION,
-    data: { ...data, product: WAITLIST_PRODUCT, source: 'growthbyte-waitlist' },
+    data: { ...data, product: WAITLIST_PRODUCT, source: 'growthbyte-os-doors' },
     overrideAccess: true,
   })
   return doc as unknown as WaitlistMember
@@ -35,28 +35,26 @@ export async function updateMember(
   return doc as unknown as WaitlistMember
 }
 
-export async function countVerifiedMembers(payload: Payload): Promise<number> {
+// Founding slots count real claims (set by the team once a workspace is onboarded), never sign-ups.
+export async function countFoundingClaims(payload: Payload): Promise<number> {
   const { totalDocs } = await payload.count({
     collection: COLLECTION,
-    where: { product: { equals: WAITLIST_PRODUCT }, verified: { equals: true } },
+    where: { product: { equals: WAITLIST_PRODUCT }, foundingClaimed: { equals: true } },
     overrideAccess: true,
   })
   return totalDocs
 }
 
-// Positions come from an atomic $inc so two people verifying at the same moment can never both become #50.
-export async function claimNextPosition(payload: Payload): Promise<number | null> {
+// Positions come from an atomic $inc so two people verifying at the same moment never share a number.
+export async function claimNextPosition(payload: Payload): Promise<number> {
   const counters = payload.db.connection.collection<{ _id: string; seq: number }>(COUNTERS_COLLECTION)
-  const filter = { _id: WAITLIST_PRODUCT }
   const counter = await counters.findOneAndUpdate(
-    filter,
+    { _id: WAITLIST_PRODUCT },
     { $inc: { seq: 1 } },
     { upsert: true, returnDocument: 'after' },
   )
-  const position = counter?.seq ?? null
-  if (position !== null && position <= WAITLIST_CAP) return position
-  await counters.updateOne(filter, { $inc: { seq: -1 } })
-  return null
+  if (!counter) throw new Error('Waitlist position counter returned no document')
+  return counter.seq
 }
 
 function toMember(raw: unknown): WaitlistMember | null {
@@ -71,15 +69,4 @@ export async function incrementReferralCount(payload: Payload, referrerId: strin
     .findOneAndUpdate({ _id: referrerId }, { $inc: { referralCount: 1 } }, { new: true })
     .lean()
   return toMember(updated)
-}
-
-// Consuming the token atomically means a double-clicked link cannot claim two positions.
-export async function consumeVerifyToken(payload: Payload, tokenHash: string): Promise<WaitlistMember | null> {
-  const claimed = await payload.db.collections[COLLECTION]
-    .findOneAndUpdate(
-      { verifyTokenHash: tokenHash, product: WAITLIST_PRODUCT, verified: { $ne: true } },
-      { $unset: { verifyTokenHash: 1 } },
-    )
-    .lean()
-  return toMember(claimed)
 }

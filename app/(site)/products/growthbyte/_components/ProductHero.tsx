@@ -1,19 +1,25 @@
 import Link from 'next/link'
-import { REFERRAL_REWARD_THRESHOLD, WAITLIST_CAP } from '@/lib/waitlist/constants'
+import { DOORS_ANCHOR, REFERRAL_REWARD_THRESHOLD } from '@/lib/waitlist/constants'
+import FoundingCallLink from './FoundingCallLink'
 import FoundingSpotsMeter from './FoundingSpotsMeter'
-import WaitlistForm from './WaitlistForm'
+import DoorPicker from './doors/DoorPicker'
 
 // Answers, in order: what the product is, what this page is, why join now.
 const SUB =
   'GrowthByte OS plans, runs and reports SEO and marketing work for each of your clients — and nothing ships until your team approves it. We’re opening it to 50 founding agencies first.'
 
 const OFFERS = [
-  `Founding price for the first ${WAITLIST_CAP}`,
-  'Early access before launch',
+  'A Growth Proposal or Growth Strategy in 24 hours',
+  'Founding pricing locked for as long as you stay',
   `${REFERRAL_REWARD_THRESHOLD} referrals = 3 months free`,
 ]
 
-export default function ProductHero({ memberCount }: { memberCount: number }) {
+interface ProductHeroProps {
+  claimedCount: number
+  callUrl: string
+}
+
+export default function ProductHero({ claimedCount, callUrl }: ProductHeroProps) {
   return (
     <section className="hero wl-hero">
       <div className="wrap hero-in">
@@ -23,11 +29,14 @@ export default function ProductHero({ memberCount }: { memberCount: number }) {
           <ul className="wl-offers">
             {OFFERS.map((offer) => <li key={offer}>{offer}</li>)}
           </ul>
-          <Link href="#what-it-does" className="wl-watch-btn">See what it does →</Link>
+          <div className="dr-hero-links">
+            <FoundingCallLink href={callUrl} placement="hero" className="gb-btn gb-btn-ghost dr-call" />
+            <Link href="#what-it-does" className="wl-watch-btn">See what it does →</Link>
+          </div>
         </div>
-        <div id="waitlist" className="cta-card wl-hero-card">
-          <FoundingSpotsMeter memberCount={memberCount} />
-          <WaitlistForm isFull={memberCount >= WAITLIST_CAP} />
+        <div id={DOORS_ANCHOR} className="cta-card wl-hero-card">
+          <FoundingSpotsMeter claimedCount={claimedCount} />
+          <DoorPicker />
         </div>
       </div>
     </section>

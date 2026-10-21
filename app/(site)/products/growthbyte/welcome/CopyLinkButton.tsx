@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { trackEvent } from '@/lib/analytics/track-event'
 
 export default function CopyLinkButton({ value }: { value: string }) {
   const [hasCopied, setHasCopied] = useState(false)
@@ -9,6 +10,7 @@ export default function CopyLinkButton({ value }: { value: string }) {
     try {
       await navigator.clipboard.writeText(value)
       setHasCopied(true)
+      trackEvent('share_clicked', { channel: 'copy' })
     } catch {
       setHasCopied(false)
     }
@@ -16,7 +18,7 @@ export default function CopyLinkButton({ value }: { value: string }) {
 
   return (
     <button type="button" className="gb-btn gb-btn-ghost wl-copy" onClick={copyReferralLink}>
-      {hasCopied ? 'Copied ✓' : 'Copy'}
+      {hasCopied ? 'Copied ✓' : 'Copy link'}
     </button>
   )
 }

@@ -1,5 +1,4 @@
 import type { Payload } from 'payload'
-import type { WaitlistMember } from './constants'
 import { agencyDomainOf } from './email-domain'
 import { findMemberWhere } from './members'
 
@@ -21,11 +20,17 @@ export interface AgencyIdentity {
   isPossibleDuplicate: boolean
 }
 
-// One place per agency: a company email domain that already holds a verified spot cannot take a second.
+interface IdentityCandidate {
+  id?: string
+  email: string
+  agencyName?: string
+}
+
+// One place per company: an email domain that already holds a verified spot cannot take a second.
 // Free-mail users cannot be matched by domain, so a repeated agency name is only flagged for manual review.
-export async function resolveAgencyIdentity(payload: Payload, member: WaitlistMember): Promise<AgencyIdentity> {
-  const agencyDomain = agencyDomainOf(member.email)
-  const agencyKey = normalizeAgencyName(member.agencyName ?? '')
+export async function resolveAgencyIdentity(payload: Payload, candidate: IdentityCandidate): Promise<AgencyIdentity> {
+  const agencyDomain = agencyDomainOf(candidate.email)
+  const agencyKey = normalizeAgencyName(candidate.agencyName ?? '')
   const [domainHolder, nameTwin] = await Promise.all([
     agencyDomain
       ? findMemberWhere(payload, { agencyDomain: { equals: agencyDomain }, verified: { equals: true } })
@@ -35,7 +40,7 @@ export async function resolveAgencyIdentity(payload: Payload, member: WaitlistMe
   return {
     agencyDomain,
     agencyKey,
-    isDomainTaken: domainHolder !== null && domainHolder.id !== member.id,
-    isPossibleDuplicate: nameTwin !== null && nameTwin.id !== member.id,
+    isDomainTaken: domainHolder !== null && domainHolder.id !== candidate.id,
+    isPossibleDuplicate: nameTwin !== null && nameTwin.id !== candidate.id,
   }
 }

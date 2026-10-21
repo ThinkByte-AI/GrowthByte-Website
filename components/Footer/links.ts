@@ -1,5 +1,5 @@
 export const PRODUCT_LINKS = [
-  { name: 'GrowthByte', href: '/products/growthbyte' },
+  { name: 'GrowthByte OS', href: '/products/growthbyte' },
 ]
 
 export const SERVICE_LINKS = [

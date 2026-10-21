@@ -33,11 +33,20 @@ const FREE_MAIL_DOMAINS = new Set([
   'protonmail.com',
   'rediffmail.com',
   'zoho.com',
+  'aol.com',
+  'gmx.com',
+  'mail.com',
+  'me.com',
+  'msn.com',
+  'yandex.com',
+  'ymail.com',
 ])
 
 export const emailDomain = (email: string): string => email.split('@')[1]?.toLowerCase() ?? ''
 
 export const isDisposableEmail = (email: string): boolean => DISPOSABLE_DOMAINS.has(emailDomain(email))
+
+export const isFreeMailEmail = (email: string): boolean => FREE_MAIL_DOMAINS.has(emailDomain(email))
 
 export function agencyDomainOf(email: string): string | null {
   const domain = emailDomain(email)

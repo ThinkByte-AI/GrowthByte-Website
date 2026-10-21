@@ -1,44 +1,25 @@
-import { REFERRAL_REWARD_THRESHOLD, type WaitlistMember } from '@/lib/waitlist/constants'
-import { buildLinkedInShareUrl, buildReferralUrl, buildWhatsAppShareUrl } from '@/lib/waitlist/links'
-import CopyLinkButton from './CopyLinkButton'
+import { FOUNDING_SLOTS, type WaitlistMember } from '@/lib/waitlist/constants'
+import ReferralShareCard from './ReferralShareCard'
 
 interface MemberStatusCardProps {
   member: WaitlistMember
   origin: string
+  callUrl: string
 }
 
-function describeReferralProgress(count: number, hasReward: boolean): string {
-  if (hasReward) return '3 months free is yours at launch.'
-  return `Referrals: ${count} / ${REFERRAL_REWARD_THRESHOLD} for 3 months free.`
+function listBadgeOf(member: WaitlistMember): string | null {
+  if (member.door === 'business' || !member.position) return null
+  return member.position <= FOUNDING_SLOTS ? 'Founding list' : 'Early Access'
 }
 
-export default function MemberStatusCard({ member, origin }: MemberStatusCardProps) {
-  const referralUrl = buildReferralUrl(origin, member.referralCode ?? '')
-  const referralCount = member.referralCount ?? 0
-  const hasReward = (member.reward ?? 'none') !== 'none'
-
+export default function MemberStatusCard({ member, origin, callUrl }: MemberStatusCardProps) {
+  const badge = listBadgeOf(member)
   return (
     <div className="wl-member">
-      <span className="badge"><span className="badge-dot" />Founding cohort</span>
-      <h1>You are in. <em>You are #{member.position}.</em></h1>
-      <p className="hero-sub">Early access before public launch + the founding price for the founding 50.</p>
-      <div className="cta-card wl-member-card">
-        <div className="cta-card-h">Your link</div>
-        <div className="wl-link-row">
-          <code className="wl-link">{referralUrl}</code>
-          <CopyLinkButton value={referralUrl} />
-        </div>
-        <div className="wl-share">
-          <a className="gb-btn gb-btn-teal" href={buildWhatsAppShareUrl(referralUrl)} target="_blank" rel="noopener noreferrer">
-            Share on WhatsApp
-          </a>
-          <a className="gb-btn gb-btn-teal" href={buildLinkedInShareUrl(referralUrl)} target="_blank" rel="noopener noreferrer">
-            Share on LinkedIn
-          </a>
-        </div>
-        <p className="wl-progress">{describeReferralProgress(referralCount, hasReward)}</p>
-        <p className="cf-micro">Bookmark this page — it always shows your latest count.</p>
-      </div>
+      {badge && <span className="badge"><span className="badge-dot" />{badge}</span>}
+      <h1>You are <em>#{member.position}</em> on the GrowthByte OS list.</h1>
+      <p className="hero-sub">Founding offers go out when workspaces open — list members hear first, in position order.</p>
+      <ReferralShareCard member={member} origin={origin} callUrl={callUrl} />
     </div>
   )
 }

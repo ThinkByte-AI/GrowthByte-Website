@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { WAITLIST_PAGE_PATH } from '@/lib/waitlist/constants'
+import { DOORS_ANCHOR, WAITLIST_PAGE_PATH } from '@/lib/waitlist/constants'
 
 interface WaitlistNoticeProps {
   title: string
@@ -13,8 +13,8 @@ export default function WaitlistNotice({ title, body, showJoinLink = true }: Wai
       <h1>{title}</h1>
       <p className="hero-sub">{body}</p>
       {showJoinLink && (
-        <Link href={`${WAITLIST_PAGE_PATH}#waitlist`} className="gb-btn gb-btn-white">
-          Back to the waitlist
+        <Link href={`${WAITLIST_PAGE_PATH}#${DOORS_ANCHOR}`} className="gb-btn gb-btn-white">
+          Back to GrowthByte OS
         </Link>
       )}
     </div>
