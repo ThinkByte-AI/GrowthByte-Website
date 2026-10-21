@@ -10,13 +10,13 @@ const DOORS: { door: Door; tab: string; heading: string; sub: string; footnote?:
     door: 'agency',
     tab: 'I run an agency',
     heading: 'Get a Growth Proposal for one of your clients.',
-    sub: 'Enter a client’s website and goal. GrowthByte OS builds their plan and sends you a proposal you can put your name on — in 24 hours.',
+    sub: 'Enter a client’s website and goal. GrowthByte OS builds their plan and sends you a proposal you can put your name on, in 24 hours.',
   },
   {
     door: 'business',
     tab: 'I run a business',
     heading: 'See what’s holding your growth back.',
-    sub: 'Enter your website and goal. You get a Growth Strategy showing the gaps and what to fix first — in 24 hours.',
+    sub: 'Enter your website and goal. You get a Growth Strategy showing the gaps and what to fix first, in 24 hours.',
     footnote: 'Already work with an agency? Send them the strategy when it arrives.',
   },
 ]
@@ -49,9 +49,7 @@ export default function DoorPicker() {
       </div>
       <div role="tabpanel">
         <div className="cta-card-h">{active.heading}</div>
-        <p className="cta-card-sub">{active.sub}</p>
-        <DoorForm key={active.door} door={active.door} />
-        {active.footnote && <p className="cf-micro dr-footnote">{active.footnote}</p>}
+        <DoorForm key={active.door} door={active.door} intro={active.sub} footnote={active.footnote} />
       </div>
     </div>
   )

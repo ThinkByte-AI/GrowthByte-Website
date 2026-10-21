@@ -15,7 +15,7 @@ function describeReferralProgress(member: WaitlistMember): string {
   if (member.door === 'business') return 'Already work with an agency? Send them your link when your Growth Strategy arrives.'
   if ((member.reward ?? 'none') !== 'none') return '3 months free is yours at launch.'
   const count = member.referralCount ?? 0
-  return `When ${REFERRAL_REWARD_THRESHOLD} agencies join from your link, you get 3 months free on any paid plan — applied at launch. Referrals so far: ${count} / ${REFERRAL_REWARD_THRESHOLD}.`
+  return `When ${REFERRAL_REWARD_THRESHOLD} agencies join from your link, you get 3 months free on any paid plan, applied at launch. Referrals so far: ${count} / ${REFERRAL_REWARD_THRESHOLD}.`
 }
 
 export default function ReferralShareCard({ member, origin, callUrl }: ReferralShareCardProps) {
@@ -32,7 +32,7 @@ export default function ReferralShareCard({ member, origin, callUrl }: ReferralS
         <FoundingCallLink href={callUrl} placement="confirmation" className="gb-btn gb-btn-ghost wl-copy" />
       </div>
       <p className="wl-progress">{describeReferralProgress(member)}</p>
-      <p className="cf-micro">Bookmark this page — it always shows your latest count.</p>
+      <p className="cf-micro">Bookmark this page. It always shows your latest count.</p>
     </div>
   )
 }

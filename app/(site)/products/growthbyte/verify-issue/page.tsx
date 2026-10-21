@@ -4,7 +4,7 @@ import '../waitlist.css'
 import WaitlistNotice from '../_components/WaitlistNotice'
 
 export const metadata: Metadata = {
-  title: { absolute: 'Confirm your email — GrowthByte OS' },
+  title: { absolute: 'Confirm your email | GrowthByte OS' },
   robots: { index: false, follow: false },
 }
 
@@ -16,12 +16,12 @@ const NOTICES: Record<string, { title: string; body: string; showJoinLink: boole
   },
   cooldown: {
     title: 'This website already has a document on the way',
-    body: 'We make one document per website every 7 days, and one was confirmed for this site already. Check your inbox — it arrives within 24 hours of that confirmation.',
+    body: 'We make one document per website every 7 days, and one was confirmed for this site already. Check your inbox. It arrives within 24 hours of that confirmation.',
     showJoinLink: false,
   },
   invalid: {
     title: 'This link has already been used',
-    body: 'If you confirmed already, your document is on its way — check your inbox for your personal page. Otherwise, request it again.',
+    body: 'If you confirmed already, your document is on its way. Check your inbox for your personal page. Otherwise, request it again.',
     showJoinLink: true,
   },
   error: {

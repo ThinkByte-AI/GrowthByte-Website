@@ -9,7 +9,7 @@ const STAGES = [
   {
     step: '02',
     name: 'Execute',
-    desc: 'AI workflows do the research, writing and reporting — on a schedule, for every client at once.',
+    desc: 'AI workflows do the research, writing and reporting on a schedule, for every client at once.',
   },
   {
     step: '03',
@@ -25,7 +25,7 @@ export default function WhatItDoes() {
         <div className="sec-head">
           <span className="eyebrow">What GrowthByte OS does</span>
           <h2>Your agency’s client work, run by AI.</h2>
-          <p className="lead">Today your team does every audit, brief, post and report by hand, client by client. GrowthByte OS does that work — your team decides and approves.</p>
+          <p className="lead">Today your team does every audit, brief, post and report by hand, client by client. GrowthByte OS does that work. Your team decides and approves.</p>
         </div>
         <div className="wl-what-grid">
           {STAGES.map((stage) => (

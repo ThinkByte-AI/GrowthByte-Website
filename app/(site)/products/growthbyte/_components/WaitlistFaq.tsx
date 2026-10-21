@@ -6,7 +6,7 @@ function buildFaqs(settings: LaunchSettings) {
   return [
     {
       q: 'Who is GrowthByte OS for?',
-      a: 'Agencies that run SEO, content, paid, social or AI-search work for clients — from a two-person shop to a large multi-team agency. Workspaces, pods and approvals scale with you. Businesses can get a Growth Strategy for themselves and send it to their agency.',
+      a: 'Agencies that run SEO, content, paid, social or AI-search work for clients, from a two-person shop to a large multi-team agency. Workspaces, pods and approvals scale with you. Businesses can get a Growth Strategy for themselves and send it to their agency.',
     },
     {
       q: 'Is there a trial?',
@@ -56,7 +56,7 @@ export default function WaitlistFaq({ settings }: { settings: LaunchSettings }) 
           ))}
         </div>
         <p className="faq-contact">Something else? <a href="mailto:agent@growthbyte.ai">agent@growthbyte.ai</a></p>
-        <SectionCta line="See it work on a real business first — your client’s, or your own." />
+        <SectionCta line="See it work on a real business first: your client’s, or your own." />
       </div>
     </section>
   )

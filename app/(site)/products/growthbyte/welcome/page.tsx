@@ -14,7 +14,7 @@ import WaitlistNotice from '../_components/WaitlistNotice'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: { absolute: 'You are in — GrowthByte OS' },
+  title: { absolute: 'You are in | GrowthByte OS' },
   robots: { index: false, follow: false },
 }
 

@@ -30,10 +30,10 @@ export const buildWelcomeEmail = ({
     heading: `You are #${position} on the GrowthByte OS list.`,
     paragraphs: [
       greeting(name),
-      'Founding offers go out when workspaces open — list members hear first, in position order.',
+      'Founding offers go out when workspaces open. List members hear first, in position order.',
       `Your link: <a href="${escapeHtml(referralUrl)}">${escapeHtml(referralUrl)}</a>`,
       isRewardEligible
-        ? `Know other agency owners? When ${REFERRAL_REWARD_THRESHOLD} agencies join from your link, you get 3 months free on any paid plan — applied at launch.`
+        ? `Know other agency owners? When ${REFERRAL_REWARD_THRESHOLD} agencies join from your link, you get 3 months free on any paid plan, applied at launch.`
         : 'Work with an agency? Send them your link when your Growth Strategy arrives.',
     ],
     button: { label: 'Share my link', href: memberPageUrl },
@@ -56,7 +56,7 @@ export const buildReferralJoinedEmail = ({
 }: ReferralJoinedEmailArgs): OutgoingEmail => ({
   to,
   subject: isRewardEligible
-    ? `An agency just joined from your link — you are ${referralCount}/${REFERRAL_REWARD_THRESHOLD}`
+    ? `An agency just joined from your link: you are ${referralCount}/${REFERRAL_REWARD_THRESHOLD}`
     : 'An agency just joined from your link',
   html: renderWaitlistEmail({
     heading: 'An agency just joined from your link',

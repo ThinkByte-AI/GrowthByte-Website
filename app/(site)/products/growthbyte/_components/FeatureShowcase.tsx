@@ -9,7 +9,7 @@ export default function FeatureShowcase() {
         <div className="sec-head">
           <span className="eyebrow">See it in the product</span>
           <h2>Real screens from GrowthByte OS.</h2>
-          <p className="lead">No mockups — this is the product founding agencies get. Tap any screen to enlarge it.</p>
+          <p className="lead">No mockups. This is the product founding agencies get. Tap any screen to enlarge it.</p>
         </div>
         <div className="wl-feature-grid">
           {PRODUCT_FEATURES.map((feature) => (
@@ -21,7 +21,7 @@ export default function FeatureShowcase() {
             </div>
           ))}
         </div>
-        <SectionCta line="This is the product you get — before anyone else." isDark />
+        <SectionCta line="This is the product you get, before anyone else." isDark />
       </div>
     </section>
   )

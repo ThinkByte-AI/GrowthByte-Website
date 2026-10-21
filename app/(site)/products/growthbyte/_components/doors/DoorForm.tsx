@@ -2,58 +2,27 @@
 
 import { useRef, useState } from 'react'
 import { trackEvent } from '@/lib/analytics/track-event'
-import { captureUtmParams } from '@/lib/analytics/utm'
 import { DOOR_DOCUMENT_NAMES } from '@/lib/doors/options'
-import type { DocRequestInput } from '@/lib/doors/types'
 import type { Door } from '@/lib/waitlist/constants'
-import DoorFormFields from './DoorFormFields'
-import DoorFormStatus, { type DoorNotice } from './DoorFormStatus'
+import { DOOR_STEPS } from './DoorFormFields'
+import DoorFormStatus from './DoorFormStatus'
+import DoorStepProgress from './DoorStepProgress'
+import { GENERIC_ERROR, buildRequestBody, toErrorMessage, toSubmitState, type DoorResponse, type SubmitState } from './door-request'
+import { useDoorSteps } from './useDoorSteps'
 
-type SubmitState = 'idle' | 'submitting' | 'error' | DoorNotice
-
-interface DoorResponse {
-  ok?: boolean
-  status?: string
-  error?: string
+interface DoorFormProps {
+  door: Door
+  intro: string
+  footnote?: string
 }
 
-const GENERIC_ERROR = 'Something went wrong. Please try again.'
-const RATE_LIMIT_ERROR = 'Too many requests from this connection. Please try again in an hour.'
+const STEP_TITLES = DOOR_STEPS.map((s) => s.title)
 
-const readField = (data: FormData, name: string): string => String(data.get(name) ?? '').trim()
-
-function buildRequestBody(door: Door, data: FormData): DocRequestInput {
-  return {
-    door,
-    website: readField(data, 'website'),
-    offer: readField(data, 'offer'),
-    audience: readField(data, 'audience'),
-    goal: readField(data, 'goal'),
-    channels: data.getAll('channels').map(String),
-    name: readField(data, 'name'),
-    agencyName: readField(data, 'agencyName') || undefined,
-    email: readField(data, 'email'),
-    whatsapp: readField(data, 'whatsapp') || undefined,
-    country: readField(data, 'country'),
-    wantsAgency: data.get('wantsAgency') === 'on',
-    ...captureUtmParams(),
-  }
-}
-
-function toSubmitState(res: Response, body: DoorResponse | null): SubmitState {
-  if (body?.status === 'cooldown') return 'cooldown'
-  if (!res.ok || !body?.ok) return 'error'
-  return 'verify_sent'
-}
-
-function toErrorMessage(body: DoorResponse | null): string {
-  return body?.status === 'rate_limited' ? RATE_LIMIT_ERROR : body?.error ?? GENERIC_ERROR
-}
-
-export default function DoorForm({ door }: { door: Door }) {
+export default function DoorForm({ door, intro, footnote }: DoorFormProps) {
   const [state, setState] = useState<SubmitState>('idle')
   const [error, setError] = useState<string | null>(null)
   const hasStartedRef = useRef(false)
+  const { step, isLastStep, isCurrentStepValid, goNext, goBack, registerStep } = useDoorSteps(DOOR_STEPS.length)
   const isSubmitting = state === 'submitting'
 
   const trackFirstInput = () => {
@@ -62,9 +31,8 @@ export default function DoorForm({ door }: { door: Door }) {
     trackEvent('doc_started', { door })
   }
 
-  const sendDocRequest = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const body = buildRequestBody(door, new FormData(e.currentTarget))
+  const sendDocRequest = async (form: HTMLFormElement) => {
+    const body = buildRequestBody(door, new FormData(form))
     setState('submitting')
     setError(null)
     try {
@@ -82,16 +50,33 @@ export default function DoorForm({ door }: { door: Door }) {
     }
   }
 
+  // Enter on an early step moves forward instead of submitting a half-filled form.
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!isLastStep) goNext()
+    else if (isCurrentStepValid()) void sendDocRequest(e.currentTarget)
+  }
+
   if (state === 'verify_sent' || state === 'cooldown') return <DoorFormStatus notice={state} door={door} />
 
   return (
-    <form className="cf-row wl-form" onSubmit={sendDocRequest} onInput={trackFirstInput}>
-      <DoorFormFields door={door} isDisabled={isSubmitting} />
-      <button type="submit" className="gb-btn gb-btn-teal" disabled={isSubmitting} style={{ justifyContent: 'center' }}>
-        {isSubmitting ? 'Sending…' : `Get my ${DOOR_DOCUMENT_NAMES[door]}`}
-      </button>
+    <form className="cf-row wl-form" onSubmit={handleSubmit} onInput={trackFirstInput} noValidate>
+      {step === 0 && <p className="cta-card-sub dr-intro">{intro}</p>}
+      <DoorStepProgress step={step} titles={STEP_TITLES} />
+      {DOOR_STEPS.map(({ title, Fields }, i) => (
+        <fieldset key={title} ref={registerStep(i)} hidden={i !== step} className="dr-step">
+          <Fields door={door} isDisabled={isSubmitting} />
+        </fieldset>
+      ))}
+      <div className="dr-step-nav">
+        {step > 0 && <button type="button" className="gb-btn gb-btn-ghost dr-back" onClick={goBack} disabled={isSubmitting}>← Back</button>}
+        <button type="submit" className="gb-btn gb-btn-teal dr-next" disabled={isSubmitting}>
+          {isLastStep ? (isSubmitting ? 'Sending…' : `Get my ${DOOR_DOCUMENT_NAMES[door]}`) : 'Next →'}
+        </button>
+      </div>
       {state === 'error' && <div className="cf-status err">{error ?? GENERIC_ERROR}</div>}
-      <p className="cf-micro"><b className="wl-req">*</b> required · Work email only · We email you a link to confirm before we start.</p>
+      {isLastStep && <p className="cf-micro"><b className="wl-req">*</b> required · Work email only · We email you a link to confirm before we start.</p>}
+      {isLastStep && footnote && <p className="cf-micro">{footnote}</p>}
     </form>
   )
 }

@@ -6,7 +6,7 @@ import DoorPicker from './doors/DoorPicker'
 
 // Answers, in order: what the product is, what this page is, why join now.
 const SUB =
-  'GrowthByte OS plans, runs and reports SEO and marketing work for each of your clients — and nothing ships until your team approves it. We’re opening it to 50 founding agencies first.'
+  'GrowthByte OS plans, runs and reports SEO and marketing work for each of your clients, and nothing ships until your team approves it. We’re opening it to 50 founding agencies first.'
 
 const OFFERS = [
   'A Growth Proposal or Growth Strategy in 24 hours',

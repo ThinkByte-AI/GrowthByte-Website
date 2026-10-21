@@ -21,9 +21,30 @@
 .gb-home .dr-check input { width: 16px; height: 16px; accent-color: var(--T); }
 
 .gb-home .wl-form select.cf-inp { appearance: auto; }
-.gb-home .dr-footnote { margin-top: 10px; }
 
 .gb-home .dr-hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
 .gb-home .dr-hero-links .wl-watch-btn { margin-bottom: 0; }
 .gb-home .dr-call { color: #fff; border: 1px solid rgba(255, 255, 255, .3); padding: 12px 20px; }
 .gb-home .dr-call:hover { border-color: var(--T); color: var(--T); }
+
+.gb-home .dr-slots { margin-bottom: 14px; }
+.gb-home .dr-slots-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.gb-home .dr-slots-title { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #566460; }
+.gb-home .dr-slots-left { font-family: var(--mono); font-size: 11px; color: #566460; }
+.gb-home .dr-slots-left b { font-family: var(--disp); font-size: 16px; font-weight: 900; color: var(--Td); }
+.gb-home .dr-slots-bar { height: 4px; border-radius: 100px; background: rgba(11, 11, 11, .08); overflow: hidden; }
+.gb-home .dr-slots-bar i { display: block; height: 100%; min-width: 4px; background: var(--T); border-radius: inherit; }
+
+.gb-home .dr-intro { margin: 2px 0 4px; }
+.gb-home .dr-progress { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 4px; }
+.gb-home .dr-progress-label { font-family: var(--mono); font-size: 11.5px; color: #566460; }
+.gb-home .dr-progress-label b { color: #0B0B0B; font-weight: 600; }
+.gb-home .dr-progress-bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.gb-home .dr-progress-bars i { height: 3px; border-radius: 100px; background: rgba(11, 11, 11, .1); }
+.gb-home .dr-progress-bars i.on { background: var(--T); }
+
+.gb-home .dr-step { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.gb-home .dr-step[hidden] { display: none; }
+.gb-home .dr-step-nav { display: flex; gap: 8px; }
+.gb-home .dr-next { flex: 1; justify-content: center; }
+.gb-home .dr-back { color: #0B0B0B; border: 1px solid rgba(11, 11, 11, .14); padding: 10px 16px; }

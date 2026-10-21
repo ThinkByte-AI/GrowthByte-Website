@@ -37,7 +37,7 @@ export default function DocConfirmation({ request, member, origin, callUrl }: Do
         </>
       ) : (
         <>
-          <p className="hero-sub">Your company is already on the GrowthByte OS list — a colleague holds its place.</p>
+          <p className="hero-sub">Your company is already on the GrowthByte OS list. A colleague holds its place.</p>
           <FoundingCallLink href={callUrl} placement="confirmation" className="gb-btn gb-btn-white" />
         </>
       )}

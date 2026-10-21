@@ -15,9 +15,9 @@ import WaitlistFaq from './_components/WaitlistFaq'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: { absolute: 'GrowthByte OS for Agencies — Get a Growth Proposal in 24 Hours' },
+  title: { absolute: 'GrowthByte OS for Agencies | Get a Growth Proposal in 24 Hours' },
   description:
-    'GrowthByte OS runs your agency’s client work — plan, execute and report for every client, with your team approving what ships. Get a Growth Proposal for a client, or a Growth Strategy for your business, in 24 hours.',
+    'GrowthByte OS runs your agency’s client work. It plans, executes and reports for every client, and your team approves what ships. Get a Growth Proposal for a client, or a Growth Strategy for your business, in 24 hours.',
   alternates: { canonical: '/products/growthbyte' },
   openGraph: {
     title: 'GrowthByte OS for Agencies',

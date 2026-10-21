@@ -16,7 +16,7 @@ function buildSteps(settings: LaunchSettings) {
     {
       when: 'Within 24 hours',
       name: 'Your document arrives',
-      desc: 'A Growth Proposal for your client, or a Growth Strategy for your business — built by GrowthByte OS on the real website.',
+      desc: 'A Growth Proposal for your client, or a Growth Strategy for your business, built by GrowthByte OS on the real website.',
     },
     {
       when: describeFirstLogins(settings),
@@ -33,7 +33,7 @@ export default function HowSlotsWork({ settings }: { settings: LaunchSettings })
         <div className="sec-head">
           <span className="eyebrow">How it works</span>
           <h2>See GrowthByte OS work on a real business first.</h2>
-          <p className="lead">There is no free tier. The document is how you try it — on your client or your own business.</p>
+          <p className="lead">There is no free tier. The document is how you try it, on your client or your own business.</p>
         </div>
         <div className="steps">
           {buildSteps(settings).map((step, i) => (

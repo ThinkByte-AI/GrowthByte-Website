@@ -25,7 +25,7 @@ export default function FoundingOffer({ settings }: { settings: LaunchSettings }
           <p className="cta-body">
             Founding agencies choose a 6- or 12-month plan with pricing locked for as long as they stay. Nothing is
             charged until your workspace is open. Onboarding and migration are done with our team. Founding offers go
-            out when workspaces open — list members hear first, in position order. {describeFoundingWindow(settings)}
+            out when workspaces open. List members hear first, in position order. {describeFoundingWindow(settings)}
           </p>
           <ul className="cta-checks">
             {CHECKS.map((c) => <li key={c}><CheckMark />{c}</li>)}

@@ -8,7 +8,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 function validateEmail(email: string): string | null {
   if (!EMAIL_RE.test(email)) return 'Enter a valid work email.'
   if (isFreeMailEmail(email) || isDisposableEmail(email)) {
-    return 'Use your work email — personal and temporary inboxes cannot request a document.'
+    return 'Use your work email. Personal and temporary inboxes cannot request a document.'
   }
   return null
 }

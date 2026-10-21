@@ -44,7 +44,7 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
     key: 'runs',
     imageSrc: '/waitlist/features/runs.png',
     badge: 'Runs',
-    name: 'Watch every run — and fix it',
+    name: 'Watch every run, and fix it',
     desc: 'Live steps, files and estimated cost for each run. A step failed? Fix it with AI and run again.',
   },
   {
@@ -52,14 +52,14 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
     imageSrc: '/waitlist/features/portal.png',
     badge: 'Client portal',
     name: 'Clients see the work live',
-    desc: 'Each client contact gets their own portal — goals, tasks, results and sign-offs — plus a weekly digest email.',
+    desc: 'Each client contact gets their own portal with goals, tasks, results and sign-offs, plus a weekly digest email.',
   },
   {
     key: 'health',
     imageSrc: '/waitlist/features/health.png',
     badge: 'Client Health',
     name: 'Know which client needs you',
-    desc: 'A 0–100 health score for every client from traffic, goal pace and delivery — with call prep before you meet.',
+    desc: 'A 0 to 100 health score for every client from traffic, goal pace and delivery, with call prep before you meet.',
     isWide: true,
   },
 ]

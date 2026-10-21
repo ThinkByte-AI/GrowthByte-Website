@@ -18,7 +18,7 @@ export default function MemberStatusCard({ member, origin, callUrl }: MemberStat
     <div className="wl-member">
       {badge && <span className="badge"><span className="badge-dot" />{badge}</span>}
       <h1>You are <em>#{member.position}</em> on the GrowthByte OS list.</h1>
-      <p className="hero-sub">Founding offers go out when workspaces open — list members hear first, in position order.</p>
+      <p className="hero-sub">Founding offers go out when workspaces open. List members hear first, in position order.</p>
       <ReferralShareCard member={member} origin={origin} callUrl={callUrl} />
     </div>
   )

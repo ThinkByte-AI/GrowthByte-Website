@@ -8,12 +8,12 @@ function describeNotice(notice: DoorNotice, door: Door): { title: string; body: 
   if (notice === 'cooldown') {
     return {
       title: 'This website already has a document on the way',
-      body: `We make one document per website every 7 days. If it was you, check your inbox — otherwise book a call and we will look at it together.`,
+      body: `We make one document per website every 7 days. If it was you, check your inbox. Otherwise, book a call and we will look at it together.`,
     }
   }
   return {
     title: 'Check your inbox',
-    body: `We sent you a link. Click “Confirm my email” and we start your ${documentName} — it arrives within 24 hours. The link expires in 48 hours.`,
+    body: `We sent you a link. Click “Confirm my email” and we start your ${documentName}. It arrives within 24 hours. The link expires in 48 hours.`,
   }
 }
 
